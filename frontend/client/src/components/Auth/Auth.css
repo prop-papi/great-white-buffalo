@@ -1,0 +1,30 @@
+.auth-header {
+  width: 100%;
+  padding: 50px 0;
+}
+.auth-header .logo {
+  width: 300px;
+  display: block;
+  margin: auto;
+}
+
+.login-form-container,
+.signup-form-container {
+  width: 100%;
+}
+
+.auth-form {
+  margin: auto;
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-link {
+  margin-left: 5px;
+}
+
+.landing-page-logo {
+  width: 300px;
+  margin: 50px 0;
+  text-align: center;
+}
