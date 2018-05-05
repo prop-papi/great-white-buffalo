@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt-nodejs");
 const SqlString = require("sqlstring");
 
 const insertNewUser = async (user, pw) => {
-  const salt = bcrypt.genSaltSync(10);
+  const salt = bcrypt.genSaltSync(process.env.SALT_ROUNDS);
   const hash = bcrypt.hashSync(pw, salt);
   const query = `INSERT INTO Users (username, password) VALUES (${SqlString.escape(
     user

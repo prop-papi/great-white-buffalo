@@ -22,9 +22,13 @@ router.post("/login", async function(req, res, next) {
           console.log("Error: ", err);
           res.send(err);
         }
-        let token = jwt.sign({ data: JSON.parse(user[0].id) }, "g6787cQi$q51", {
-          expiresIn: "1d"
-        });
+        let token = jwt.sign(
+          { data: JSON.parse(user[0].id) },
+          process.env.TOKEN_SECRET,
+          {
+            expiresIn: "1d"
+          }
+        );
         res.set(
           "auth",
           JSON.stringify({ auth: true, token: token, id: user[0].id })
@@ -46,12 +50,16 @@ router.post("/signup", async function(req, res) {
         req.body.username,
         req.body.password
       );
-      const token = jwt.sign({ data: req.body.signup_email }, "g6787cQi$q51", {
-        expiresIn: "1d"
-      });
+      const token = jwt.sign(
+        { data: req.body.signup_email },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "1d"
+        }
+      );
       res.set(
         "auth",
-        JSON.stringify({ auth: true, token: token, id: data[0].id })
+        JSON.stringify({ auth: true, token: token, id: data.id })
       );
       res.set("Access-Control-Expose-Headers", "auth");
       res.send();

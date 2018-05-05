@@ -1,10 +1,10 @@
 const mysql = require("promise-mysql");
 
 const connection = mysql.createPool({
-  host: "greatwhitebuffalo.ciminvuvr2we.us-east-2.rds.amazonaws.com",
-  user: "gwbuff",
-  password: "gwbuffboys*21",
-  database: "greatwhitebuffalo"
+  host: process.env.AWS_HOST,
+  user: process.env.AWS_USER,
+  password: process.env.AWS_PASSWORD,
+  database: process.env.AWS_DATABASE
 });
 
 module.exports = connection;
