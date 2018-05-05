@@ -7,7 +7,8 @@ import {
   Button,
   Form,
   Col,
-  ControlLabel
+  ControlLabel,
+  Alert
 } from "react-bootstrap";
 
 import "./Auth.css";
@@ -18,11 +19,18 @@ export default class Login extends Component {
 
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      showLoginErrorAlert: false
+    };
+
+    this.alertStyle = {
+      width: "42%",
+      marginLeft: "10px"
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.submitAuthData = this.submitAuthData.bind(this);
+    this.handleDismissLoginError = this.handleDismissLoginError.bind(this);
   }
 
   async submitAuthData(e) {
@@ -32,18 +40,19 @@ export default class Login extends Component {
       username,
       password
     };
-    console.log(body);
     try {
-      const data = axios.post(`http://localhost:1337/api/auth/login`, body);
-      localStorage.setItem("username", data.data.username);
-      localStorage.setItem("id", data.data.id);
-      localStorage.setItem("token", data.data.token.accessToken);
-      localStorage.setItem("win_ratio", data.data.win_ratio);
-      localStorage.setItem("reputation", data.data.reputation);
-      data
-        ? this.props.history.push("/home")
-        : this.props.history.push("/login");
+      const data = await axios.post(
+        `http://localhost:1337/api/auth/login`,
+        body
+      );
+      localStorage.setItem("username", data.data[0].username);
+      localStorage.setItem("id", data.data[0].id);
+      localStorage.setItem("win_ratio", data.data[0].win_ratio);
+      localStorage.setItem("reputation", data.data[0].reputation);
+      document.cookie = JSON.parse(data.headers.auth).token;
+      // ****NOTE - ROUTE USERS TO HOME PAGE HERE****
     } catch (err) {
+      this.setState({ showLoginErrorAlert: true });
       throw new Error(err);
     }
   }
@@ -51,6 +60,14 @@ export default class Login extends Component {
   handleInputChange(e) {
     const { value, name } = e.target;
     this.setState({ [name]: value });
+  }
+
+  handleDismissLoginError() {
+    this.setState({
+      showLoginErrorAlert: false,
+      username: "",
+      password: ""
+    });
   }
 
   render() {
@@ -64,6 +81,7 @@ export default class Login extends Component {
             <Col sm={10}>
               <FormControl
                 className="login-form"
+                value={this.state.username}
                 type="username"
                 name="username"
                 placeholder="Username"
@@ -79,6 +97,7 @@ export default class Login extends Component {
             <Col sm={10}>
               <FormControl
                 className="login-form"
+                value={this.state.password}
                 type="password"
                 name="password"
                 placeholder="Password"
@@ -86,13 +105,6 @@ export default class Login extends Component {
               />
             </Col>
           </FormGroup>
-
-          {/* <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Checkbox>Remember me</Checkbox>
-            </Col>
-          </FormGroup> */}
-
           <FormGroup>
             <Col smOffset={2} sm={10}>
               <Button type="submit" onClick={e => this.submitAuthData(e)}>
@@ -100,6 +112,19 @@ export default class Login extends Component {
               </Button>
             </Col>
           </FormGroup>
+          {this.state.showLoginErrorAlert ? (
+            <Alert
+              bsStyle="danger"
+              style={this.alertStyle}
+              onDismiss={this.handleDismissLoginError}
+            >
+              <h4>Oh snap! You got an error!</h4>
+              <p>Invalid username/password credentials, please try again.</p>
+              <p>
+                <Button onClick={this.handleDismissLoginError}>Close</Button>
+              </p>
+            </Alert>
+          ) : null}
         </Form>
       </div>
     );

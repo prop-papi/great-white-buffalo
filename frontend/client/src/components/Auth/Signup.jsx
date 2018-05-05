@@ -21,12 +21,23 @@ export default class Signup extends Component {
       username: "",
       password: "",
       passwordConfirm: "",
-      showAlert: false
+      showPasswordAlert: false,
+      showUsernameAlert: false
+    };
+
+    this.alertStyle = {
+      width: "42%",
+      marginLeft: "10px"
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.submitAuthData = this.submitAuthData.bind(this);
-    this.handleDismiss = this.handleDismiss.bind(this);
+    this.handleDismissPasswordError = this.handleDismissPasswordError.bind(
+      this
+    );
+    this.handleDismissUsernameError = this.handleDismissUsernameError.bind(
+      this
+    );
   }
 
   async submitAuthData(e) {
@@ -36,28 +47,40 @@ export default class Signup extends Component {
       username,
       password
     };
-    // check if input passwords are matching here
+    // check if input passwords are matching
     if (password !== passwordConfirm) {
-      console.log("passwords not matching");
-      this.setState({ showAlert: true });
+      this.setState({ showPasswordAlert: true });
     } else {
       try {
         const data = await axios.post(
           `http://localhost:1337/api/auth/signup`,
           body
         );
-        data
-          ? this.props.history.push("/login")
-          : this.props.history.push("/auth");
+        // alert based on server response for exising user
+        if (data.data === "Username already exists.") {
+          this.setState({ showUsernameAlert: true });
+        } else {
+          document.cookie = JSON.parse(data.headers.auth).token;
+          // ****NOTE - ROUTE USERS TO HOME PAGE HERE****
+        }
       } catch (err) {
+        console.log("catch", err);
         throw new Error(err);
       }
     }
   }
 
-  handleDismiss() {
+  handleDismissPasswordError() {
     this.setState({
-      showAlert: false,
+      showPasswordAlert: false,
+      password: "",
+      passwordConfirm: ""
+    });
+  }
+
+  handleDismissUsernameError() {
+    this.setState({
+      showUsernameAlert: false,
       username: "",
       password: "",
       passwordConfirm: ""
@@ -73,15 +96,6 @@ export default class Signup extends Component {
   render() {
     return (
       <div className="login-form-container">
-        {this.state.showAlert ? (
-          <Alert bsStyle="danger" onDismiss={this.handleDismiss}>
-            <h4>Oh snap! You got an error!</h4>
-            <p>Please input matching passwords.</p>
-            <p>
-              <Button onClick={this.handleDismiss}>Close</Button>
-            </p>
-          </Alert>
-        ) : null}
         <Form horizontal>
           <FormGroup controlId="formHorizontalUsername">
             <Col componentClass={ControlLabel} sm={2}>
@@ -91,6 +105,7 @@ export default class Signup extends Component {
               <FormControl
                 className="login-form"
                 type="username"
+                value={this.state.username}
                 name="username"
                 placeholder="Username"
                 onChange={this.handleInputChange}
@@ -106,6 +121,7 @@ export default class Signup extends Component {
               <FormControl
                 className="login-form"
                 type="password"
+                value={this.state.password}
                 name="password"
                 placeholder="Password"
                 onChange={this.handleInputChange}
@@ -121,6 +137,7 @@ export default class Signup extends Component {
               <FormControl
                 className="login-form"
                 type="password"
+                value={this.state.passwordConfirm}
                 name="passwordConfirm"
                 placeholder="Re-type Password"
                 onChange={this.handleInputChange}
@@ -135,6 +152,32 @@ export default class Signup extends Component {
               </Button>
             </Col>
           </FormGroup>
+          {this.state.showPasswordAlert ? (
+            <Alert
+              bsStyle="danger"
+              style={this.alertStyle}
+              onDismiss={this.handleDismissPasswordError}
+            >
+              <h4>Oh snap! You got an error!</h4>
+              <p>Please input matching passwords.</p>
+              <p>
+                <Button onClick={this.handleDismissPasswordError}>Close</Button>
+              </p>
+            </Alert>
+          ) : null}
+          {this.state.showUsernameAlert ? (
+            <Alert
+              bsStyle="danger"
+              style={this.alertStyle}
+              onDismiss={this.handleDismissUsernameError}
+            >
+              <h4>Oh snap! You got an error!</h4>
+              <p>Username already exists, please choose a different one.</p>
+              <p>
+                <Button onClick={this.handleDismissUsernameError}>Close</Button>
+              </p>
+            </Alert>
+          ) : null}
         </Form>
       </div>
     );

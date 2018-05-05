@@ -1,76 +1,65 @@
-let express = require("express");
-let router = express.Router();
-let pass = require("../../middleware/passport.js");
+const express = require("express");
+const router = express.Router();
+const pass = require("../../middleware/passport.js");
 
-let _ = require("underscore");
-let bodyParser = require("body-parser");
-let jwt = require("jsonwebtoken");
-let passport = require("passport");
+const _ = require("underscore");
+const bodyParser = require("body-parser");
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
+const authdb = require("../../db/models/auth/index.js");
 
 // handle user login route
-router.post("/login", function(req, res, next) {
+router.post("/login", async function(req, res, next) {
   passport.authenticate(
     "local-login",
     { session: false, failureRedirect: "/login" },
     function(err, user, info) {
       if (err || !user) {
-        console.log("here");
         return res.status(401).send(JSON.stringify(info));
       }
-
       req.login(user, { session: false }, function(err) {
         if (err) {
+          console.log("Error: ", err);
           res.send(err);
         }
-        let token = jwt.sign(
-          { data: JSON.parse(user[0].id) },
-          configs.HASHKEY,
-          {
-            expiresIn: "1hr"
-          }
-        );
+        let token = jwt.sign({ data: JSON.parse(user[0].id) }, "g6787cQi$q51", {
+          expiresIn: "1d"
+        });
         res.set(
           "auth",
           JSON.stringify({ auth: true, token: token, id: user[0].id })
         );
         res.set("Access-Control-Expose-Headers", "auth");
-        res.send();
+        res.send(JSON.stringify(user));
       });
     }
   )(req, res, next);
 });
 
-// handle user signup route
-router.post("/signup", function(req, res) {
-  console.log(req.body);
-  // run user insert function with input values
-  // Users.findUser(req.body.signup_email, function(err, data) {
-  //   // check if user already exists
-  //   if (data.length) {
-  //     res.status(401).send("User already exists. Please login.");
-  //   } else {
-  //     // user does not exist, create and login
-  //     Users.insertNewUser(
-  //       req.body.signup_firstname,
-  //       req.body.signup_lastname,
-  //       req.body.signup_email,
-  //       req.body.signup_password,
-  //       function(err, data) {
-  //         if (err) {
-  //           console.log(err);
-  //         } else {
-  //           console.log("New user created.");
-  //         }
-  //       }
-  //     );
-  //     let token = jwt.sign({ data: req.body.signup_email }, configs.HASHKEY, {
-  //       expiresIn: "1hr"
-  //     });
-  //     res.set("auth", JSON.stringify({ auth: true, token: token }));
-  //     res.set("Access-Control-Expose-Headers", "auth");
-  //     res.send();
-  //   }
-  // });
+router.post("/signup", async function(req, res) {
+  let data = await authdb.selectUser(req.body.username);
+  if (data.length) {
+    res.send("Username already exists.");
+  } else {
+    try {
+      const newUser = await authdb.insertNewUser(
+        req.body.username,
+        req.body.password
+      );
+      const token = jwt.sign({ data: req.body.signup_email }, "g6787cQi$q51", {
+        expiresIn: "1d"
+      });
+      res.set(
+        "auth",
+        JSON.stringify({ auth: true, token: token, id: data[0].id })
+      );
+      res.set("Access-Control-Expose-Headers", "auth");
+      res.send();
+    } catch (err) {
+      console.log(err);
+      res.status(401).send();
+    }
+  }
 });
 
 router.get("/logout", function(req, res) {
