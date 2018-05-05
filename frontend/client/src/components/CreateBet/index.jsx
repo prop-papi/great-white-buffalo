@@ -7,18 +7,22 @@ class CreateBet extends React.Component { // note we do not export the actual Re
   constructor(props) {
     super(props)
     this.state = {
-      createValue: '',
+      end: '', // this should be calendar
+      club: '', // should default to the club they are on
+      wager: '',
+      description: '',
+      odds: '1:1', // be able to change ultimately
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
-    this.setState({ createValue: e.target.value });
+    this.setState({ value: e.target.value });
   }
 
   handleSubmit(e) {
-    this.props.testAction(this.state.createValue)
+    this.props.testAction(this.state.value) // this will be submitting a bet
     event.preventDefault();
   }
 
@@ -33,7 +37,7 @@ class CreateBet extends React.Component { // note we do not export the actual Re
             and this.props.searchNumber is '{JSON.stringify(this.props.searchNumber)}'
             <button onClick={()=> console.log(this.props.createNumber)}/>
       <div>
-        <input type="text" value={this.state.createValue} onChange={this.handleChange} />
+        <input type="text" value={this.state.value} onChange={this.handleChange} />
         <input type="submit" value="Submit" onClick={this.handleSubmit}/>
       </div>
       </div>
