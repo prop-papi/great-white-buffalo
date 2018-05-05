@@ -60,6 +60,11 @@ export default class Signup extends Component {
         if (data.data === "Username already exists.") {
           this.setState({ showUsernameAlert: true });
         } else {
+          localStorage.setItem("username", data.data[0].username);
+          localStorage.setItem("id", data.data[0].id);
+          localStorage.setItem("win_ratio", data.data[0].win_ratio);
+          localStorage.setItem("reputation", data.data[0].reputation);
+          localStorage.setItem("default_club", data.data[0].default_club);
           document.cookie = JSON.parse(data.headers.auth).token;
           // ****NOTE - ROUTE USERS TO HOME PAGE HERE****
         }

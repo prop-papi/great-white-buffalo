@@ -1,0 +1,142 @@
+{
+  "clubs": [
+    {
+      "id": 1,
+      "name": "NFL",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 2,
+      "name": "MLB",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 3,
+      "name": "NHL",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 4,
+      "name": "NBA",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 5,
+      "name": "MLS",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 6,
+      "name": "Premier League",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 7,
+      "name": "Bundesliga",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 8,
+      "name": "Overwatch",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 9,
+      "name": "Rocket League",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 10,
+      "name": "PUBG",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 11,
+      "name": "Fortnite",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    },
+    {
+      "id": 12,
+      "name": "Global",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    }
+  ],
+  "bets": [
+    {
+      "id": 1,
+      "description": "Broncos Super Bowl CHAMPS 2019",
+      "wager": 50,
+      "quantity": 1,
+      "status": "pending",
+      "creator": 1,
+      "challenger": null,
+      "club": 1,
+      "created_at": "2018-05-04T23:48:35.000Z",
+      "end_at": "2018-05-04T23:48:35.000Z",
+      "odds": "1:1"
+    },
+    {
+      "id": 2,
+      "description": "Cowboys 0-16",
+      "wager": 100,
+      "quantity": 1,
+      "status": "pending",
+      "creator": 4,
+      "challenger": null,
+      "club": 1,
+      "created_at": "2018-05-04T23:48:35.000Z",
+      "end_at": "2018-05-06T23:48:35.000Z",
+      "odds": "1:1"
+    },
+    {
+      "id": 3,
+      "description": "Warrios swept in the finals by Cavs",
+      "wager": 500,
+      "quantity": 1,
+      "status": "pending",
+      "creator": 5,
+      "challenger": null,
+      "club": 4,
+      "created_at": "2018-05-04T23:48:35.000Z",
+      "end_at": "2018-05-07T23:48:35.000Z",
+      "odds": "1:1"
+    },
+    {
+      "id": 4,
+      "description": "Cheerleader gets booted for kissing a fan in Finals",
+      "wager": 250,
+      "quantity": 1,
+      "status": "pending",
+      "creator": 3,
+      "challenger": null,
+      "club": 4,
+      "created_at": "2018-05-04T23:48:35.000Z",
+      "end_at": "2018-05-10T23:48:35.000Z",
+      "odds": "1:1"
+    }
+  ]
+}

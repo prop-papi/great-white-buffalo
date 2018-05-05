@@ -29,6 +29,16 @@ const selectUser = async user => {
   }
 };
 
+const selectNewUser = async id => {
+  const query = `SELECT * FROM Users WHERE id='${id}';`;
+  try {
+    return await db.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 const verifyUser = async (pw, hash) => {
   let found = false;
   if (bcrypt.compareSync(pw, hash)) {
@@ -42,3 +52,4 @@ const verifyUser = async (pw, hash) => {
 module.exports.insertNewUser = insertNewUser;
 module.exports.selectUser = selectUser;
 module.exports.verifyUser = verifyUser;
+module.exports.selectNewUser = selectNewUser;

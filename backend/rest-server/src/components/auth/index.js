@@ -57,12 +57,13 @@ router.post("/signup", async function(req, res) {
           expiresIn: "1d"
         }
       );
+      const user = await authdb.selectNewUser(newUser.insertId);
       res.set(
         "auth",
         JSON.stringify({ auth: true, token: token, id: data.id })
       );
       res.set("Access-Control-Expose-Headers", "auth");
-      res.send();
+      res.send(JSON.stringify(user));
     } catch (err) {
       console.log(err);
       res.status(401).send();
