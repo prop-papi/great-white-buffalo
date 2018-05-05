@@ -6,7 +6,8 @@
   "scripts": {
     "test": "blank",
     "react-dev": "webpack -d --watch",
-    "server-dev": "nodemon backend/rest-server/src/index.js"
+    "server-dev": "nodemon backend/rest-server/src/index.js",
+    "start:socket-server": "nodemon backend/socket-server/src/index.js"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,7 @@
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
     "request": "^2.85.0",
+    "socket.io": "^2.1.0",
     "webpack": "^4.6.0",
     "xml2js": "^0.4.19"
   },
