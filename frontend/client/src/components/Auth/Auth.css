@@ -10,7 +10,8 @@
 
 .login-form-container,
 .signup-form-container {
-  width: 100%;
+  width: 70%;
+  margin-top: 20px;
 }
 
 .auth-form {
@@ -23,8 +24,6 @@
   margin-left: 5px;
 }
 
-.landing-page-logo {
-  width: 300px;
-  margin: 50px 0;
-  text-align: center;
+.login-form {
+  width: 30%;
 }

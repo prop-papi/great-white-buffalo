@@ -1,20 +1,21 @@
-const path = require('path');
+const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
-  entry: path.resolve('./frontend/client/src/index.js'),
+  entry: ["babel-polyfill", path.resolve("./frontend/client/src/index.js")],
   output: {
-    path: path.resolve('./frontend/client/public'),
-    filename: 'bundle.js'
+    path: path.resolve("./frontend/client/public"),
+    filename: "bundle.js"
   },
-  
+
   module: {
     rules: [
       {
         test: /\.js[x]?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         options: {
-          presets: ['env', 'react']
+          presets: ["env", "react"]
         }
       },
       {
@@ -24,6 +25,6 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx']
-  },
+    extensions: [".js", ".jsx"]
+  }
 };

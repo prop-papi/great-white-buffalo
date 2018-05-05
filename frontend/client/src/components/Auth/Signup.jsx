@@ -6,7 +6,9 @@ import {
   Input,
   Button,
   Form,
-  Col
+  Col,
+  ControlLabel,
+  Alert
 } from "react-bootstrap";
 
 import "./Auth.css";
@@ -18,35 +20,78 @@ export default class Signup extends Component {
     this.state = {
       username: "",
       password: "",
-      password2: ""
+      passwordConfirm: "",
+      showPasswordAlert: false,
+      showUsernameAlert: false
     };
+
+    this.alertStyle = {
+      width: "42%",
+      marginLeft: "10px"
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.submitAuthData = this.submitAuthData.bind(this);
+    this.handleDismissPasswordError = this.handleDismissPasswordError.bind(
+      this
+    );
+    this.handleDismissUsernameError = this.handleDismissUsernameError.bind(
+      this
+    );
   }
 
-  submitAuthData = async e => {
+  async submitAuthData(e) {
     e.preventDefault();
-    const { username, password } = this.state;
+    const { username, password, passwordConfirm } = this.state;
     const body = {
       username,
       password
     };
-    // check if input passwords are matching here
-    try {
-      const data = await axios.post(
-        `http://localhost:3396/api/auth/signup`,
-        body
-      );
-      data
-        ? this.props.history.push("/login")
-        : this.props.history.push("/auth");
-    } catch (err) {
-      throw new Error(err);
+    // check if input passwords are matching
+    if (password !== passwordConfirm) {
+      this.setState({ showPasswordAlert: true });
+    } else {
+      try {
+        const data = await axios.post(
+          `http://localhost:1337/api/auth/signup`,
+          body
+        );
+        // alert based on server response for exising user
+        if (data.data === "Username already exists.") {
+          this.setState({ showUsernameAlert: true });
+        } else {
+          document.cookie = JSON.parse(data.headers.auth).token;
+          // ****NOTE - ROUTE USERS TO HOME PAGE HERE****
+        }
+      } catch (err) {
+        console.log("catch", err);
+        throw new Error(err);
+      }
     }
-  };
+  }
 
-  handleInputChange = event => {
-    const { value, name } = event.target;
-    this.setState({ [name]: value });
-  };
+  handleDismissPasswordError() {
+    this.setState({
+      showPasswordAlert: false,
+      password: "",
+      passwordConfirm: ""
+    });
+  }
+
+  handleDismissUsernameError() {
+    this.setState({
+      showUsernameAlert: false,
+      username: "",
+      password: "",
+      passwordConfirm: ""
+    });
+  }
+
+  async handleInputChange(e) {
+    e.preventDefault();
+    const { value, name } = e.target;
+    await this.setState({ [name]: value });
+  }
 
   render() {
     return (
@@ -54,42 +99,48 @@ export default class Signup extends Component {
         <Form horizontal>
           <FormGroup controlId="formHorizontalUsername">
             <Col componentClass={ControlLabel} sm={2}>
-              Username
+              Username:
             </Col>
             <Col sm={10}>
               <FormControl
+                className="login-form"
                 type="username"
+                value={this.state.username}
                 name="username"
                 placeholder="Username"
-                onChange={() => this.handleInputChange}
+                onChange={this.handleInputChange}
               />
             </Col>
           </FormGroup>
 
           <FormGroup controlId="formHorizontalPassword">
             <Col componentClass={ControlLabel} sm={2}>
-              Password
+              Password:
             </Col>
             <Col sm={10}>
               <FormControl
+                className="login-form"
                 type="password"
+                value={this.state.password}
                 name="password"
                 placeholder="Password"
-                onChange={() => this.handleInputChange}
+                onChange={this.handleInputChange}
               />
             </Col>
           </FormGroup>
 
-          <FormGroup controlId="formHorizontalPassword">
+          <FormGroup controlId="formHorizontalPassword2">
             <Col componentClass={ControlLabel} sm={2}>
-              Re-type Password
+              Re-type Password:
             </Col>
             <Col sm={10}>
               <FormControl
+                className="login-form"
                 type="password"
-                name="password2"
-                placeholder="Password"
-                onChange={() => this.handleInputChange}
+                value={this.state.passwordConfirm}
+                name="passwordConfirm"
+                placeholder="Re-type Password"
+                onChange={this.handleInputChange}
               />
             </Col>
           </FormGroup>
@@ -101,6 +152,32 @@ export default class Signup extends Component {
               </Button>
             </Col>
           </FormGroup>
+          {this.state.showPasswordAlert ? (
+            <Alert
+              bsStyle="danger"
+              style={this.alertStyle}
+              onDismiss={this.handleDismissPasswordError}
+            >
+              <h4>Oh snap! You got an error!</h4>
+              <p>Please input matching passwords.</p>
+              <p>
+                <Button onClick={this.handleDismissPasswordError}>Close</Button>
+              </p>
+            </Alert>
+          ) : null}
+          {this.state.showUsernameAlert ? (
+            <Alert
+              bsStyle="danger"
+              style={this.alertStyle}
+              onDismiss={this.handleDismissUsernameError}
+            >
+              <h4>Oh snap! You got an error!</h4>
+              <p>Username already exists, please choose a different one.</p>
+              <p>
+                <Button onClick={this.handleDismissUsernameError}>Close</Button>
+              </p>
+            </Alert>
+          ) : null}
         </Form>
       </div>
     );

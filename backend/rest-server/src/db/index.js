@@ -1,15 +1,10 @@
-let mysql = require("mysql");
+const mysql = require("promise-mysql");
 
-let connection = mysql.createConnection({
-  host: "",
-  user: "",
-  password: "",
-  database: ""
-});
-
-connection.connect(function(err) {
-  if (err) throw err;
-  console.log("Mysql Connected!");
+const connection = mysql.createPool({
+  host: process.env.AWS_HOST,
+  user: process.env.AWS_USER,
+  password: process.env.AWS_PASSWORD,
+  database: process.env.AWS_DATABASE
 });
 
 module.exports = connection;
