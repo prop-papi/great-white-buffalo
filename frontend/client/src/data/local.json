@@ -1,0 +1,81 @@
+{
+  "club": [
+    {
+      "id": 4,
+      "name": "NBA",
+      "security": "public",
+      "is_archived": 0,
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+    }
+  ],
+  "lounges": [
+    {
+      "id": 4,
+      "club": 4,
+      "name": "NBA Finals",
+      "is_archived": 0,
+      "type": "text",
+      "security": "public"
+    },
+    {
+      "id": 5,
+      "club": 4,
+      "name": "Cavs/Raptors",
+      "is_archived": 0,
+      "type": "text",
+      "security": "public"
+    },
+    {
+      "id": 6,
+      "club": 4,
+      "name": "Warriors/Pelicans",
+      "is_archived": 0,
+      "type": "text",
+      "security": "public"
+    },
+    {
+      "id": 7,
+      "club": 4,
+      "name": "Rockets/Jazz",
+      "is_archived": 0,
+      "type": "text",
+      "security": "public"
+    },
+    {
+      "id": 8,
+      "club": 4,
+      "name": "Sixers/Celtics",
+      "is_archived": 0,
+      "type": "text",
+      "security": "public"
+    }
+  ],
+  "bets": [
+    {
+      "id": 3,
+      "description": "Warrios swept in the finals by Cavs",
+      "wager": 500,
+      "quantity": 1,
+      "status": "pending",
+      "creator": 5,
+      "challenger": null,
+      "club": 4,
+      "created_at": "2018-05-04T23:48:35.000Z",
+      "end_at": "2018-05-07T23:48:35.000Z",
+      "odds": "1:1"
+    },
+    {
+      "id": 4,
+      "description": "Cheerleader gets booted for kissing a fan in Finals",
+      "wager": 250,
+      "quantity": 1,
+      "status": "pending",
+      "creator": 3,
+      "challenger": null,
+      "club": 4,
+      "created_at": "2018-05-04T23:48:35.000Z",
+      "end_at": "2018-05-10T23:48:35.000Z",
+      "odds": "1:1"
+    }
+  ]
+}
