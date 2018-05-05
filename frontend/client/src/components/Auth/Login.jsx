@@ -6,7 +6,8 @@ import {
   Input,
   Button,
   Form,
-  Col
+  Col,
+  ControlLabel
 } from "react-bootstrap";
 
 import "./Auth.css";
@@ -19,20 +20,21 @@ export default class Login extends Component {
       username: "",
       password: ""
     };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.submitAuthData = this.submitAuthData.bind(this);
   }
 
-  submitAuthData = async e => {
+  async submitAuthData(e) {
     e.preventDefault();
     const { username, password } = this.state;
     const body = {
       username,
       password
     };
+    console.log(body);
     try {
-      const data = await axios.post(
-        `http://localhost:3396/api/auth/login`,
-        body
-      );
+      const data = axios.post(`http://localhost:1337/api/auth/login`, body);
       localStorage.setItem("username", data.data.username);
       localStorage.setItem("id", data.data.id);
       localStorage.setItem("token", data.data.token.accessToken);
@@ -44,12 +46,12 @@ export default class Login extends Component {
     } catch (err) {
       throw new Error(err);
     }
-  };
+  }
 
-  handleInputChange = event => {
-    const { value, name } = event.target;
+  handleInputChange(e) {
+    const { value, name } = e.target;
     this.setState({ [name]: value });
-  };
+  }
 
   render() {
     return (
@@ -57,28 +59,30 @@ export default class Login extends Component {
         <Form horizontal>
           <FormGroup controlId="formHorizontalUsername">
             <Col componentClass={ControlLabel} sm={2}>
-              Username
+              Username:
             </Col>
             <Col sm={10}>
               <FormControl
+                className="login-form"
                 type="username"
                 name="username"
                 placeholder="Username"
-                onChange={() => this.handleInputChange}
+                onChange={this.handleInputChange}
               />
             </Col>
           </FormGroup>
 
           <FormGroup controlId="formHorizontalPassword">
             <Col componentClass={ControlLabel} sm={2}>
-              Password
+              Password:
             </Col>
             <Col sm={10}>
               <FormControl
+                className="login-form"
                 type="password"
                 name="password"
                 placeholder="Password"
-                onChange={() => this.handleInputChange}
+                onChange={this.handleInputChange}
               />
             </Col>
           </FormGroup>
