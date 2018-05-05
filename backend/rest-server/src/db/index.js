@@ -1,4 +1,5 @@
 const mysql = require("promise-mysql");
+<<<<<<< dabafde5f6d5ff7e60221b9ece99933e11460f99
 let _ = require("underscore");
 
 const connection = mysql.createPool({
@@ -41,5 +42,24 @@ let test2 = async () => {
 };
 
 test2();
+=======
+require('dotenv').config();
+
+const connection = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASS,
+  database: "greatwhitebuffalo"
+});
+
+// connection.connect(function(err) {
+//   if (err) throw err;
+//   console.log("Mysql Connected!");
+//   // connection.query('select * from Users', (err, result) => {
+//   //   if (err) {throw err;}
+//   //   console.log('fuck yeah baby', result);
+//   // })
+// });
+>>>>>>> Can now pull user data and all there bets
 
 module.exports = connection;
