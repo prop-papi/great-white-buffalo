@@ -7,11 +7,17 @@ const resolvers = {
       return (async () => { 
         try{
           let data = await db.query('select * from Users where username=?' , [username]);
-          let bets = await db.query('select * from Bets where creator=?', [data[0]["id"]]);
-          data[0]['bets'] = bets
-          console.log('here is data', data[0]);
-          //data[0]
           return data[0]
+        } catch(err) {
+          console.log(err)
+        }
+      })()
+    },
+    allBets(_, args) {
+      return (async () => {
+        try{
+          let data = await db.query('select * from Bets');
+          return data
         } catch(err) {
           console.log(err)
         }
@@ -20,28 +26,53 @@ const resolvers = {
     allUsers(_, args) {
       return (async () => {
         try{
-          let data = await db.query('select * from User')
-          console.log('here is data', data);
-          return JSON.stringify(data)
+          let data = await db.query('select * from Users')
+          return data
         } catch(err) {
           console.log(err)
         }
       })()
     }
   },
-  // User: {
-  //   posts(author) {
-  //     return author.getPosts();
-  //   }
-  // },
-  // Bet: {
-  //   author(post) {
-  //     return post.getAuthor();
-  //   },
-  //   views(post) {
-  //     return View.findOne({ postId: post.id }).then(view => view.views);
-  //   }
-  // }
+  Mutation: {
+    addBet(_, args) {
+      console.log(args)
+      return (async() => {
+        try {
+          const {description, wager, creator, club} = args
+          await db.query('insert into Bets (description, wager, creator, club) values (?,?,?,?)', [description, wager, creator, club])
+          return args
+        } catch(err) {
+          console.log(err);
+        }
+      })()
+    }
+  },
+  User: {
+    bets(user) {
+      return (async () => { 
+        try{
+          let bets = await db.query('select * from Bets where creator=?', [user.id]);
+          return bets
+        } catch(err) {
+          console.log(err)
+        }
+      })()
+    }
+  },
+  Bet: {
+    user(creator) {
+      return (async () => { 
+        try{
+          let bets = await db.query('select * from Users where id=?', [creator.id]);
+          return bets
+        } catch(err) {
+          console.log(err)
+        }
+      })()
+    }
+  }
+  
 };
 
 export default resolvers;
