@@ -30,6 +30,7 @@
     "jest": "^22.4.3",
     "jsonwebtoken": "^8.2.1",
     "mysql": "^2.15.0",
+    "mongodb": "^2.2.33",
     "nodemon": "^1.17.3",
     "npm": "^6.0.0",
     "passport": "^0.4.0",
