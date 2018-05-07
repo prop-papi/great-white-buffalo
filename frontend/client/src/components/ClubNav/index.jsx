@@ -19,8 +19,9 @@ class ClubNav extends Component {
   }
 
   render() {
+    console.log('we made it boys')
     return (
-      <div className="container">
+      <div className="club-container">
         <Nav bsStyle="pills" stacked>
           <NavItem
             key={11}

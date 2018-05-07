@@ -22,26 +22,6 @@ const mongoConnectString = `mongodb://${process.env.MONGO_USERNAME}:${
 }?ssl=true&replicaSet=${process.env.MONGO_DATABASE}-shard-0&authSource=admin`;
 
 let promise = mongoose.connect(mongoConnectString);
-console.log(process.env.AWS_DATABASE)
-console.log(process.env.AWS_HOST)
-console.log(process.env.AWS_USER)
-// example function for pulling global data
-let test = async () => {
-  let query1 = `select club from UsersClubs WHERE user=1;`;
-  let data = await connection.query(query1);
-  let clubs = [];
-  _.each(data, function(row) {
-    clubs.push(row.club);
-  });
-  let query2 = `select * from Clubs WHERE id in (${[...clubs]})`;
-  let query3 = `select * from Bets WHERE club in (${[...clubs]})`;
-  let data2 = await connection.query(query2);
-  let data3 = await connection.query(query3);
-  let global = {};
-  global["clubs"] = JSON.parse(JSON.stringify(data2));
-  global["bets"] = JSON.parse(JSON.stringify(data3));
-  console.log(global);
-};
 
 let mongodb = mongoose.connection;
 mongodb.on("error", console.error.bind(console, "connection error:"));
@@ -90,4 +70,3 @@ mongodb.once("open", async function() {
 
 module.exports.mysqldb = mysqldb;
 module.exports.mongodb = mongodb;
-module.exports = connection;

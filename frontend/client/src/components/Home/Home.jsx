@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import "./Home.css";
-
+import ClubNav from '../ClubNav/index';
 class Home extends Component {
     constructor() {
       super()
-
     }
 
     render() {
@@ -18,8 +17,8 @@ class Home extends Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={1} sm={1} md={1} style={{'backgroundColor': 'rgb(90,105,120)', 'height': '100%'}}>
-                Club
+              <Col xs={1} sm={1 } md={1} style={{'backgroundColor': 'rgb(90,105,120)', 'height': '100%'}}>
+                <ClubNav/>
               </Col>
               <Col xs={2} sm={2} md={2} style={{'backgroundColor': 'rgb(105,115,130)', 'height': '100%'}}>
                 Lounge
