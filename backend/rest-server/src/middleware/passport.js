@@ -4,7 +4,6 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const passportJWT = require("passport-jwt");
 const JwtStrategy = passportJWT.Strategy;
-const db = require("../db/index.js");
 const authdb = require("../db/models/auth/index.js");
 
 passport.use(

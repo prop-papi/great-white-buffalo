@@ -1,0 +1,32 @@
+.container {
+  width: 9%;
+  height: 550px;
+  float: left;
+  overflow-y: scroll;
+}
+.club-logo-wrapper {
+  background-color: transparent !important;
+}
+
+.nav-image {
+  width: 100%;
+}
+
+.nav-item > a:hover {
+  width: 100%;
+  background-color: transparent;
+}
+
+.nav-pills > li > a:hover {
+  color: #fff;
+  opacity: 1;
+}
+
+.nav-pills > li > a {
+  background-color: transparent !important;
+  transition: transform 0.4s;
+}
+
+.nav-image:hover {
+  transform: scale(1.2);
+}
