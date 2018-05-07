@@ -26,11 +26,10 @@ class CreateBet extends React.Component { // note we do not export the actual Re
   render() {
     return (
       <div>Hello from React router search bet
-            your current store is as follows!!!
-            {/* {this.props.store.getState()} */}
-
-            and this.props.searchNumber is '{JSON.stringify(this.props.searchNumber)}'
-            <button onClick={()=> console.log(this.props.searchNumber)}/>
+            your global data in the store is 
+            {this.props.global}
+            and your local data in the store is
+            {this.props.local}
       <div>
         <input type="text" value={this.state.searchValue} onChange={this.handleChange} />
         <input type="submit" value="Submit" onClick={this.handleSubmit}/>
@@ -42,7 +41,9 @@ class CreateBet extends React.Component { // note we do not export the actual Re
 
 function mapStateToProps(state) { // specifies the slice of state this compnent wants and provides it
   return {
-    searchNumber: state.searchNumber
+    searchNumber: state.searchNumber,
+    local: state.localData,
+    global: state.globalData,
   };
 }
 

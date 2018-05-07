@@ -7,3 +7,7 @@ export const testAction = (createNumber) => dispatch => {
 export const testSearchAction = (searchNumber) => dispatch => {
   dispatch({ type: 'THIS_IS_ALSO_A_TEST', searchNumber }); // or just enter as a string
 }
+
+export const setTestData = (localData, globalData) => dispatch => {
+  dispatch({ type: 'SET_TEST_DATA', localData, globalData });
+}

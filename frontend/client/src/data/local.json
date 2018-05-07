@@ -77,5 +77,21 @@
       "end_at": "2018-05-10T23:48:35.000Z",
       "odds": "1:1"
     }
+  ],
+  "messages": [
+    { "_id": "5aebd1e21c89001e4be74d1e",
+    "user": 1,
+    "lounge": 1,
+    "text": "Broncos taking the ship",
+    "media": "",
+    "created_at": "2018-05-10T23:48:35.000Z"
+    },
+    { "_id": "5aebd30f1c89001e4be74d21",
+    "user": 4,
+    "lounge": 1,
+    "text": "Re-building year for the cowgirls!",
+    "media": "",
+    "created_at": "2018-05-10T23:58:35.000Z"
+    }
   ]
 }
