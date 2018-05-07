@@ -5,84 +5,93 @@
       "name": "NFL",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/nfllogo-880x350.jpg"
     },
     {
       "id": 2,
       "name": "MLB",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/mlb.png"
     },
     {
       "id": 3,
       "name": "NHL",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/download.png"
     },
     {
       "id": 4,
       "name": "NBA",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/jordan-nba-logo-590x798.png"
     },
     {
       "id": 5,
       "name": "MLS",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/2000px-MLS_logo.svg.png"
     },
     {
       "id": 6,
       "name": "Premier League",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/premier-league.jpg"
     },
     {
       "id": 7,
       "name": "Bundesliga",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/bundesliga.jpg"
     },
     {
       "id": 8,
       "name": "Overwatch",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/overwatch.jpeg"
     },
     {
       "id": 9,
       "name": "Rocket League",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/rocketleague.jpeg"
     },
     {
       "id": 10,
       "name": "PUBG",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/pubG.jpg"
     },
     {
       "id": 11,
       "name": "Fortnite",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo":
+        "https://s3.us-east-2.amazonaws.com/great-white-buffalo/fortnite.png"
     },
     {
       "id": 12,
       "name": "Global",
       "security": "public",
       "is_archived": 0,
-      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
+      "logo": "https://s3.us-east-2.amazonaws.com/great-white-buffalo/home.jpg"
     }
   ],
   "bets": [
