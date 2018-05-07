@@ -18,16 +18,16 @@ class Home extends Component {
               </Col>
             </Row>
             <Row>
-              <Col md={1} style={{'backgroundColor': 'rgb(90,105,120)', 'height': '100%'}}>
+              <Col xs={1} sm={1} md={1} style={{'backgroundColor': 'rgb(90,105,120)', 'height': '100%'}}>
                 Club
               </Col>
-              <Col md={2} style={{'backgroundColor': 'rgb(105,115,130)', 'height': '100%'}}>
+              <Col xs={2} sm={2} md={2} style={{'backgroundColor': 'rgb(105,115,130)', 'height': '100%'}}>
                 Lounge
               </Col>
-              <Col md={6} style={{'backgroundColor': 'rgb(120,135,150)', 'height': '100%'}}>
+              <Col xs={6} sm={6} md={6} style={{'backgroundColor': 'rgb(120,135,150)', 'height': '100%'}}>
                 Media
               </Col>
-              <Col md={3} style={{'backgroundColor': 'rgb(130,145,160)', 'height': '100%'}}>
+              <Col xs={3} sm={3} md={3} style={{'backgroundColor': 'rgb(130,145,160)', 'height': '100%'}}>
                 Friends
               </Col>
             </Row>
