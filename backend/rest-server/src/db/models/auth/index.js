@@ -1,4 +1,4 @@
-const db = require("../../index.js");
+const mysqldb = require("../../index.js").mysqldb;
 const mysql = require("mysql");
 const bcrypt = require("bcrypt-nodejs");
 const SqlString = require("sqlstring");
@@ -10,7 +10,7 @@ const insertNewUser = async (user, pw) => {
     user
   )}, '${hash}');`;
   try {
-    let data = await db.query(query);
+    let data = await mysqldb.query(query);
     console.log("Successfully created new user.", data);
     return data;
   } catch (err) {
@@ -22,7 +22,7 @@ const insertNewUser = async (user, pw) => {
 const selectUser = async user => {
   const query = `SELECT * FROM Users WHERE username='${user}';`;
   try {
-    return await db.query(query);
+    return await mysqldb.query(query);
   } catch (err) {
     console.log("error", err);
     return err;
@@ -32,7 +32,7 @@ const selectUser = async user => {
 const selectNewUser = async id => {
   const query = `SELECT * FROM Users WHERE id='${id}';`;
   try {
-    return await db.query(query);
+    return await mysqldb.query(query);
   } catch (err) {
     console.log("error", err);
     return err;
