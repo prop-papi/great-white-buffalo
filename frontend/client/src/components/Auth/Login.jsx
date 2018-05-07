@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 import {
   FormGroup,
   FormControl,
@@ -9,23 +9,23 @@ import {
   Col,
   ControlLabel,
   Alert
-} from "react-bootstrap";
+} from 'react-bootstrap';
 
-import "./Auth.css";
+import './Auth.css';
 
 export default class Login extends Component {
   constructor() {
     super();
 
     this.state = {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       showLoginErrorAlert: false
     };
 
     this.alertStyle = {
-      width: "42%",
-      marginLeft: "10px"
+      width: '42%',
+      marginLeft: '10px'
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -45,11 +45,11 @@ export default class Login extends Component {
         `http://localhost:1337/api/auth/login`,
         body
       );
-      localStorage.setItem("username", data.data[0].username);
-      localStorage.setItem("id", data.data[0].id);
-      localStorage.setItem("win_ratio", data.data[0].win_ratio);
-      localStorage.setItem("reputation", data.data[0].reputation);
-      localStorage.setItem("default_club", data.data[0].default_club);
+      localStorage.setItem('username', data.data[0].username);
+      localStorage.setItem('id', data.data[0].id);
+      localStorage.setItem('win_ratio', data.data[0].win_ratio);
+      localStorage.setItem('reputation', data.data[0].reputation);
+      localStorage.setItem('default_club', data.data[0].default_club);
       document.cookie = JSON.parse(data.headers.auth).token;
       this.props.history.push("/home");
     } catch (err) {
@@ -66,8 +66,8 @@ export default class Login extends Component {
   handleDismissLoginError() {
     this.setState({
       showLoginErrorAlert: false,
-      username: "",
-      password: ""
+      username: '',
+      password: ''
     });
   }
 

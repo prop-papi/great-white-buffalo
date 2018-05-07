@@ -1,12 +1,12 @@
-import React from "react";
-import axios from "axios";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { updateBalances } from "../../actions";
-import DatePicker from "react-16-bootstrap-date-picker";
-import TimePicker from "react-bootstrap-time-picker";
-import moment from "moment";
-import "./index.css";
+import React from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateBalances } from '../../actions';
+import DatePicker from 'react-16-bootstrap-date-picker';
+import TimePicker from 'react-bootstrap-time-picker';
+import moment from 'moment';
+import './index.css';
 import {
   ButtonToolbar,
   DropdownButton,
@@ -20,7 +20,7 @@ import {
   Col,
   ControlLabel,
   Alert
-} from "react-bootstrap";
+} from 'react-bootstrap';
 
 // add confirmation dialogue w/ bet details!!!
 
@@ -30,30 +30,30 @@ class CreateBet extends React.Component {
     this.state = {
       endDate: new Date(
         moment()
-          .startOf("day")
-          .add(12, "hours")
+          .startOf('day')
+          .add(12, 'hours')
       ).toISOString(), // starts at noon today bc of way date picker works
       endTime:
         (new Date(
-          this.round(moment(), moment.duration(30, "minutes"), "ceil")
+          this.round(moment(), moment.duration(30, 'minutes'), 'ceil')
         ).getTime() -
-          new Date(moment().startOf("day")).getTime()) /
+          new Date(moment().startOf('day')).getTime()) /
         1000, // defaults to next 30 min time
       expiresDate: new Date(
         moment()
-          .startOf("day")
-          .add(12, "hours")
+          .startOf('day')
+          .add(12, 'hours')
       ).toISOString(), // starts at noon today bc of way date picker works
       expiresTime:
         (new Date(
-          this.round(moment(), moment.duration(30, "minutes"), "ceil")
+          this.round(moment(), moment.duration(30, 'minutes'), 'ceil')
         ).getTime() -
-          new Date(moment().startOf("day")).getTime()) /
+          new Date(moment().startOf('day')).getTime()) /
         1000, // defaults to next 30 min time
-      club: "",
-      wager: "", // needs to compare against user tokens and write change to database
-      description: "",
-      odds: "1:1", // be able to change ultimately
+      club: '',
+      wager: '', // needs to compare against user tokens and write change to database
+      description: '',
+      odds: '1:1', // be able to change ultimately
       clubs: {},
       showBetFailAlert: false,
       showBetSuccessAlert: false
@@ -101,7 +101,7 @@ class CreateBet extends React.Component {
     ];
 
     this.alertStyle = {
-      width: "150%"
+      width: '150%'
     };
   }
 
@@ -143,19 +143,19 @@ class CreateBet extends React.Component {
         this.state.expiresTime * 1000 -
         43200000
     ).toISOString();
-    const formattedExpiresAt = moment(expiresAt).format("YYYY-MM-DD HH:mm:ss");
+    const formattedExpiresAt = moment(expiresAt).format('YYYY-MM-DD HH:mm:ss');
     const endsAt = new Date(
       new Date(this.state.endDate).getTime() +
         this.state.endTime * 1000 -
         43200000
     ).toISOString();
-    const formattedEndsAt = moment(endsAt).format("YYYY-MM-DD HH:mm:ss");
+    const formattedEndsAt = moment(endsAt).format('YYYY-MM-DD HH:mm:ss');
     const { club, wager, odds, description } = this.state;
     if (
       new Date(expiresAt) >= new Date(currently) &&
       new Date(endsAt) >= new Date(expiresAt) &&
-      wager !== "" &&
-      description !== "" &&
+      wager !== '' &&
+      description !== '' &&
       Number(wager) >= 1
     ) {
       const body = {
@@ -176,28 +176,28 @@ class CreateBet extends React.Component {
           this.setState({
             endDate: new Date(
               moment()
-                .startOf("day")
-                .add(12, "hours")
+                .startOf('day')
+                .add(12, 'hours')
             ).toISOString(), // starts at noon today bc of way date picker works
             endTime:
               (new Date(
-                this.round(moment(), moment.duration(30, "minutes"), "ceil")
+                this.round(moment(), moment.duration(30, 'minutes'), 'ceil')
               ).getTime() -
-                new Date(moment().startOf("day")).getTime()) /
+                new Date(moment().startOf('day')).getTime()) /
               1000, // defaults to next 30 min time
             expiresDate: new Date(
               moment()
-                .startOf("day")
-                .add(12, "hours")
+                .startOf('day')
+                .add(12, 'hours')
             ).toISOString(), // starts at noon today bc of way date picker works
             expiresTime:
               (new Date(
-                this.round(moment(), moment.duration(30, "minutes"), "ceil")
+                this.round(moment(), moment.duration(30, 'minutes'), 'ceil')
               ).getTime() -
-                new Date(moment().startOf("day")).getTime()) /
+                new Date(moment().startOf('day')).getTime()) /
               1000, // defaults to next 30 min time
-            wager: "", // needs to compare against user tokens and write change to database
-            description: "",
+            wager: '', // needs to compare against user tokens and write change to database
+            description: '',
             showBetSuccessAlert: true
           });
           this.props.updateBalances(
@@ -279,7 +279,7 @@ class CreateBet extends React.Component {
             <br /> <br />
             <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
               <span>Wager Odds</span>
-            </OverlayTrigger>{" "}
+            </OverlayTrigger>{' '}
             {this.state.odds}
             <br /> <br />
             <div className="datePicker">
@@ -301,7 +301,7 @@ class CreateBet extends React.Component {
             <br />
             <input
               type="submit"
-              style={{ position: "absolute", left: "7%" }}
+              style={{ position: 'absolute', left: '7%' }}
               className="submitButton"
               onClick={this.handleSubmit}
             />
@@ -313,7 +313,7 @@ class CreateBet extends React.Component {
             {this.props.global.globalData.balances[0].available_balance}
             <br /> <br />
             <span>
-              {this.state.clubs[this.state.club]}{" "}
+              {this.state.clubs[this.state.club]}{' '}
               <ButtonToolbar className="testing">
                 <DropdownButton title="Clubs" id={1}>
                   {Object.keys(this.state.clubs).map(c => (
