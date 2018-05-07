@@ -5,6 +5,7 @@ import SearchBets from "./components/SearchBets/index.jsx";
 import CreateBet from "./components/CreateBet/index.jsx";
 import Login from "./components/Auth/Login.jsx";
 import Signup from "./components/Auth/Signup.jsx";
+import TestInfo from './components/TestInfo/index.jsx';
 
 export default class App extends Component {
   constructor() {
@@ -19,6 +20,7 @@ export default class App extends Component {
           <Route path="/signup" component={Signup} />
           <Route path="/searchbets" component={SearchBets} />
           <Route path="/createbet" component={CreateBet} />
+          <Route path="/test" component={TestInfo} />>
         </Switch>
       </div>
     );

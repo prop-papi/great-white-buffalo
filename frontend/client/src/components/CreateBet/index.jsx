@@ -7,35 +7,32 @@ class CreateBet extends React.Component { // note we do not export the actual Re
   constructor(props) {
     super(props)
     this.state = {
-      createValue: '',
+      end: '', // this should be calendar
+      club: '', // should be a drop down and default to currently selected club
+      wager: '', // text field input
+      description: '', // text field input
+      odds: '1:1', // be able to change ultimately
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
-    this.setState({ createValue: e.target.value });
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   handleSubmit(e) {
-    this.props.testAction(this.state.createValue)
+    this.props.testAction(this.state.value) // this will be submitting a bet
     event.preventDefault();
   }
 
 
   render() {
     return (
-      <div>Hello from React router create bet
-            your current store is as follows!!!
-            {/* {this.props.store.getState()} */}
-
-            and this.props.createNumber is '{JSON.stringify(this.props.createNumber)}'
-            and this.props.searchNumber is '{JSON.stringify(this.props.searchNumber)}'
-            <button onClick={()=> console.log(this.props.createNumber)}/>
       <div>
-        <input type="text" value={this.state.createValue} onChange={this.handleChange} />
+        <input type="text" name="club" value={this.state.value} onChange={this.handleChange} />
+        <input type="text" value={this.state.value} onChange={this.handleChange} />
         <input type="submit" value="Submit" onClick={this.handleSubmit}/>
-      </div>
       </div>
     );
   }
