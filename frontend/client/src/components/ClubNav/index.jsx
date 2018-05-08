@@ -17,10 +17,6 @@ class ClubNav extends Component {
     this.props.updateLocalData(club.id);
   }
 
-  componentDidMount() {
-    console.log(this.props);
-  }
-
   render() {
     return (
       <div className="club-container">
@@ -85,7 +81,6 @@ class ClubNav extends Component {
 
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
-  console.log(state);
   return {
     //globalData: state.globalData,
     data: state.data,
