@@ -8,8 +8,24 @@
   background-color: rgb(70,85,100);
 }
 
-.glyph:after {
-  background-color: transparent;
+.glyph:active {
+  background-color: transparent !important;
+}
+
+.glyph:focus {
+  background-color: transparent !important;
+}
+
+.menu {
+  background-color: rgb(70,85,100);
+}
+
+a{
+  color: white !important;
+}
+a:hover{
+  background-color: transparent !important;
+  color: rgb(90,105,120) !important;
 }
 
 .logo {
