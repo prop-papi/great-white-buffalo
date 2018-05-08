@@ -1,15 +1,24 @@
 .lounges-container {
-  width: 14%;
+  width: 100%;
   height: 550px;
   float: left;
   overflow-y: scroll;
   overflow-x: visible;
 }
 
+.lounge-name {
+  color: white;
+}
+
 .list-group-item {
   padding: 8px 15px !important;
   border: 0px solid #ddd !important;
+  background-color: transparent !important;
   text-align: center;
+}
+
+.list-group-item:hover {
+  background-color: rgb(61, 77, 87) !important;
 }
 
 .club-logo {

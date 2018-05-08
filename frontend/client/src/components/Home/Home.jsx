@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import ClubNav from '../ClubNav/index';
 import GlobalNavBar from '../GlobalNavBar/GlobalNavBar';
+import LoungeList from '../LoungeList/index'
 import "./Home.css";
+
 class Home extends Component {
     constructor() {
       super()
@@ -22,7 +24,7 @@ class Home extends Component {
                 <ClubNav/>
               </Col>
               <Col xs={2} sm={2} md={2} style={{'backgroundColor': 'rgb(105,115,130)', 'height': '100%'}}>
-                Lounge
+                <LoungeList/>
               </Col>
               <Col xs={6} sm={6} md={6} style={{'backgroundColor': 'rgb(120,135,150)', 'height': '100%'}}>
                 Media
