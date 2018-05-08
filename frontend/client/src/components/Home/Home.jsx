@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import "./Home.css";
 import ClubNav from '../ClubNav/index';
+import GlobalNavBar from '../GlobalNavBar/GlobalNavBar';
+import "./Home.css";
 class Home extends Component {
     constructor() {
       super()
@@ -13,7 +14,7 @@ class Home extends Component {
           <Grid>
             <Row style={{'height': '10%'}}>
               <Col md={12} align='center' style={{'backgroundColor': 'rgb(90,105,120)', 'height': '100%'}}>
-                Global Nav Bar
+                <GlobalNavBar/>
               </Col>
             </Row>
             <Row>
