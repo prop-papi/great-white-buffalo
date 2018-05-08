@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Glyphicon, Button, Image } from 'react-bootstrap';
+import { Col, Glyphicon, ButtonToolbar, Image, Dropdown , DropdownButton, MenuItem } from 'react-bootstrap';
 import './GlobalNavBar.css';
 class GlobalNavBar extends Component {
   constructor() {
@@ -15,9 +15,19 @@ class GlobalNavBar extends Component {
           <Col md={8} mdHidden={true}>
           </Col>
           <Col align='right' md={2}>
-            <Button bsSize='large' className='glyph'>
-              <Glyphicon glyph='align-justify' />
-            </Button>
+            {/* <ButtonToolbar > */}
+              <Dropdown pullRight>
+                <Dropdown.Toggle bsSize='large' className='glyph'> 
+                  <Glyphicon glyph='align-justify' />
+                </Dropdown.Toggle>
+                <Dropdown.Menu className='menu'>
+                  <MenuItem>Profile</MenuItem>
+                  <MenuItem>Notifications</MenuItem>
+                  <MenuItem>Leaderboard</MenuItem>
+                  <MenuItem>Logout</MenuItem>
+                </Dropdown.Menu>
+              </Dropdown>
+            {/* </ButtonToolbar> */}
           </Col>
       </div>
     )

@@ -24,7 +24,7 @@ class Home extends Component {
               <Col xs={1} sm={1 } md={1} style={{'backgroundColor': 'rgb(90,105,120)', 'height': '100%'}}>
                 <ClubNav/>
               </Col>
-              <Col xs={2} sm={2} md={2} style={{'backgroundColor': 'rgb(105,115,130)', 'height': '100%'}}>
+              <Col xs={2} sm={2} md={2} style={{'backgroundColor': 'rgb(100,115,130)', 'height': '100%'}}>
                 <LoungeList/>
               </Col>
               <Col xs={6} sm={6} md={6} style={{'backgroundColor': 'rgb(120,135,150)', 'height': '100%'}}>
