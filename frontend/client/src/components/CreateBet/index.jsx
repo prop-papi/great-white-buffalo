@@ -61,6 +61,11 @@ class CreateBet extends React.Component {
     this.endTimeChange = this.endTimeChange.bind(this);
     this.createSelectItems = this.createSelectItems.bind(this);
     this.selectClub = this.selectClub.bind(this);
+    this.handleDismissCreateError = this.handleDismissCreateError.bind(this);
+    this.handleDismissCreateSuccess = this.handleDismissCreateSuccess.bind(
+      this
+    );
+
     this.tooltips = [
       <Tooltip id="tooltip">
         Be as descriptive as possible as this description will need to be
@@ -79,6 +84,11 @@ class CreateBet extends React.Component {
         i.e. after the game or season
       </Tooltip>
     ];
+
+    this.alertStyle = {
+      width: "42%",
+      marginLeft: "10px"
+    };
   }
 
   componentDidMount() {
@@ -161,6 +171,18 @@ class CreateBet extends React.Component {
     this.setState({ endTime: time });
   }
 
+  handleDismissCreateError() {
+    this.setState({
+      showBetFailAlert: false
+    });
+  }
+
+  handleDismissCreateSuccess() {
+    this.setState({
+      showBetSuccessAlert: false
+    });
+  }
+
   render() {
     return (
       <div>
@@ -225,6 +247,38 @@ class CreateBet extends React.Component {
         </ButtonToolbar>
         {this.state.clubs[this.state.club]}
         <input type="submit" value="Submit" onClick={this.handleSubmit} />
+        {this.state.showBetFailAlert ? (
+          <Alert
+            bsStyle="danger"
+            style={this.alertStyle}
+            onDismiss={this.handleDismissCreateError}
+          >
+            <h4>Oh snap! You got an error!</h4>
+            <p>
+              There is an error in your wager input. Please verify and try
+              again.
+            </p>
+            <p>
+              <Button onClick={this.handleDismissCreateError}>Close</Button>
+            </p>
+          </Alert>
+        ) : null}
+        {this.state.showBetSuccessAlert ? (
+          <Alert
+            bsStyle="success"
+            style={this.alertStyle}
+            onDismiss={this.handleDismissCreateError}
+          >
+            <h4>Created wager successfully!!!</h4>
+            <p>
+              Congratulations, your wager has been successfully created. You can
+              view all of your bets from your profile.
+            </p>
+            <p>
+              <Button onClick={this.handleDismissCreateSuccess}>Close</Button>
+            </p>
+          </Alert>
+        ) : null}
       </div>
     );
   }
