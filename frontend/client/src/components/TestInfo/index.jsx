@@ -1,26 +1,28 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { setTestData } from '../../actions';
-import axios from 'axios';
-
+import React from "react";
+import { connect } from "react-redux";
+import { setTestData } from "../../actions";
+import axios from "axios";
 
 class TestData extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
     return (
       <div>
-        Redux current store local data - called with 'this.props.data.localData'
+        Redux current store local data - called with
+        'this.props.local.localData'
         <br /> <br />
-        {JSON.stringify(this.props.data.localData)}
-
-        <br /><br /><br /><br />
-
-        Redux current store global data - called with 'this.props.data.globalData'
+        {JSON.stringify(this.props.local.localData)}
+        <br />
+        <br />
+        <br />
+        <br />
+        Redux current store global data - called with
+        'this.props.global.globalData'
         <br /> <br />
-        {JSON.stringify(this.props.data.globalData)}
+        {JSON.stringify(this.props.global.globalData)}
       </div>
     );
   }
@@ -28,7 +30,8 @@ class TestData extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    data: state.data,
+    global: state.global,
+    local: state.local
   };
 }
 

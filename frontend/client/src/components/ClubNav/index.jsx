@@ -82,8 +82,6 @@ class ClubNav extends Component {
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
-    //globalData: state.globalData,
-    data: state.data,
     global: state.global
   };
 }

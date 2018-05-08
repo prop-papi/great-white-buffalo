@@ -110,13 +110,19 @@ class CreateBet extends React.Component {
   componentDidMount() {
     this.setState({
       clubs: this.createSelectItems(),
-      club: this.props.data.localData.club.id
+      club: this.props.local.localData.club.id
+    });
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      club: newProps.local.localData.club.id
     });
   }
 
   createSelectItems() {
     let items = {};
-    this.props.data.globalData.clubs.forEach(club => {
+    this.props.global.globalData.clubs.forEach(club => {
       items[club.id] = club.name;
     });
     return items;
@@ -280,7 +286,12 @@ class CreateBet extends React.Component {
         <ButtonToolbar>
           <DropdownButton title="Clubs" id={1}>
             {Object.keys(this.state.clubs).map(c => (
-              <MenuItem onSelect={this.selectClub} key={c} eventKey={c}>
+              <MenuItem
+                className="menu"
+                onSelect={this.selectClub}
+                key={c}
+                eventKey={c}
+              >
                 {this.state.clubs[c]}
               </MenuItem>
             ))}
@@ -328,7 +339,8 @@ class CreateBet extends React.Component {
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
-    data: state.data
+    global: state.global,
+    local: state.local
   };
 }
 

@@ -56,7 +56,6 @@ class LoungeList extends Component {
 
 function mapStateToProps(state) {
   return {
-    data: state.data,
     local: state.local
   };
 }
