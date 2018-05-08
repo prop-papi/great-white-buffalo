@@ -1,20 +1,29 @@
 import axios from "axios";
 
-export const setLocalData = payload => dispatch => {
+export const setLocalData = payload => {
   dispatch({ type: "LOCAL_DATA", payload });
 };
 
-export const setGlobalData = payload => dispatch => {
+export const setGlobalData = payload => {
   dispatch({ type: "GLOBAL_DATA", payload });
 };
 
-export const setTestData = (localData, globalData) => dispatch => {
-  dispatch({ type: "SET_TEST_DATA", localData, globalData });
+export const setDefaultData = (localData, globalData, dispatch) => {
+  dispatch({ type: "SET_DEFAULT_DATA", localData, globalData });
 };
 
-export const fetchHomeData = async id => {
-  // make axios request w/ user id to fetch all data needed
-  // set the store data with results
+export const fetchHomeData = (id, club) => async dispatch => {
   // utilize some kind of loading screen
-  const data = await axios.get(`http://localhost:1337/api/users/${id}`);
+  const globalData = await axios.get(`http://localhost:1337/api/users/${id}`);
+  const localData = await axios.get(
+    `http://localhost:1337/api/users/local/${club}`
+  );
+  setDefaultData(localData.data, globalData.data, dispatch);
+};
+
+export const updateLocalData = club => async dispatch => {
+  const localData = await axios.get(
+    `http://localhost:1337/api/users/local/${club}`
+  );
+  setLocalData(localData.data, dispatch);
 };

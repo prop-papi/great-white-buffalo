@@ -9,7 +9,6 @@ import "./index.css";
 class ClubNav extends Component {
   constructor() {
     super();
-
     this.handleNavItemClick = this.handleNavItemClick.bind(this);
   }
 
@@ -26,7 +25,7 @@ class ClubNav extends Component {
             key={11}
             className="nav-item"
             onClick={() =>
-              this.handleNavItemClick(this.props.data.globalData.clubs[11])
+              this.handleNavItemClick(this.props.data.globalData.globalClub[0])
             }
           >
             <div className="club-logo-wrapper">
@@ -34,12 +33,12 @@ class ClubNav extends Component {
                 placement="right"
                 overlay={
                   <Tooltip id="tooltip">
-                    {this.props.data.globalData.clubs[11].name}
+                    {this.props.data.globalData.globalClub[0].name}
                   </Tooltip>
                 }
               >
                 <Image
-                  src={this.props.data.globalData.clubs[11].logo}
+                  src={this.props.data.globalData.globalClub[0].logo}
                   circle
                   responsive
                   className="nav-image"

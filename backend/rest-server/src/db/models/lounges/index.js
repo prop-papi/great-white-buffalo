@@ -2,7 +2,7 @@ const mysqldb = require("../../index.js").mysqldb;
 const mysql = require("mysql");
 
 const selectAllLoungesInClub = async club => {
-  const query = `SELECT * FROM Users WHERE username='${user}';`;
+  const query = `select * from Lounges WHERE club=${club};`;
   try {
     return await mysqldb.query(query);
   } catch (err) {

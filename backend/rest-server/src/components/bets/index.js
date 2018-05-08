@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const betsdb = require("../../db/models/bets/index.js");
 
 router.post("/create", async function(req, res) {
-  console.log(req.body);
   try {
     const newUser = await betsdb.insertNewBet(
       req.body.club,

@@ -6,6 +6,8 @@ import LoungeList from "../LoungeList/index";
 import CreateBet from "../CreateBet/index.jsx";
 import { fetchHomeData } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import "./Home.css";
 
 class Home extends Component {
@@ -14,7 +16,10 @@ class Home extends Component {
   }
   async componentDidMount() {
     // set app state here
-    fetchHomeData(localStorage.getItem("id"));
+    await this.props.fetchHomeData(
+      localStorage.getItem("id"),
+      localStorage.getItem("default_club")
+    );
   }
 
   render() {
@@ -72,4 +77,21 @@ class Home extends Component {
   }
 }
 
-export default Home;
+function mapStateToProps(state) {
+  // specifies the slice of state this compnent wants and provides it
+  return {
+    //globalData: state.globalData,
+    data: state.data
+  };
+}
+
+function bindActionsToDispatch(dispatch) {
+  return bindActionCreators(
+    {
+      fetchHomeData: fetchHomeData
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, bindActionsToDispatch)(Home);

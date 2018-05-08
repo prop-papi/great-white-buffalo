@@ -28,7 +28,7 @@ class LoungeList extends Component {
     return (
       <div className="lounges-container">
         <Image
-          src={this.props.data.localData.club[0].logo}
+          src={this.props.data.localData.club.logo}
           circle
           responsive
           className="club-logo"
