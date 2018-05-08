@@ -2,17 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import {
-  Nav,
-  NavItem,
-  NavItemProps,
-  Image,
-  ImageProps,
-  Thumbnail,
-  ThumbnailProps,
-  Tooltip,
-  OverlayTrigger
-} from "react-bootstrap";
+import { Nav, NavItem, Image, Tooltip, OverlayTrigger } from "react-bootstrap";
 
 import "./index.css";
 
