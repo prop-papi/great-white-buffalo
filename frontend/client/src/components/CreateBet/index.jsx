@@ -89,15 +89,11 @@ class CreateBet extends React.Component {
         i.e. after the game or season (must be after 'Expires At')
       </Tooltip>,
       <Tooltip id="tooltip">
-        My total balance available to bet (not tied up in current or pending
-        bets)
+        My total balance available to wager (not tied up in current or pending
+        wagers)
       </Tooltip>,
       <Tooltip id="tooltip">
-        My total balance available to bet (not tied up in current or pending
-        bets)
-      </Tooltip>,
-      <Tooltip id="tooltip">
-        Currently all bets are set to 1:1 odds. Changing this will be added in
+        Currently all wagers are set to 1:1 odds. Changing this will be added in
         an upcoming release!
       </Tooltip>
     ];
@@ -276,7 +272,7 @@ class CreateBet extends React.Component {
         {`${this.state.balance} tokens`}
         <br />
         <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
-          <span>Bet Odds</span>
+          <span>Wager Odds</span>
         </OverlayTrigger>{" "}
         {this.state.odds} <br />
         <div className="datePicker">
@@ -352,7 +348,7 @@ class CreateBet extends React.Component {
             <h4>Created wager successfully!!!</h4>
             <p>
               Congratulations, your wager has been successfully created. You can
-              view all of your bets from your profile.
+              view all of your wagers from your profile.
             </p>
             <p>
               <Button onClick={this.handleDismissCreateSuccess}>Close</Button>
