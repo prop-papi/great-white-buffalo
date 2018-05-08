@@ -1,7 +1,8 @@
 import React from 'react';
+import axios from "axios";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { testAction } from '../../actions'
+import { testAction } from '../../actions';
 import DatePicker from 'react-16-bootstrap-date-picker';
 import TimePicker from 'react-bootstrap-time-picker';
 import moment from 'moment';
@@ -69,13 +70,29 @@ class CreateBet extends React.Component {
   async handleSubmit(e) {
     e.preventDefault();
     const expiresAt = new Date((new Date(this.state.expiresDate).getTime()) + (this.state.expiresTime * 1000) - 43200000).toISOString();
+    const formattedExpiresAt = moment(expiresAt).format("YYYY-MM-DD HH:mm:ss");
     const endsAt = new Date((new Date(this.state.endDate).getTime()) + (this.state.endTime * 1000) - 43200000).toISOString();
-    //const { club}
-    // const body = {
-    //   end
-    // };
-    // console.log('exp' , expiresAt, 'end ', endsAt)
-    // write to database and then call action i create here!!!!
+    const formattedEndsAt = moment(endsAt).format("YYYY-MM-DD HH:mm:ss");
+    const { club, wager, odds, description } = this.state;
+    const body = {
+      club,
+      wager,
+      odds,
+      description,
+      formattedExpiresAt,
+      formattedEndsAt,
+      user: localStorage.id,
+    };
+    try {
+      const data = await axios.post(
+        `http://localhost:1337/api/bets/create`,
+        body
+      );
+      // call action i create here!!!!
+    } catch (err) {
+      //this.setState({ showLoginErrorAlert: true });
+      throw new Error(err);
+    }
   }
 
   round(date, duration, method) {
