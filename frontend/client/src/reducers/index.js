@@ -4,7 +4,7 @@ import globalData from "./setGlobalData.js";
 import local from "./setTestData.js";
 
 export default combineReducers({
-  local: setLocalData,
+  local: localData,
   global: globalData,
   data: local
 });

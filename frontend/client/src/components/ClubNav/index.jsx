@@ -19,7 +19,6 @@ class ClubNav extends Component {
   }
 
   render() {
-    console.log('we made it boys')
     return (
       <div className="club-container">
         <Nav bsStyle="pills" stacked>
