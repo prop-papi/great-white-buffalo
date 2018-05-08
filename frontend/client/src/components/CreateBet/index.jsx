@@ -134,36 +134,36 @@ class CreateBet extends React.Component {
   render() {
     return (
       <div>
-      <OverlayTrigger placement="right" overlay={this.tooltips[0]}>
-      <span>Description</span>
-      </OverlayTrigger> 
+        <OverlayTrigger placement="right" overlay={this.tooltips[0]}>
+          <span>Description</span>
+        </OverlayTrigger>
         <input type="text" name="description" value={this.state.description} onChange={this.handleChange} />
-      <OverlayTrigger placement="right" overlay={this.tooltips[1]}>
-      <span>Wager Amount</span>
-      </OverlayTrigger> 
-          <input type="text" name="wager" value={this.state.wager} onChange={this.handleChange} />
+        <OverlayTrigger placement="right" overlay={this.tooltips[1]}>
+          <span>Wager Amount</span>
+        </OverlayTrigger>
+        <input type="text" name="wager" value={this.state.wager} onChange={this.handleChange} />
         <div className="datePicker">
-        <OverlayTrigger placement="right" overlay={this.tooltips[2]}>
-      <span>Expires At</span>
-      </OverlayTrigger> 
-        <DatePicker name="expiresDate" value={this.state.expiresDate} onChange={this.expDateChange} />
+          <OverlayTrigger placement="right" overlay={this.tooltips[2]}>
+            <span>Expires At</span>
+          </OverlayTrigger>
+          <DatePicker name="expiresDate" value={this.state.expiresDate} onChange={this.expDateChange} />
         </div>
         <div className="timePicker">
-          <TimePicker onChange={this.expTimeChange} value={this.state.expiresTime}/>
+          <TimePicker onChange={this.expTimeChange} value={this.state.expiresTime} />
         </div>
         <div className="datePicker">
-        <OverlayTrigger placement="right" overlay={this.tooltips[3]}>
-      <span>Ends At</span>
-      </OverlayTrigger> 
-        <DatePicker name="endDate" value={this.state.endDate} onChange={this.endDateChange} />
+          <OverlayTrigger placement="right" overlay={this.tooltips[3]}>
+            <span>Ends At</span>
+          </OverlayTrigger>
+          <DatePicker name="endDate" value={this.state.endDate} onChange={this.endDateChange} />
         </div>
         <div className="timePicker">
-          <TimePicker onChange={this.endTimeChange} value={this.state.endTime}/>
+          <TimePicker onChange={this.endTimeChange} value={this.state.endTime} />
         </div>
         <ButtonToolbar>
           <DropdownButton title="Clubs" id={1}>
-            {Object.keys(this.state.clubs).map(c => <MenuItem onSelect={this.selectClub} key={c} eventKey={c}>{this.state.clubs[c]}</MenuItem>)}     
-          </DropdownButton>     
+            {Object.keys(this.state.clubs).map(c => <MenuItem onSelect={this.selectClub} key={c} eventKey={c}>{this.state.clubs[c]}</MenuItem>)}
+          </DropdownButton>
         </ButtonToolbar>
         {this.state.clubs[this.state.club]}
         <input type="submit" value="Submit" onClick={this.handleSubmit} />
