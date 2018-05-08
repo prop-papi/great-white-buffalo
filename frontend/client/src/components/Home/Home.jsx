@@ -8,6 +8,7 @@ import { fetchHomeData } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import axios from "axios";
 import "./Home.css";
 
 class Home extends Component {
