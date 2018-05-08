@@ -28,11 +28,12 @@ class Home extends Component {
               <Col xs={2} sm={2} md={2} style={{'backgroundColor': 'rgb(100,115,130)', 'height': '100%'}}>
                 <LoungeList />
               </Col>
-              <Col xs={6} sm={6} md={6} style={{'backgroundColor': 'rgb(120,135,150)', 'height': '100%'}}>
+              <Col xs={7} sm={7} md={7} style={{'backgroundColor': 'rgb(120,135,150)', 'height': '100%'}}>
                 <MainNavBar />
+                <br />
                 <CreateBet />
               </Col>
-              <Col xs={3} sm={3} md={3} style={{'backgroundColor': 'rgb(130,145,160)', 'height': '100%'}}>
+              <Col xs={2} sm={2} md={2} style={{'backgroundColor': 'rgb(130,145,160)', 'height': '100%'}}>
                 Friends
               </Col>
             </Row>

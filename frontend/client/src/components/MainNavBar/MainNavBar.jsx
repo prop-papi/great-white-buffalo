@@ -10,7 +10,7 @@ class MainNavBar extends Component {
   render() {
     return (
       <div>
-        <Grid>
+        <Row className='nav-row'>
           <Col align='center' md={4}>
             <Button>Video</Button>
           </Col>
@@ -20,7 +20,7 @@ class MainNavBar extends Component {
           <Col align='center' md={4}>
             <Button>Chat</Button>
           </Col>
-        </Grid>
+        </Row>
       </div>
     )
   }
