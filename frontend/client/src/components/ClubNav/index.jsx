@@ -2,15 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import {
-  Nav,
-  NavItem,
-  NavItemProps,
-  Image,
-  ImageProps,
-  Thumbnail,
-  ThumbnailProps
-} from "react-bootstrap";
+import { Nav, NavItem, Image, Tooltip, OverlayTrigger } from "react-bootstrap";
 
 import "./index.css";
 
@@ -38,12 +30,21 @@ class ClubNav extends Component {
             }
           >
             <div className="club-logo-wrapper">
-              <Image
-                src={this.props.data.globalData.clubs[11].logo}
-                circle
-                responsive
-                className="nav-image"
-              />
+              <OverlayTrigger
+                placement="right"
+                overlay={
+                  <Tooltip id="tooltip">
+                    {this.props.data.globalData.clubs[11].name}
+                  </Tooltip>
+                }
+              >
+                <Image
+                  src={this.props.data.globalData.clubs[11].logo}
+                  circle
+                  responsive
+                  className="nav-image"
+                />
+              </OverlayTrigger>
             </div>
           </NavItem>
           {this.props.data.globalData.clubs.map(club => {
@@ -55,12 +56,17 @@ class ClubNav extends Component {
                   onClick={() => this.handleNavItemClick(club)}
                 >
                   <div className="club-logo-wrapper">
-                    <Image
-                      src={club.logo}
-                      circle
-                      responsive
-                      className="nav-image"
-                    />
+                    <OverlayTrigger
+                      placement="right"
+                      overlay={<Tooltip id="tooltip">{club.name}</Tooltip>}
+                    >
+                      <Image
+                        src={club.logo}
+                        circle
+                        responsive
+                        className="nav-image"
+                      />
+                    </OverlayTrigger>
                   </div>
                 </NavItem>
               );

@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import SearchBets from "./components/SearchBets/index.jsx";
 import CreateBet from "./components/CreateBet/index.jsx";
 import ClubNav from "./components/ClubNav/index.jsx";
+import LoungeList from "./components/LoungeList/index.jsx";
 import Login from "./components/Auth/Login.jsx";
 import Signup from "./components/Auth/Signup.jsx";
 import TestInfo from "./components/TestInfo/index.jsx";
@@ -23,6 +24,7 @@ export default class App extends Component {
           <Route path="/createbet" component={CreateBet} />
           <Route path="/test" component={TestInfo} />
           <Route path="/clubnav" component={ClubNav} />
+          <Route path="/lounges" component={LoungeList} />
         </Switch>
       </div>
     );

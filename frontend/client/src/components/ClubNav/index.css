@@ -3,6 +3,7 @@
   height: 550px;
   float: left;
   overflow-y: scroll;
+  overflow-x: visible;
 }
 .club-logo-wrapper {
   background-color: transparent !important;
@@ -19,7 +20,7 @@
 
 .nav-pills > li > a:hover {
   color: #fff;
-  opacity: 1;
+  opacity: 0.5;
 }
 
 .nav-pills > li > a {

@@ -1,0 +1,23 @@
+.lounges-container {
+  width: 14%;
+  height: 550px;
+  float: left;
+  overflow-y: scroll;
+  overflow-x: visible;
+}
+
+.list-group-item {
+  padding: 8px 15px !important;
+  border: 0px solid #ddd !important;
+  text-align: center;
+}
+
+.club-logo {
+  width: 50%;
+  text-align: center;
+  margin: 10px 0px 10px 50px;
+}
+
+.lounge-icon {
+  font-size: 20px;
+}
