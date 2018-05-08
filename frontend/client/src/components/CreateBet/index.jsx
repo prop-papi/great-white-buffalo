@@ -10,7 +10,9 @@ import {
   ButtonToolbar,
   DropdownButton,
   FormControl,
+  OverlayTrigger,
   Input,
+  Tooltip,
   Button,
   Form,
   MenuItem,
@@ -41,6 +43,20 @@ class CreateBet extends React.Component {
     this.endTimeChange = this.endTimeChange.bind(this);
     this.createSelectItems = this.createSelectItems.bind(this);
     this.selectClub = this.selectClub.bind(this);
+    this.tooltips = [
+      <Tooltip id="tooltip">
+        Be as descriptive as possible as this description will need to be understood and read by others to both accept and vote on the outcome of this wager!!!
+      </Tooltip>,
+      <Tooltip id="tooltip">
+        Please enter a whole number between 1 and how many tokens you have
+      </Tooltip>,
+      <Tooltip id="tooltip">
+        This is the last time someone should be able to accept your wager i.e. the beginning of a game or season depending on the wager
+      </Tooltip>,
+      <Tooltip id="tooltip">
+        This is the time you expect the outcome of the wager to be decided by i.e. after the game or season
+      </Tooltip>
+    ];
   }
 
   componentDidMount() {
@@ -118,16 +134,28 @@ class CreateBet extends React.Component {
   render() {
     return (
       <div>
-        Description <input type="text" name="description" value={this.state.description} onChange={this.handleChange} />
-        Wager Amount <input type="text" name="wager" value={this.state.wager} onChange={this.handleChange} />
+      <OverlayTrigger placement="right" overlay={this.tooltips[0]}>
+      <span>Description</span>
+      </OverlayTrigger> 
+        <input type="text" name="description" value={this.state.description} onChange={this.handleChange} />
+      <OverlayTrigger placement="right" overlay={this.tooltips[1]}>
+      <span>Wager Amount</span>
+      </OverlayTrigger> 
+          <input type="text" name="wager" value={this.state.wager} onChange={this.handleChange} />
         <div className="datePicker">
-          Expires <DatePicker name="expiresDate" value={this.state.expiresDate} onChange={this.expDateChange} />
+        <OverlayTrigger placement="right" overlay={this.tooltips[2]}>
+      <span>Expires At</span>
+      </OverlayTrigger> 
+        <DatePicker name="expiresDate" value={this.state.expiresDate} onChange={this.expDateChange} />
         </div>
         <div className="timePicker">
           <TimePicker onChange={this.expTimeChange} value={this.state.expiresTime}/>
         </div>
         <div className="datePicker">
-          End <DatePicker name="endDate" value={this.state.endDate} onChange={this.endDateChange} />
+        <OverlayTrigger placement="right" overlay={this.tooltips[3]}>
+      <span>Ends At</span>
+      </OverlayTrigger> 
+        <DatePicker name="endDate" value={this.state.endDate} onChange={this.endDateChange} />
         </div>
         <div className="timePicker">
           <TimePicker onChange={this.endTimeChange} value={this.state.endTime}/>
