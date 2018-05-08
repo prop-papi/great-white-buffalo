@@ -7,9 +7,14 @@ const io = require('socket.io')(server);
 // });
 
 io.on('connection', socket => {
-  console.log('a user connected');
+  socket.on('user.enter', msg => {
+    console.log(msg.user, 'entered');
+  });
+
+  // console.log('a user connected');
 
   socket.on('message.send', msg => {
+    console.log('message: ', msg);
     io.emit('message.send', msg);
   });
 
@@ -28,7 +33,7 @@ io.on('connection', socket => {
   });
 });
 
-server.listen(3000, err => {
+io.listen(3000, err => {
   if (err) throw err;
   console.log('listening on PORT:3000');
 });

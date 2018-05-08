@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormControl, ListGroup, ListGroupItem, Panel } from 'react-bootstrap';
 import moment from 'moment';
-// import socket from 'socket.io';
 import io from 'socket.io-client';
 
 // custom css
 import './Chat.css';
+
+// connection to socket server
+const socket = io('http://localhost:3000');
 
 class Chat extends Component {
   constructor(props) {
@@ -18,8 +20,7 @@ class Chat extends Component {
 
     this.state = {
       text: '',
-      // endpoint: 'localhost:3000'
-      test: 'black'
+      cache: []
     };
   }
 
@@ -33,22 +34,29 @@ class Chat extends Component {
       console.log('message sent: ', this.state.text);
       console.log('test message data', this.props.data.localData.messages);
       // send the message to db / cache
-
-      const socket = io('https://localhost:3000');
-      socket.emit('test', this.state.test);
-
       // socket emit
+      console.log(this.props.data.localData);
 
-      // socket.emit('message.sent', {
-      //   message: this.state.text,
-      //   user: localStorage.username
-      //   // specify lounge as well
-      // });
+      socket.emit('message.send', {
+        text: this.state.text,
+        user: localStorage.username,
+        // hard coded lounge
+        lounge: this.props.data.localData.lounges[2],
+        createdAt: new Date()
+      });
       this.setState({ text: '' });
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    socket.emit('user.enter', {
+      user: localStorage.username
+    });
+    socket.on('message.send', msg => {
+      console.log('message listener', msg);
+      this.setState({ cache: [...this.state.cache, msg] });
+    });
+  }
 
   render() {
     return (
@@ -61,8 +69,25 @@ class Chat extends Component {
               {this.props.data.localData.messages.map(message => {
                 return (
                   <ListGroupItem key={message._id}>
-                    {message.text}
-                    <span>{moment(message.createdAt).fromNow()}</span>
+                    <p>
+                      {message.user}:
+                      <span>({moment(message.createdAt).format('LT')})</span>
+                    </p>
+                    <p>{message.text}</p>
+                  </ListGroupItem>
+                );
+              })}
+            </ListGroup>
+            <ListGroup>
+              {/* {console.log(this.state.cache)} */}
+              {this.state.cache.map((message, i) => {
+                return (
+                  <ListGroupItem key={i}>
+                    <p>
+                      {message.user}:
+                      <span>({moment(message.createdAt).format('LT')})</span>
+                    </p>
+                    <p>{message.text}</p>
                   </ListGroupItem>
                 );
               })}
