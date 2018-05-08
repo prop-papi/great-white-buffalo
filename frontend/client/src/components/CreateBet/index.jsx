@@ -47,11 +47,13 @@ class CreateBet extends React.Component {
         ).getTime() -
           new Date(moment().startOf("day")).getTime()) /
         1000, // defaults to next 30 min time
-      club: "", // should be a drop down and default to currently selected club
-      wager: "", // text field input
-      description: "", // text field input
+      club: "",
+      wager: "", // needs to compare against user tokens and write change to database
+      description: "",
       odds: "1:1", // be able to change ultimately
-      clubs: {}
+      clubs: {},
+      showBetFailAlert: false,
+      showBetSuccessAlert: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -73,15 +75,29 @@ class CreateBet extends React.Component {
         this wager!!!
       </Tooltip>,
       <Tooltip id="tooltip">
-        Please enter a whole number between 1 and how many tokens you have
+        Please enter a whole number between 1 and your balance (shown on the
+        right)
       </Tooltip>,
       <Tooltip id="tooltip">
         This is the last time someone should be able to accept your wager i.e.
-        the beginning of a game or season depending on the wager
+        the beginning of a game or season depending on the wager (must be before
+        'Ends At')
       </Tooltip>,
       <Tooltip id="tooltip">
         This is the time you expect the outcome of the wager to be decided by
-        i.e. after the game or season
+        i.e. after the game or season (must be after 'Expires At')
+      </Tooltip>,
+      <Tooltip id="tooltip">
+        My total balance available to bet (not tied up in current or pending
+        bets)
+      </Tooltip>,
+      <Tooltip id="tooltip">
+        My total balance available to bet (not tied up in current or pending
+        bets)
+      </Tooltip>,
+      <Tooltip id="tooltip">
+        Currently all bets are set to 1:1 odds. Changing this will be added in
+        an upcoming release!
       </Tooltip>
     ];
 
@@ -117,6 +133,7 @@ class CreateBet extends React.Component {
 
   async handleSubmit(e) {
     e.preventDefault();
+    const currently = new Date().toISOString();
     const expiresAt = new Date(
       new Date(this.state.expiresDate).getTime() +
         this.state.expiresTime * 1000 -
@@ -130,24 +147,37 @@ class CreateBet extends React.Component {
     ).toISOString();
     const formattedEndsAt = moment(endsAt).format("YYYY-MM-DD HH:mm:ss");
     const { club, wager, odds, description } = this.state;
-    const body = {
-      club,
-      wager,
-      odds,
-      description,
-      formattedExpiresAt,
-      formattedEndsAt,
-      user: localStorage.id
-    };
-    try {
-      const data = await axios.post(
-        `http://localhost:1337/api/bets/create`,
-        body
-      );
-      // call action i create here!!!!
-    } catch (err) {
-      //this.setState({ showLoginErrorAlert: true });
-      throw new Error(err);
+    if (
+      new Date(expiresAt) >= new Date(currently) &&
+      new Date(endsAt) >= new Date(expiresAt) &&
+      wager !== "" &&
+      description !== "" &&
+      Number(wager) >= 1
+    ) {
+      const body = {
+        club,
+        wager,
+        odds,
+        description,
+        formattedExpiresAt,
+        formattedEndsAt,
+        user: localStorage.id
+      };
+      try {
+        const data = await axios.post(
+          `http://localhost:1337/api/bets/create`,
+          body
+        );
+        if (data.status === 200) {
+          this.setState({ showBetSuccessAlert: true });
+        }
+        // call action i create here!!!!
+      } catch (err) {
+        this.setState({ showBetFailAlert: true });
+        throw new Error(err);
+      }
+    } else {
+      this.setState({ showBetFailAlert: true });
     }
   }
 
@@ -194,7 +224,8 @@ class CreateBet extends React.Component {
           name="description"
           value={this.state.description}
           onChange={this.handleChange}
-        />
+        />{" "}
+        <br />
         <OverlayTrigger placement="right" overlay={this.tooltips[1]}>
           <span>Wager Amount</span>
         </OverlayTrigger>
@@ -203,7 +234,17 @@ class CreateBet extends React.Component {
           name="wager"
           value={this.state.wager}
           onChange={this.handleChange}
-        />
+        />{" "}
+        <br />
+        <OverlayTrigger placement="right" overlay={this.tooltips[4]}>
+          <span>My Balance:</span>
+        </OverlayTrigger>
+        {" XXXXXX tokens"}
+        <br />
+        <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
+          <span>Bet Odds</span>
+        </OverlayTrigger>{" "}
+        {this.state.odds} <br />
         <div className="datePicker">
           <OverlayTrigger placement="right" overlay={this.tooltips[2]}>
             <span>Expires At</span>
