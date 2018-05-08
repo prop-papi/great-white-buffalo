@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { updateLocalData } from "../../actions";
 
 import { Nav, NavItem, Image, Tooltip, OverlayTrigger } from "react-bootstrap";
 
@@ -13,8 +14,11 @@ class ClubNav extends Component {
   }
 
   handleNavItemClick(club) {
-    console.log(club);
-    // perform some routing and/or re-render new state of the page, overwrite local data store
+    this.props.updateLocalData(club.id);
+  }
+
+  componentDidMount() {
+    console.log(this.props);
   }
 
   render() {
@@ -25,7 +29,9 @@ class ClubNav extends Component {
             key={11}
             className="nav-item"
             onClick={() =>
-              this.handleNavItemClick(this.props.data.globalData.globalClub[0])
+              this.handleNavItemClick(
+                this.props.global.globalData.globalClub[0]
+              )
             }
           >
             <div className="club-logo-wrapper">
@@ -33,12 +39,12 @@ class ClubNav extends Component {
                 placement="right"
                 overlay={
                   <Tooltip id="tooltip">
-                    {this.props.data.globalData.globalClub[0].name}
+                    {this.props.global.globalData.globalClub[0].name}
                   </Tooltip>
                 }
               >
                 <Image
-                  src={this.props.data.globalData.globalClub[0].logo}
+                  src={this.props.global.globalData.globalClub[0].logo}
                   circle
                   responsive
                   className="nav-image"
@@ -46,7 +52,7 @@ class ClubNav extends Component {
               </OverlayTrigger>
             </div>
           </NavItem>
-          {this.props.data.globalData.clubs.map(club => {
+          {this.props.global.globalData.clubs.map(club => {
             if (club.id !== 12) {
               return (
                 <NavItem
@@ -79,10 +85,21 @@ class ClubNav extends Component {
 
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
+  console.log(state);
   return {
     //globalData: state.globalData,
-    data: state.data
+    data: state.data,
+    global: state.global
   };
 }
 
-export default connect(mapStateToProps)(ClubNav);
+function bindActionsToDispatch(dispatch) {
+  return bindActionCreators(
+    {
+      updateLocalData: updateLocalData
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, bindActionsToDispatch)(ClubNav);

@@ -1,11 +1,11 @@
 import axios from "axios";
 
-export const setLocalData = payload => {
-  dispatch({ type: "LOCAL_DATA", payload });
+export const setLocalData = (localData, dispatch) => {
+  dispatch({ type: "LOCAL_DATA", localData });
 };
 
-export const setGlobalData = payload => {
-  dispatch({ type: "GLOBAL_DATA", payload });
+export const setGlobalData = (globalData, dispatch) => {
+  dispatch({ type: "GLOBAL_DATA", globalData });
 };
 
 export const setDefaultData = (localData, globalData, dispatch) => {
@@ -18,7 +18,8 @@ export const fetchHomeData = (id, club) => async dispatch => {
   const localData = await axios.get(
     `http://localhost:1337/api/users/local/${club}`
   );
-  setDefaultData(localData.data, globalData.data, dispatch);
+  setGlobalData(globalData.data, dispatch);
+  setLocalData(localData.data, dispatch);
 };
 
 export const updateLocalData = club => async dispatch => {
