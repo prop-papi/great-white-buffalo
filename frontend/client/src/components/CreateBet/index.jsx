@@ -52,7 +52,8 @@ class CreateBet extends React.Component {
       description: "",
       odds: "1:1", // be able to change ultimately
       clubs: {},
-      balance: 0,
+      available_balance: 0,
+      escrow_balance: 0,
       showBetFailAlert: false,
       showBetSuccessAlert: false
     };
@@ -76,8 +77,8 @@ class CreateBet extends React.Component {
         this wager!!!
       </Tooltip>,
       <Tooltip id="tooltip">
-        Please enter a whole number between 1 and your balance (shown on the
-        right)
+        Please enter a whole number between 1 and your available balance (shown
+        on the right)
       </Tooltip>,
       <Tooltip id="tooltip">
         This is the last time someone should be able to accept your wager i.e.
@@ -108,7 +109,8 @@ class CreateBet extends React.Component {
     this.setState({
       clubs: this.createSelectItems(),
       club: this.props.local.localData.club.id,
-      balance: this.props.global.globalData.balance[0].balance
+      available_balance: this.props.global.globalData.balances[0]
+        .available_balance
     });
   }
 
@@ -200,8 +202,8 @@ class CreateBet extends React.Component {
             description: "",
             showBetSuccessAlert: true
           });
+          // write to db and update redux store w/ bet amount subtracted // actually.....create trigger on bets table to subtract tokens upon succesfull submittal?
         }
-        // call action i create here!!!!
       } catch (err) {
         this.setState({ showBetFailAlert: true });
         throw new Error(err);
@@ -267,9 +269,9 @@ class CreateBet extends React.Component {
         />{" "}
         <br />
         <OverlayTrigger placement="right" overlay={this.tooltips[4]}>
-          <span>My Balance:</span>
+          <span>My Available Balance:</span>
         </OverlayTrigger>
-        {`${this.state.balance} tokens`}
+        {`${this.state.available_balance} tokens`}
         <br />
         <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
           <span>Wager Odds</span>
