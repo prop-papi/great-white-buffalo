@@ -52,6 +52,7 @@ class CreateBet extends React.Component {
       description: "",
       odds: "1:1", // be able to change ultimately
       clubs: {},
+      balance: 0,
       showBetFailAlert: false,
       showBetSuccessAlert: false
     };
@@ -110,7 +111,8 @@ class CreateBet extends React.Component {
   componentDidMount() {
     this.setState({
       clubs: this.createSelectItems(),
-      club: this.props.local.localData.club.id
+      club: this.props.local.localData.club.id,
+      balance: this.props.global.globalData.balance[0].balance
     });
   }
 
@@ -175,7 +177,33 @@ class CreateBet extends React.Component {
           body
         );
         if (data.status === 200) {
-          this.setState({ showBetSuccessAlert: true });
+          this.setState({
+            endDate: new Date(
+              moment()
+                .startOf("day")
+                .add(12, "hours")
+            ).toISOString(), // starts at noon today bc of way date picker works
+            endTime:
+              (new Date(
+                this.round(moment(), moment.duration(30, "minutes"), "ceil")
+              ).getTime() -
+                new Date(moment().startOf("day")).getTime()) /
+              1000, // defaults to next 30 min time
+            expiresDate: new Date(
+              moment()
+                .startOf("day")
+                .add(12, "hours")
+            ).toISOString(), // starts at noon today bc of way date picker works
+            expiresTime:
+              (new Date(
+                this.round(moment(), moment.duration(30, "minutes"), "ceil")
+              ).getTime() -
+                new Date(moment().startOf("day")).getTime()) /
+              1000, // defaults to next 30 min time
+            wager: "", // needs to compare against user tokens and write change to database
+            description: "",
+            showBetSuccessAlert: true
+          });
         }
         // call action i create here!!!!
       } catch (err) {
@@ -245,7 +273,7 @@ class CreateBet extends React.Component {
         <OverlayTrigger placement="right" overlay={this.tooltips[4]}>
           <span>My Balance:</span>
         </OverlayTrigger>
-        {" XXXXXX tokens"}
+        {`${this.state.balance} tokens`}
         <br />
         <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
           <span>Bet Odds</span>
