@@ -25,8 +25,8 @@ router.get("/:id", async function(req, res) {
     globalData["clubs"] = JSON.parse(JSON.stringify(clubsData));
     let betsData = await betsdb.selectAllBetsFromClubsList(myClubs);
     globalData["bets"] = JSON.parse(JSON.stringify(betsData));
-    let balance = await usersdb.getBalance(req.params.id);
-    globalData["balance"] = JSON.parse(JSON.stringify(balance));
+    let balances = await usersdb.getBalance(req.params.id);
+    globalData["balances"] = JSON.parse(JSON.stringify(balances));
     let globalClub = await clubsdb.selectGlobalClub();
     globalData["globalClub"] = JSON.parse(JSON.stringify(globalClub));
 

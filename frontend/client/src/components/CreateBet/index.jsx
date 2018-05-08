@@ -47,11 +47,15 @@ class CreateBet extends React.Component {
         ).getTime() -
           new Date(moment().startOf("day")).getTime()) /
         1000, // defaults to next 30 min time
-      club: "", // should be a drop down and default to currently selected club
-      wager: "", // text field input
-      description: "", // text field input
+      club: "",
+      wager: "", // needs to compare against user tokens and write change to database
+      description: "",
       odds: "1:1", // be able to change ultimately
-      clubs: {}
+      clubs: {},
+      available_balance: 0,
+      escrow_balance: 0,
+      showBetFailAlert: false,
+      showBetSuccessAlert: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -61,6 +65,11 @@ class CreateBet extends React.Component {
     this.endTimeChange = this.endTimeChange.bind(this);
     this.createSelectItems = this.createSelectItems.bind(this);
     this.selectClub = this.selectClub.bind(this);
+    this.handleDismissCreateError = this.handleDismissCreateError.bind(this);
+    this.handleDismissCreateSuccess = this.handleDismissCreateSuccess.bind(
+      this
+    );
+
     this.tooltips = [
       <Tooltip id="tooltip">
         Be as descriptive as possible as this description will need to be
@@ -68,29 +77,52 @@ class CreateBet extends React.Component {
         this wager!!!
       </Tooltip>,
       <Tooltip id="tooltip">
-        Please enter a whole number between 1 and how many tokens you have
+        Please enter a whole number between 1 and your available balance (shown
+        on the right)
       </Tooltip>,
       <Tooltip id="tooltip">
         This is the last time someone should be able to accept your wager i.e.
-        the beginning of a game or season depending on the wager
+        the beginning of a game or season depending on the wager (must be before
+        'Ends At')
       </Tooltip>,
       <Tooltip id="tooltip">
         This is the time you expect the outcome of the wager to be decided by
-        i.e. after the game or season
+        i.e. after the game or season (must be after 'Expires At')
+      </Tooltip>,
+      <Tooltip id="tooltip">
+        My total balance available to wager (not tied up in current or pending
+        wagers)
+      </Tooltip>,
+      <Tooltip id="tooltip">
+        Currently all wagers are set to 1:1 odds. Changing this will be added in
+        an upcoming release!
       </Tooltip>
     ];
+
+    this.alertStyle = {
+      width: "42%",
+      marginLeft: "10px"
+    };
   }
 
   componentDidMount() {
     this.setState({
       clubs: this.createSelectItems(),
-      club: this.props.data.localData.club.id
+      club: this.props.local.localData.club.id,
+      available_balance: this.props.global.globalData.balances[0]
+        .available_balance
+    });
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      club: newProps.local.localData.club.id
     });
   }
 
   createSelectItems() {
     let items = {};
-    this.props.data.globalData.clubs.forEach(club => {
+    this.props.global.globalData.clubs.forEach(club => {
       items[club.id] = club.name;
     });
     return items;
@@ -107,6 +139,7 @@ class CreateBet extends React.Component {
 
   async handleSubmit(e) {
     e.preventDefault();
+    const currently = new Date().toISOString();
     const expiresAt = new Date(
       new Date(this.state.expiresDate).getTime() +
         this.state.expiresTime * 1000 -
@@ -120,24 +153,63 @@ class CreateBet extends React.Component {
     ).toISOString();
     const formattedEndsAt = moment(endsAt).format("YYYY-MM-DD HH:mm:ss");
     const { club, wager, odds, description } = this.state;
-    const body = {
-      club,
-      wager,
-      odds,
-      description,
-      formattedExpiresAt,
-      formattedEndsAt,
-      user: localStorage.id
-    };
-    try {
-      const data = await axios.post(
-        `http://localhost:1337/api/bets/create`,
-        body
-      );
-      // call action i create here!!!!
-    } catch (err) {
-      //this.setState({ showLoginErrorAlert: true });
-      throw new Error(err);
+    if (
+      new Date(expiresAt) >= new Date(currently) &&
+      new Date(endsAt) >= new Date(expiresAt) &&
+      wager !== "" &&
+      description !== "" &&
+      Number(wager) >= 1
+    ) {
+      const body = {
+        club,
+        wager,
+        odds,
+        description,
+        formattedExpiresAt,
+        formattedEndsAt,
+        user: localStorage.id
+      };
+      try {
+        const data = await axios.post(
+          `http://localhost:1337/api/bets/create`,
+          body
+        );
+        if (data.status === 200) {
+          this.setState({
+            endDate: new Date(
+              moment()
+                .startOf("day")
+                .add(12, "hours")
+            ).toISOString(), // starts at noon today bc of way date picker works
+            endTime:
+              (new Date(
+                this.round(moment(), moment.duration(30, "minutes"), "ceil")
+              ).getTime() -
+                new Date(moment().startOf("day")).getTime()) /
+              1000, // defaults to next 30 min time
+            expiresDate: new Date(
+              moment()
+                .startOf("day")
+                .add(12, "hours")
+            ).toISOString(), // starts at noon today bc of way date picker works
+            expiresTime:
+              (new Date(
+                this.round(moment(), moment.duration(30, "minutes"), "ceil")
+              ).getTime() -
+                new Date(moment().startOf("day")).getTime()) /
+              1000, // defaults to next 30 min time
+            wager: "", // needs to compare against user tokens and write change to database
+            description: "",
+            showBetSuccessAlert: true
+          });
+          // write to db and update redux store w/ bet amount subtracted // actually.....create trigger on bets table to subtract tokens upon succesfull submittal?
+        }
+      } catch (err) {
+        this.setState({ showBetFailAlert: true });
+        throw new Error(err);
+      }
+    } else {
+      this.setState({ showBetFailAlert: true });
     }
   }
 
@@ -161,6 +233,18 @@ class CreateBet extends React.Component {
     this.setState({ endTime: time });
   }
 
+  handleDismissCreateError() {
+    this.setState({
+      showBetFailAlert: false
+    });
+  }
+
+  handleDismissCreateSuccess() {
+    this.setState({
+      showBetSuccessAlert: false
+    });
+  }
+
   render() {
     return (
       <div>
@@ -172,7 +256,8 @@ class CreateBet extends React.Component {
           name="description"
           value={this.state.description}
           onChange={this.handleChange}
-        />
+        />{" "}
+        <br />
         <OverlayTrigger placement="right" overlay={this.tooltips[1]}>
           <span>Wager Amount</span>
         </OverlayTrigger>
@@ -181,7 +266,17 @@ class CreateBet extends React.Component {
           name="wager"
           value={this.state.wager}
           onChange={this.handleChange}
-        />
+        />{" "}
+        <br />
+        <OverlayTrigger placement="right" overlay={this.tooltips[4]}>
+          <span>My Available Balance:</span>
+        </OverlayTrigger>
+        {`${this.state.available_balance} tokens`}
+        <br />
+        <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
+          <span>Wager Odds</span>
+        </OverlayTrigger>{" "}
+        {this.state.odds} <br />
         <div className="datePicker">
           <OverlayTrigger placement="right" overlay={this.tooltips[2]}>
             <span>Expires At</span>
@@ -217,7 +312,12 @@ class CreateBet extends React.Component {
         <ButtonToolbar>
           <DropdownButton title="Clubs" id={1}>
             {Object.keys(this.state.clubs).map(c => (
-              <MenuItem onSelect={this.selectClub} key={c} eventKey={c}>
+              <MenuItem
+                className="menu"
+                onSelect={this.selectClub}
+                key={c}
+                eventKey={c}
+              >
                 {this.state.clubs[c]}
               </MenuItem>
             ))}
@@ -225,6 +325,38 @@ class CreateBet extends React.Component {
         </ButtonToolbar>
         {this.state.clubs[this.state.club]}
         <input type="submit" value="Submit" onClick={this.handleSubmit} />
+        {this.state.showBetFailAlert ? (
+          <Alert
+            bsStyle="danger"
+            style={this.alertStyle}
+            onDismiss={this.handleDismissCreateError}
+          >
+            <h4>Oh snap! You got an error!</h4>
+            <p>
+              There is an error in your wager input. Please verify and try
+              again.
+            </p>
+            <p>
+              <Button onClick={this.handleDismissCreateError}>Close</Button>
+            </p>
+          </Alert>
+        ) : null}
+        {this.state.showBetSuccessAlert ? (
+          <Alert
+            bsStyle="success"
+            style={this.alertStyle}
+            onDismiss={this.handleDismissCreateError}
+          >
+            <h4>Created wager successfully!!!</h4>
+            <p>
+              Congratulations, your wager has been successfully created. You can
+              view all of your wagers from your profile.
+            </p>
+            <p>
+              <Button onClick={this.handleDismissCreateSuccess}>Close</Button>
+            </p>
+          </Alert>
+        ) : null}
       </div>
     );
   }
@@ -233,7 +365,8 @@ class CreateBet extends React.Component {
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
-    data: state.data
+    global: state.global,
+    local: state.local
   };
 }
 

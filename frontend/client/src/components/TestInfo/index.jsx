@@ -1,60 +1,38 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { setTestData } from '../../actions';
-import axios from 'axios';
+import React from "react";
+import { connect } from "react-redux";
+import { setTestData } from "../../actions";
+import axios from "axios";
 
-
-class TestData extends React.Component { // note we do not export the actual React component
+class TestData extends React.Component {
   constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this);
+    super(props);
   }
-
-  handleSubmit() {
-    var l = require('../../data/local.json');
-    var g = require('../../data/global.json');
-    this.props.setTestData(l, g);
-    event.preventDefault();
-  }
-
-
 
   render() {
     return (
       <div>
-        <input type="submit" value="Set Test Data!!!" onClick={this.handleSubmit}/>
-
-       <button value="What is my local data??" onClick={()=> console.log(this.props.data.localData)}/>
-
-        Local Test Data called with 'this.props.localData'
-        {JSON.stringify(this.props.data.localData)}
-
-        <br /><br /><br /><br />
-
-        Global Test Data called with 'this.props.globalData'
-        {JSON.stringify(this.props.data.globalData)}
+        Redux current store local data - called with
+        'this.props.local.localData'
+        <br /> <br />
+        {JSON.stringify(this.props.local.localData)}
+        <br />
+        <br />
+        <br />
+        <br />
+        Redux current store global data - called with
+        'this.props.global.globalData'
+        <br /> <br />
+        {JSON.stringify(this.props.global.globalData)}
       </div>
     );
   }
 }
 
-function mapStateToProps(state) { // specifies the slice of state this compnent wants and provides it
+function mapStateToProps(state) {
   return {
-    //globalData: state.globalData,
-    data: state.data,
+    global: state.global,
+    local: state.local
   };
 }
 
-function bindActionsToDispatch(dispatch) { 
-  return bindActionCreators(
-    {
-      setTestData: setTestData
-    },
-    dispatch
-  );
-}
-
-
-export default connect(mapStateToProps, bindActionsToDispatch)(TestData); // exporting something similar to our CreateBet class, but
-                                                    // that has access to what we defined in mapStateToProps and bindActionsToDispatch
+export default connect(mapStateToProps)(TestData);
