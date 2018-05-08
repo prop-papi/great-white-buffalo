@@ -51,7 +51,7 @@ export default class Login extends Component {
       localStorage.setItem("reputation", data.data[0].reputation);
       localStorage.setItem("default_club", data.data[0].default_club);
       document.cookie = JSON.parse(data.headers.auth).token;
-      // ****NOTE - ROUTE USERS TO HOME PAGE HERE****
+      this.props.history.push("/home");
     } catch (err) {
       this.setState({ showLoginErrorAlert: true });
       throw new Error(err);

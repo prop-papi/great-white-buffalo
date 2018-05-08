@@ -1,13 +1,30 @@
-export const THIS_IS_A_TEST = 'THIS_IS_A_TEST' // you can either declare as a variable
+import axios from "axios";
 
-export const testAction = (createNumber) => dispatch => {
-  dispatch({ type: THIS_IS_A_TEST, createNumber });
-}
+export const setLocalData = (localData, dispatch) => {
+  dispatch({ type: "LOCAL_DATA", localData });
+};
 
-export const testSearchAction = (searchNumber) => dispatch => {
-  dispatch({ type: 'THIS_IS_ALSO_A_TEST', searchNumber }); // or just enter as a string
-}
+export const setGlobalData = (globalData, dispatch) => {
+  dispatch({ type: "GLOBAL_DATA", globalData });
+};
 
-export const setTestData = (localData, globalData) => dispatch => {
-  dispatch({ type: 'SET_TEST_DATA', localData, globalData });
-}
+export const setDefaultData = (localData, globalData, dispatch) => {
+  dispatch({ type: "SET_DEFAULT_DATA", localData, globalData });
+};
+
+export const fetchHomeData = (id, club) => async dispatch => {
+  // utilize some kind of loading screen
+  const globalData = await axios.get(`http://localhost:1337/api/users/${id}`);
+  const localData = await axios.get(
+    `http://localhost:1337/api/users/local/${club}`
+  );
+  setGlobalData(globalData.data, dispatch);
+  setLocalData(localData.data, dispatch);
+};
+
+export const updateLocalData = club => async dispatch => {
+  const localData = await axios.get(
+    `http://localhost:1337/api/users/local/${club}`
+  );
+  setLocalData(localData.data, dispatch);
+};

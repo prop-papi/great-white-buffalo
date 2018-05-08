@@ -28,13 +28,13 @@ class LoungeList extends Component {
     return (
       <div className="lounges-container">
         <Image
-          src={this.props.data.localData.club[0].logo}
+          src={this.props.local.localData.club.logo}
           circle
           responsive
           className="club-logo"
         />
         <ListGroup>
-          {this.props.data.localData.lounges.map(lounge => {
+          {this.props.local.localData.lounges.map(lounge => {
             return (
               <ListGroupItem
                 className="lounge-item"
@@ -56,7 +56,8 @@ class LoungeList extends Component {
 
 function mapStateToProps(state) {
   return {
-    data: state.data
+    data: state.data,
+    local: state.local
   };
 }
 

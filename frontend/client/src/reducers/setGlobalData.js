@@ -1,8 +1,8 @@
 export default function(state = {}, action) {
   switch (action.type) {
-    case 'THIS_IS_A_TEST':
+    case "GLOBAL_DATA":
       return Object.assign({}, state, {
-        createNumber: action.createNumber
+        globalData: action.globalData
       });
       break;
     default:
