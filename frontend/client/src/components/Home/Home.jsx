@@ -32,7 +32,7 @@ class Home extends Component {
               align="center"
               style={{ backgroundColor: "rgb(90,105,120)", height: "100%" }}
             >
-              <GlobalNavBar />
+              <GlobalNavBar history={this.props.history} />
             </Col>
           </Row>
           <Row>
