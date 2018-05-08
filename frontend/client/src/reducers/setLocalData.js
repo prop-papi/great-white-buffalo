@@ -1,14 +1,11 @@
 export default function(state = {}, action) {
   switch (action.type) {
-    case 'THIS_IS_ALSO_A_TEST':
-      console.log(action)
+    case "LOCAL_DATA":
       return Object.assign({}, state, {
-        searchNumber: action.searchNumber
-    });
-    break;
+        localData: action.localData
+      });
+      break;
     default:
       return state;
   }
 }
-
-
