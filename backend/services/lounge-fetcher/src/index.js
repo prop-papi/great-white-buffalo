@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
@@ -11,12 +12,10 @@ const PORT = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
 
-let cron = schedule.scheduleJob("*/10 * * * * *", function() {
+let cron = schedule.scheduleJob("*/5 * * * *", function() {
   // run some function to fetch sports data and write to the db
   util.addNewLounges();
 });
-
-cron.cancel();
 
 app.listen(PORT, () => {
   console.log("Listening on port " + PORT);

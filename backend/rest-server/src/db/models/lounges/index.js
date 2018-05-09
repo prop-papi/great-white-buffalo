@@ -1,5 +1,5 @@
 const mysqldb = require("../../index.js").mysqldb;
-const mysql = require("mysql");
+const SqlString = require("sqlstring");
 
 const selectAllLoungesInClub = async club => {
   const query = `select * from Lounges WHERE club=${club};`;
@@ -12,7 +12,7 @@ const selectAllLoungesInClub = async club => {
 };
 
 const checkLoungeExist = async name => {
-  const query = `select * from Lounges WHERE name=${name};`;
+  const query = `select * from Lounges WHERE name=${SqlString.escape(name)};`;
   try {
     return await mysqldb.query(query);
   } catch (err) {
@@ -33,3 +33,4 @@ const insertLounge = async (club, name) => {
 
 module.exports.selectAllLoungesInClub = selectAllLoungesInClub;
 module.exports.checkLoungeExist = checkLoungeExist;
+module.exports.insertLounge = insertLounge;

@@ -15,6 +15,7 @@
     "nodemon": "^1.12.1"
   },
   "dependencies": {
+    "async-request": "^1.2.0",
     "axios": "^0.17.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
