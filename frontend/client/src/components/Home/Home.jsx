@@ -7,10 +7,12 @@ import CreateBet from "../CreateBet/index.jsx";
 import { fetchHomeData } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
+import UsersNav from "../UsersNav/UsersNav";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
 import "./Home.css";
+import SideProfile from "../SideProfile/SideProfile";
 
 class Home extends Component {
   constructor() {
@@ -71,7 +73,8 @@ class Home extends Component {
                 md={2}
                 style={{ backgroundColor: "rgb(130,145,160)", height: "90vh" }}
               >
-                Friends
+                <UsersNav />
+                <SideProfile />
               </Col>
             </Row>
           </Grid>

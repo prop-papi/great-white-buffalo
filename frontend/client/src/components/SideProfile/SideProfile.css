@@ -1,0 +1,10 @@
+.side-profile {
+  text-align: center;
+  padding-top: 20px;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.side-profile .bio {
+  font-size: 15px;
+}
