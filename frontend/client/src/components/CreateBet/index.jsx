@@ -6,6 +6,7 @@ import { updateBalances } from "../../actions";
 import DatePicker from "react-16-bootstrap-date-picker";
 import TimePicker from "react-bootstrap-time-picker";
 import moment from "moment";
+import "./index.css";
 import {
   ButtonToolbar,
   DropdownButton,
@@ -76,7 +77,7 @@ class CreateBet extends React.Component {
       </Tooltip>,
       <Tooltip id="tooltip">
         Please enter a whole number between 1 and your available balance (shown
-        on the right)
+        to the right)
       </Tooltip>,
       <Tooltip id="tooltip">
         This is the last time someone should be able to accept your wager i.e.
@@ -98,8 +99,7 @@ class CreateBet extends React.Component {
     ];
 
     this.alertStyle = {
-      width: "42%",
-      marginLeft: "10px"
+      width: "150%"
     };
   }
 
@@ -246,116 +246,142 @@ class CreateBet extends React.Component {
 
   render() {
     return (
-      <div>
-        <OverlayTrigger placement="right" overlay={this.tooltips[0]}>
-          <span>Description</span>
-        </OverlayTrigger>
-        <input
-          type="text"
-          name="description"
-          value={this.state.description}
-          onChange={this.handleChange}
-        />{" "}
-        <br />
-        <OverlayTrigger placement="right" overlay={this.tooltips[1]}>
-          <span>Wager Amount</span>
-        </OverlayTrigger>
-        <input
-          type="text"
-          name="wager"
-          value={this.state.wager}
-          onChange={this.handleChange}
-        />{" "}
-        <br />
-        <OverlayTrigger placement="right" overlay={this.tooltips[4]}>
-          <span>My Available Balance:</span>
-        </OverlayTrigger>
-        {`${this.props.global.globalData.balances[0].available_balance} tokens`}
-        <br />
-        <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
-          <span>Wager Odds</span>
-        </OverlayTrigger>{" "}
-        {this.state.odds} <br />
-        <div className="datePicker">
-          <OverlayTrigger placement="right" overlay={this.tooltips[2]}>
-            <span>Expires At</span>
+      <div className="row" id="createBetComponent">
+        <div className="col-md-2" />
+        <div className="col-md-8">
+          <OverlayTrigger placement="right" overlay={this.tooltips[0]}>
+            <span>Description</span>
           </OverlayTrigger>
-          <DatePicker
-            name="expiresDate"
-            value={this.state.expiresDate}
-            onChange={this.expDateChange}
+          <FormControl
+            componentClass="textarea"
+            type="text"
+            name="description"
+            rows="4"
+            value={this.state.description}
+            onChange={this.handleChange}
           />
-        </div>
-        <div className="timePicker">
-          <TimePicker
-            onChange={this.expTimeChange}
-            value={this.state.expiresTime}
-          />
-        </div>
-        <div className="datePicker">
-          <OverlayTrigger placement="right" overlay={this.tooltips[3]}>
-            <span>Ends At</span>
-          </OverlayTrigger>
-          <DatePicker
-            name="endDate"
-            value={this.state.endDate}
-            onChange={this.endDateChange}
-          />
-        </div>
-        <div className="timePicker">
-          <TimePicker
-            onChange={this.endTimeChange}
-            value={this.state.endTime}
-          />
-        </div>
-        <ButtonToolbar>
-          <DropdownButton title="Clubs" id={1}>
-            {Object.keys(this.state.clubs).map(c => (
-              <MenuItem
-                className="menu"
-                onSelect={this.selectClub}
-                key={c}
-                eventKey={c}
+          <br />
+          <div className="col-md-6">
+            <OverlayTrigger placement="right" overlay={this.tooltips[1]}>
+              <span>Wager Amount </span>
+            </OverlayTrigger>
+            <input
+              type="text"
+              name="wager"
+              style={{ width: 100 }}
+              value={this.state.wager}
+              onChange={this.handleChange}
+            />
+            <br /> <br />
+            <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
+              <span>Wager Odds</span>
+            </OverlayTrigger>{" "}
+            {this.state.odds}
+            <br /> <br />
+            <div className="datePicker">
+              <OverlayTrigger placement="right" overlay={this.tooltips[2]}>
+                <span>Expires At</span>
+              </OverlayTrigger>
+              <DatePicker
+                name="expiresDate"
+                value={this.state.expiresDate}
+                onChange={this.expDateChange}
+              />
+            </div>
+            <div className="timePicker">
+              <TimePicker
+                onChange={this.expTimeChange}
+                value={this.state.expiresTime}
+              />
+            </div>
+            <br />
+            <input
+              type="submit"
+              style={{ position: "absolute", left: "7%" }}
+              className="submitButton"
+              onClick={this.handleSubmit}
+            />
+          </div>
+          <div className="col-md-6">
+            <OverlayTrigger placement="right" overlay={this.tooltips[4]}>
+              <span>My Available Balance: </span>
+            </OverlayTrigger>
+            {this.props.global.globalData.balances[0].available_balance}
+            <br /> <br />
+            <span>
+              {this.state.clubs[this.state.club]}{" "}
+              <ButtonToolbar className="testing">
+                <DropdownButton title="Clubs" id={1}>
+                  {Object.keys(this.state.clubs).map(c => (
+                    <MenuItem
+                      className="menu"
+                      onSelect={this.selectClub}
+                      key={c}
+                      eventKey={c}
+                    >
+                      {this.state.clubs[c]}
+                    </MenuItem>
+                  ))}
+                </DropdownButton>
+              </ButtonToolbar>
+            </span>
+            <div className="datePicker">
+              <br />
+              <OverlayTrigger placement="right" overlay={this.tooltips[3]}>
+                <span>Ends At</span>
+              </OverlayTrigger>
+              <br />
+              <DatePicker
+                name="endDate"
+                value={this.state.endDate}
+                onChange={this.endDateChange}
+              />
+            </div>
+            <div className="timePicker">
+              <TimePicker
+                onChange={this.endTimeChange}
+                value={this.state.endTime}
+              />
+            </div>
+            <br />
+            {this.state.showBetFailAlert ? (
+              <Alert
+                bsStyle="danger"
+                style={this.alertStyle}
+                onDismiss={this.handleDismissCreateError}
               >
-                {this.state.clubs[c]}
-              </MenuItem>
-            ))}
-          </DropdownButton>
-        </ButtonToolbar>
-        {this.state.clubs[this.state.club]}
-        <input type="submit" value="Submit" onClick={this.handleSubmit} />
-        {this.state.showBetFailAlert ? (
-          <Alert
-            bsStyle="danger"
-            style={this.alertStyle}
-            onDismiss={this.handleDismissCreateError}
-          >
-            <h4>Oh snap! You got an error!</h4>
-            <p>
-              There is an error in your wager input. Please verify and try
-              again.
-            </p>
-            <p>
-              <Button onClick={this.handleDismissCreateError}>Close</Button>
-            </p>
-          </Alert>
-        ) : null}
-        {this.state.showBetSuccessAlert ? (
-          <Alert
-            bsStyle="success"
-            style={this.alertStyle}
-            onDismiss={this.handleDismissCreateError}
-          >
-            <h4>Created wager successfully!!!</h4>
-            <p>
-              Congratulations, your wager has been successfully created. You can
-              view all of your wagers from your profile.
-            </p>
-            <p>
-              <Button onClick={this.handleDismissCreateSuccess}>Close</Button>
-            </p>
-          </Alert>
-        ) : null}
+                <h4>Oh snap! You got an error!</h4>
+                <p>
+                  There is an error in your wager input. Please verify and try
+                  again.
+                </p>
+                <p>
+                  <Button onClick={this.handleDismissCreateError}>Close</Button>
+                </p>
+              </Alert>
+            ) : null}
+            {this.state.showBetSuccessAlert ? (
+              <Alert
+                bsStyle="success"
+                style={this.alertStyle}
+                onDismiss={this.handleDismissCreateError}
+              >
+                <h4>Created wager successfully!!!</h4>
+                <p>
+                  Congratulations, your wager has been successfully created. You
+                  can view all of your wagers from your profile.
+                </p>
+                <p>
+                  <Button onClick={this.handleDismissCreateSuccess}>
+                    Close
+                  </Button>
+                </p>
+              </Alert>
+            ) : null}
+          </div>
+          <br />
+        </div>
+        <div className="col-md-2" />
       </div>
     );
   }
