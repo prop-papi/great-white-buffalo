@@ -187,6 +187,7 @@ let asyncRequest = async value =>
 let dateParser = async (m, t) => {
   // convert month to mm/dd format
   // convert time to hh:mm without am or pm
+  console.log(t);
   m = m.split("/");
   if (m[0].length === 1) {
     m[0] = "0" + m[0];
@@ -203,6 +204,7 @@ let dateParser = async (m, t) => {
     t[0] = t[0].slice(1);
     t[0] = temp.toString() + t[0];
   }
+  console.log(t);
   // 2018-05-11T20:00:00
   let fullTimeString =
     new Date().getFullYear() + "-" + m[0] + "-" + m[1] + "T" + t[0] + ":00";
