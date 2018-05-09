@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
 import "./Home.css";
-import SideProfile from "../SideProfile/SideProfile";
+import UserPane from "../UserPane/UserPane";
 
 class Home extends Component {
   constructor() {
