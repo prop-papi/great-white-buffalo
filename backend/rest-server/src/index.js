@@ -33,28 +33,6 @@ app.get("/*", function(req, res) {
   );
 });
 
-let test = async () => {
-  request.get(
-    "http://scores.nbcsports.msnbc.com/ticker/data/gamesMSNBC.js.asp?jsonp=true&sport=MLS&period=20180509",
-    function(err, res, body) {
-      let data = body
-        .replace("shsMSNBCTicker.loadGamesData(", "")
-        .replace(");", "");
-      let data2 = JSON.parse(data);
-      _.each(data2.games, function(game) {
-        parseString(game, function(err, result) {
-          console.log(
-            result["ticker-entry"]["visiting-team"][0]["$"].display_name
-          );
-          console.log(result["ticker-entry"]["home-team"][0]["$"].display_name);
-        });
-      });
-    }
-  );
-};
-
-test();
-
 app.listen(PORT, () => {
   console.log("Listening on port " + PORT);
 });

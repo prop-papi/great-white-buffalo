@@ -1,7 +1,7 @@
 const mysql = require("promise-mysql");
 const mongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
-let _ = require("underscore");
+const _ = require("underscore");
 
 // connect mysql db config
 const mysqldb = mysql.createPool({

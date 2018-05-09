@@ -80,7 +80,6 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
-  console.log(state);
   return {
     //globalData: state.globalData,
     local: state.local,
