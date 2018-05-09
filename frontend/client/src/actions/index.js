@@ -8,6 +8,10 @@ export const setGlobalData = (globalData, dispatch) => {
   dispatch({ type: "GLOBAL_DATA", globalData });
 };
 
+export const setUserPaneData = (userPaneData, dispatch) => {
+  return dispatch({ type: "USER_PANE_DATA", userPaneData });
+};
+
 export const fetchHomeData = (id, club) => async dispatch => {
   // utilize some kind of loading screen
   const globalData = await axios.get(`http://localhost:1337/api/users/${id}`);
@@ -16,6 +20,7 @@ export const fetchHomeData = (id, club) => async dispatch => {
   );
   setGlobalData(globalData.data, dispatch);
   setLocalData(localData.data, dispatch);
+  setUserPaneData({ showUsers: true, didSelectUser: false }, dispatch);
 };
 
 export const updateLocalData = club => async dispatch => {

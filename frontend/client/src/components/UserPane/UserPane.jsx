@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Row } from "react-bootstrap";
+import { connect } from "react-redux";
+import { setUserPaneData } from "../../actions";
 import SideProfile from "./SideProfile";
 import axios from "axios";
 
@@ -9,25 +11,22 @@ class UserPane extends Component {
     this.state = {
       users: ["D2", "buffalojohn", "warreng", "indabuff"],
       friends: [],
-      showUsers: true,
-      didSelectUser: false,
       selectedUser: {}
     };
-    this.handleSelectedUser = this.handleSelectedUser.bind(this);
-  }
-
-  componentDidMount() {
-    // Change this later be whoever was clicked on
   }
 
   handleSelectedUser(username) {
+    console.log(username);
     let params = {
       username
     };
     axios
-      .get("http://localhost:1337/api/users/selected", { params })
+      .get("http://localhost:1337/api/userpane/selected", { params })
       .then(response => {
-        this.setState({ selectedUser: response.data[0], didSelectUser: true });
+        this.setState({ selectedUser: response.data[0] });
+        let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
+        newUserPane.didSelectUser = true;
+        this.props.setUserPaneData(newUserPane);
       })
       .catch(err => {
         console.log("Error: ", err);
@@ -35,11 +34,10 @@ class UserPane extends Component {
   }
 
   render() {
-    if (this.state.didSelectUser === false) {
-      let usersToLoad = this.state.showUsers
-        ? this.state.users
-        : this.state.friends;
-      console.log(usersToLoad);
+    let { showUsers, didSelectUser } = this.props.userPane.userPaneData;
+
+    if (didSelectUser === false) {
+      let usersToLoad = showUsers ? this.state.users : this.state.friends;
       return (
         <div>
           {usersToLoad.map((user, key) => {
@@ -61,4 +59,16 @@ class UserPane extends Component {
   }
 }
 
-export default UserPane;
+const mapStateToProps = state => {
+  return {
+    userPane: state.userPane
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  setUserPaneData: userPaneData => {
+    dispatch(setUserPaneData(userPaneData, dispatch));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserPane);

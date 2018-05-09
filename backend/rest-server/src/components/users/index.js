@@ -8,18 +8,6 @@ const clubsdb = require("../../db/models/clubs/index.js");
 const loungesdb = require("../../db/models/lounges/index.js");
 const betsdb = require("../../db/models/bets/index.js");
 
-router.get("/selected", async function(req, res) {
-  const username = req.query.username;
-  try {
-    let selectedUser = await usersdb.selectUser(username);
-    res.json(selectedUser);
-  } catch (err) {
-    console.log("error", err);
-    res.status(500).send("Database error.");
-    return err;
-  }
-});
-
 // fetch global and local club data on user login
 router.get("/:id", async function(req, res) {
   // req.params.id is our user id, req.params.club is the default club
