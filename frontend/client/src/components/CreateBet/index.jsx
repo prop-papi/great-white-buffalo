@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { testAction } from "../../actions";
+import { updateBalances } from "../../actions";
 import DatePicker from "react-16-bootstrap-date-picker";
 import TimePicker from "react-bootstrap-time-picker";
 import moment from "moment";
@@ -52,8 +52,6 @@ class CreateBet extends React.Component {
       description: "",
       odds: "1:1", // be able to change ultimately
       clubs: {},
-      available_balance: 0,
-      escrow_balance: 0,
       showBetFailAlert: false,
       showBetSuccessAlert: false
     };
@@ -90,12 +88,12 @@ class CreateBet extends React.Component {
         i.e. after the game or season (must be after 'Expires At')
       </Tooltip>,
       <Tooltip id="tooltip">
-        My total balance available to wager (not tied up in current or pending
+        Current balance available to wager (not tied up in current or pending
         wagers)
       </Tooltip>,
       <Tooltip id="tooltip">
-        Currently all wagers are set to 1:1 odds. Changing this will be added in
-        an upcoming release!
+        Currently all wagers are set to 1:1 odds. The ability to change this
+        will be added in an upcoming release!
       </Tooltip>
     ];
 
@@ -108,9 +106,7 @@ class CreateBet extends React.Component {
   componentDidMount() {
     this.setState({
       clubs: this.createSelectItems(),
-      club: this.props.local.localData.club.id,
-      available_balance: this.props.global.globalData.balances[0]
-        .available_balance
+      club: this.props.local.localData.club.id
     });
   }
 
@@ -202,7 +198,10 @@ class CreateBet extends React.Component {
             description: "",
             showBetSuccessAlert: true
           });
-          // write to db and update redux store w/ bet amount subtracted // actually.....create trigger on bets table to subtract tokens upon succesfull submittal?
+          this.props.updateBalances(
+            this.props.global.globalData,
+            Number(wager)
+          );
         }
       } catch (err) {
         this.setState({ showBetFailAlert: true });
@@ -271,7 +270,7 @@ class CreateBet extends React.Component {
         <OverlayTrigger placement="right" overlay={this.tooltips[4]}>
           <span>My Available Balance:</span>
         </OverlayTrigger>
-        {`${this.state.available_balance} tokens`}
+        {`${this.props.global.globalData.balances[0].available_balance} tokens`}
         <br />
         <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
           <span>Wager Odds</span>
@@ -371,9 +370,10 @@ function mapStateToProps(state) {
 }
 
 function bindActionsToDispatch(dispatch) {
+  // this.props.global.globalData.balances[0].available_balance and escrow_balance
   return bindActionCreators(
     {
-      testAction: testAction
+      updateBalances: updateBalances
     },
     dispatch
   );
