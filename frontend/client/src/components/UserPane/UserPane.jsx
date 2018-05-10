@@ -48,7 +48,7 @@ class UserPane extends Component {
           })}
         </div>
       );
-    } else {
+    } else if (didSelectUser === true) {
       return (
         <div>
           <SideProfile selectedUser={this.state.selectedUser} />

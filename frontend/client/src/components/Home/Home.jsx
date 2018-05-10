@@ -74,7 +74,7 @@ class Home extends Component {
                 style={{ backgroundColor: "rgb(130,145,160)", height: "90vh" }}
               >
                 <UsersNav />
-                <SideProfile />
+                <UserPane />
               </Col>
             </Row>
           </Grid>
