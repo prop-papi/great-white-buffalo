@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { FormControl, ListGroup, ListGroupItem, Panel } from 'react-bootstrap';
-import moment from 'moment';
-import io from 'socket.io-client';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { FormControl, ListGroup, ListGroupItem, Panel } from "react-bootstrap";
+import moment from "moment";
+import io from "socket.io-client";
 
 // custom css
-import './Chat.css';
+import "./Chat.css";
 
 // connection to socket server
-const socket = io('http://localhost:3000');
+const socket = io("http://localhost:3000");
 
 class Chat extends Component {
   constructor(props) {
@@ -18,42 +18,37 @@ class Chat extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleEnterKeyPress = this.handleEnterKeyPress.bind(this);
     this.isTyping = this.isTyping.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
 
     this.state = {
-      text: '',
+      text: "",
       cache: [],
       isTyping: false,
-      currentUserTyping: ''
+      currentUserTyping: ""
     };
   }
 
   handleChange(e) {
-    socket.emit('message.typing', {
-      user: localStorage.username
-    });
     this.setState({ text: e.target.value });
-  }
-
-  handleKeyUp() {
-    socket.emit('message.typing', {
-      user: localStorage.username
-    });
+    if (e.key !== "Enter") {
+      socket.emit("message.typing", {
+        user: localStorage.username
+      });
+    }
   }
 
   handleEnterKeyPress(e) {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       // send the message to db / cache
       // socket emit
 
-      socket.emit('message.send', {
+      socket.emit("message.send", {
         text: this.state.text,
         user: localStorage.username,
         // hard coded lounge
-        lounge: this.props.data.localData.lounges[2],
+        lounge: this.props.local.localData.lounges[0],
         createdAt: new Date()
       });
-      this.setState({ text: '' });
+      this.setState({ text: "" });
     }
   }
 
@@ -71,20 +66,24 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    socket.emit('user.enter', {
-      user: localStorage.username
+    socket.emit("user.enter", {
+      user: localStorage.username,
+      // LOUNGE IS CURRENTLY HARDCODED TO FIRST OF LOUNGES LIST -- NEED TO FIX
+      lounge: this.props.local.localData.lounges[0]
     });
-    socket.on('message.send', msg => {
+
+    socket.on("message.send", msg => {
       this.setState({ cache: [...this.state.cache, msg] });
     });
-    socket.on('message.typing', msg => {
+
+    socket.on("message.typing", msg => {
       this.setState({
         isTyping: true,
         currentUserTyping: msg.user
       });
       setTimeout(() => {
         this.setState({ isTyping: false });
-      }, 750);
+      }, 1500);
     });
   }
 
@@ -95,26 +94,28 @@ class Chat extends Component {
         <br />
         <div className="chat-main-container">
           <Panel>
+            {/*
             <ListGroup>
               {this.props.data.localData.messages.map(message => {
                 return (
                   <ListGroupItem key={message._id}>
                     <p>
                       {message.user}:
-                      <span>({moment(message.createdAt).format('LT')})</span>
+                      <span>({moment(message.createdAt).format("LT")})</span>
                     </p>
                     <p>{message.text}</p>
                   </ListGroupItem>
                 );
               })}
             </ListGroup>
+            */}
             <ListGroup>
               {this.state.cache.map((message, i) => {
                 return (
                   <ListGroupItem key={i}>
                     <p>
                       {message.user}:
-                      <span>({moment(message.createdAt).format('LT')})</span>
+                      <span>({moment(message.createdAt).format("LT")})</span>
                     </p>
                     <p>{message.text}</p>
                   </ListGroupItem>
@@ -134,7 +135,7 @@ class Chat extends Component {
               // Message to @USER (Direct Message)
               onChange={this.handleChange}
               onKeyPress={this.handleEnterKeyPress}
-              onKeyUp={this.handleKeyUp}
+              // onKeyDown={this.handleKeyUp}
             />
           </Panel>
         </div>
@@ -145,8 +146,10 @@ class Chat extends Component {
 
 function mapStateToProps(state) {
   return {
-    message: state.message,
-    data: state.data
+    // message: state.message,
+    // data: state.data,
+    global: state.global,
+    local: state.local
   };
 }
 
