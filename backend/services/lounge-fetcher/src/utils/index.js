@@ -187,7 +187,6 @@ let asyncRequest = async value =>
 let dateParser = async (m, t) => {
   // convert month to mm/dd format
   // convert time to hh:mm without am or pm
-  console.log(t);
   m = m.split("/");
   if (m[0].length === 1) {
     m[0] = "0" + m[0];
@@ -198,18 +197,20 @@ let dateParser = async (m, t) => {
   t = t.split(" ");
 
   if (t[1] === "AM") {
-    t[0] = "0" + t[0];
+    let hour = t[0].split(":");
+    if (hour[0].length === 1) {
+      hour[0] = "0" + hour[0];
+    }
+    t[0] = hour.join(":");
   } else {
-    let temp = parseInt(t[0][0]) + 12;
-    t[0] = t[0].slice(1);
-    t[0] = temp.toString() + t[0];
+    let hour = t[0].split(":");
+    hour[0] = (parseInt(hour[0]) + 12).toString();
+    t[0] = hour.join(":");
   }
-  console.log(t);
   // 2018-05-11T20:00:00
   let fullTimeString =
-    new Date().getFullYear() + "-" + m[0] + "-" + m[1] + "T" + t[0] + ":00";
-  let sqlDate = moment(fullTimeString).format("YYYY-MM-DD HH:mm:ss");
-  return sqlDate;
+    new Date().getFullYear() + "-" + m[0] + "-" + m[1] + " " + t[0] + ":00";
+  return fullTimeString;
 };
 
 let archiveLounges = async () => {
@@ -231,3 +232,4 @@ let archiveLounges = async () => {
 
 module.exports.addNewLounges = addNewLounges;
 module.exports.archiveLounges = archiveLounges;
+module.exports.dateParser = dateParser;
