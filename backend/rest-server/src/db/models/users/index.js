@@ -21,5 +21,16 @@ const getBalance = async user => {
   }
 };
 
+const updateDefaultClub = async (user, club) => {
+  const query = `UPDATE Users SET default_club='${club}' WHERE id='${user}';`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.selectUser = selectUser;
 module.exports.getBalance = getBalance;
+module.exports.updateDefaultClub = updateDefaultClub;

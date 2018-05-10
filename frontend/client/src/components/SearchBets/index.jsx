@@ -98,7 +98,7 @@ class SearchBets extends React.Component {
                 </Panel.Title>
               </Panel.Heading>
               <Panel.Body collapsible>
-                {this.state.myOpenBets.map(b => <Bet bet={b} />)}
+                {this.state.myOpenBets.map(b => <Bet key={b.id} bet={b} />)}
               </Panel.Body>
             </Panel>
             <Panel eventKey="2">
@@ -108,7 +108,7 @@ class SearchBets extends React.Component {
                 </Panel.Title>
               </Panel.Heading>
               <Panel.Body collapsible>
-                {this.state.myCurrentBets.map(b => <Bet bet={b} />)}
+                {this.state.myCurrentBets.map(b => <Bet key={b.id} bet={b} />)}
               </Panel.Body>
             </Panel>
             <Panel eventKey="3">
@@ -120,7 +120,7 @@ class SearchBets extends React.Component {
                 </Panel.Title>
               </Panel.Heading>
               <Panel.Body collapsible>
-                {this.state.openBets.map(b => <Bet bet={b} />)}
+                {this.state.openBets.map(b => <Bet key={b.id} bet={b} />)}
               </Panel.Body>
             </Panel>
           </PanelGroup>

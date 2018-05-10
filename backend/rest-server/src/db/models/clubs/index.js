@@ -31,7 +31,17 @@ const selectSingleClubData = async club => {
 };
 
 const selectGlobalClub = async () => {
-  const query = `select * from Clubs WHERE id=12;`;
+  const query = `select * from Clubs where id=12;`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const selectDefaultClub = async id => {
+  const query = `select Clubs.id, Clubs.name, Clubs.security, Clubs.is_archived, Clubs.logo from Clubs inner join Users on Users.default_club=Clubs.id where Users.id='${id}';`;
   try {
     return await mysqldb.query(query);
   } catch (err) {
@@ -44,3 +54,4 @@ module.exports.selectUsersClubs = selectUsersClubs;
 module.exports.selectAllClubsData = selectAllClubsData;
 module.exports.selectSingleClubData = selectSingleClubData;
 module.exports.selectGlobalClub = selectGlobalClub;
+module.exports.selectDefaultClub = selectDefaultClub;
