@@ -21,6 +21,7 @@ class Chat extends Component {
 
     this.state = {
       text: "",
+      recent50Messages: [],
       cache: [],
       isTyping: false,
       currentUserTyping: ""
@@ -68,7 +69,9 @@ class Chat extends Component {
       currentLoungeID: this.props.currentLounge.currentLounge.id
     });
 
-    // What's my local data??
+    socket.on(`user.enter.${localStorage.username}`, msg => {
+      this.setState({ recent50Messages: msg.reverse() });
+    });
 
     socket.on("message.send", msg => {
       this.setState({ cache: [...this.state.cache, msg] });
@@ -92,22 +95,18 @@ class Chat extends Component {
         <br />
         <div className="chat-main-container">
           <Panel>
-            {/*
-            <ListGroup>
-              {this.props.data.localData.messages.map(message => {
+            <ul>
+              {this.state.recent50Messages.map((message, i) => {
+                let msg = JSON.parse(message);
                 return (
-                  <ListGroupItem key={message._id}>
-                    <p>
-                      {message.user}:
-                      <span>({moment(message.createdAt).format("LT")})</span>
-                    </p>
-                    <p>{message.text}</p>
-                  </ListGroupItem>
+                  <li key={i}>
+                    {msg.user}:{" "}
+                    <span>({moment(msg.createdAt).format("LT")})</span>
+                    <br />
+                    {msg.text}
+                  </li>
                 );
               })}
-            </ListGroup>
-            */}
-            <ul>
               {this.state.cache.map((message, i) => {
                 return (
                   <li key={i}>

@@ -3,22 +3,15 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const redis = require("redis");
 const redisClient = require("../../redis-server/src/index.js").client;
-const getListLength = require("../helpers/index.js").getListLength;
-
-// redis get length helper function
+const { getListLength, renderRecent50 } = require("../helpers/index.js");
 
 io.on("connection", socket => {
   socket.on("user.enter", msg => {
-    console.log("user enter: ", msg);
-    // redisClient.set("test", "test value", redis.print);
-    // redisClient.get("test", (error, result) => {
-    //   if (error) throw error;
-    //   console.log("GET result: ", result);
-    // });
     socket.join(msg.currentLoungeID);
+    renderRecent50(msg.currentLoungeID, (err, result) => {
+      io.to(msg.currentLoungeID).emit(`user.enter.${msg.user}`, result);
+    });
   });
-
-  // console.log('a user connected');
 
   socket.on("message.send", msg => {
     console.log("message: ", msg);
