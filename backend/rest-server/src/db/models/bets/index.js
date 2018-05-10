@@ -52,10 +52,8 @@ const selectAllBetsFromClub = async club => {
   }
 };
 
-// UPDATE `greatwhitebuffalo`.`Bets` SET `status`='closed' WHERE `id`='10';
-
 const cancelBet = async betId => {
-  const query = `UPDATE Bets SET status='closed' WHERE id=${betId};`;
+  const query = `UPDATE Bets SET status = IF(ISNULL(CHALLENGER), 'closed', status) WHERE id=${betId};`;
   try {
     return await mysqldb.query(query);
   } catch (err) {
@@ -65,7 +63,7 @@ const cancelBet = async betId => {
 };
 
 const acceptBet = async (betId, myId) => {
-  const query = `UPDATE Bets SET challenger=${myId} WHERE id=${betId};`;
+  const query = `UPDATE Bets SET challenger = IF(ISNULL(CHALLENGER) AND status='pending', ${myId}, challenger) WHERE id=${betId};`;
   try {
     return await mysqldb.query(query);
   } catch (err) {
