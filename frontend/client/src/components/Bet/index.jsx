@@ -25,9 +25,16 @@ class Bet extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showCancelBetError: false,
+      showAcceptBetError: false
+    };
+
     this.cancelBet = this.cancelBet.bind(this);
     this.acceptBet = this.acceptBet.bind(this);
     this.onConfirm = this.onConfirm.bind(this);
+    this.handleCancelBetError = this.handleCancelBetError.bind(this);
+    this.handleAcceptBetError = this.handleAcceptBetError.bind(this);
 
     this.tooltips = [
       // will i need this?
@@ -47,40 +54,59 @@ class Bet extends React.Component {
     }
   }
 
+  handleCancelBetError() {
+    this.setState({
+      showCancelBetError: false
+    });
+  }
+
+  handleAcceptBetError() {
+    this.setState({
+      showAcceptBetError: false
+    });
+  }
+
   async cancelBet() {
     try {
       const data = await axios.post(`http://localhost:1337/api/bets/cancel`, {
         betId: this.props.bet.id
       });
       if (data.status === 200) {
-        this.props.cancelMyBet(
-          this.props.global.globalData,
-          this.props.bet.id,
-          this.props.bet.wager
-        );
+        if (data.data.changedRows) {
+          this.props.cancelMyBet(
+            this.props.global.globalData,
+            this.props.bet.id,
+            this.props.bet.wager
+          );
+        } else {
+          this.setState({ showCancelBetError: true });
+        }
       }
     } catch (err) {
-      //this.setState({ showBetFailAlert: true });
       throw new Error(err);
     }
   }
 
   async acceptBet() {
+    // what if someone canceled before i re-render?
     try {
       const data = await axios.post(`http://localhost:1337/api/bets/accept`, {
         betId: this.props.bet.id,
         myId: localStorage.id
       });
       if (data.status === 200) {
-        this.props.acceptBet(
-          this.props.global.globalData,
-          this.props.bet.id,
-          this.props.bet.wager,
-          localStorage.id
-        );
+        if (data.data.changedRows) {
+          this.props.acceptBet(
+            this.props.global.globalData,
+            this.props.bet.id,
+            this.props.bet.wager,
+            localStorage.id
+          );
+        } else {
+          this.setState({ showAcceptBetError: true });
+        }
       }
     } catch (err) {
-      //this.setState({ showBetFailAlert: true });
       throw new Error(err);
     }
   }
@@ -119,6 +145,37 @@ class Bet extends React.Component {
             )}
           </div>
         </div>
+        {this.state.showCancelBetError ? (
+          <Alert
+            bsStyle="danger"
+            style={this.alertStyle}
+            onDismiss={this.handleCancelBetError}
+          >
+            <h4>Someone has already accepted this bet!</h4>
+            <p>
+              Sorry, you were too late! This bet will be displayed in active
+              wagers upon refresh.
+            </p>
+            <p>
+              <Button onClick={this.handleCancelBetError}>Close</Button>
+            </p>
+          </Alert>
+        ) : null}
+        {this.state.showAcceptBetError ? (
+          <Alert
+            bsStyle="danger"
+            style={this.alertStyle}
+            onDismiss={this.handleAcceptBetError}
+          >
+            <h4>Cannot accept this bet!</h4>
+            <p>
+              Sorry, this bet was either canceled or accepted by another user.
+            </p>
+            <p>
+              <Button onClick={this.handleAcceptBetError}>Close</Button>
+            </p>
+          </Alert>
+        ) : null}
       </div>
     );
   }
