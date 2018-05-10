@@ -31,7 +31,8 @@ class Chat extends Component {
     this.setState({ text: e.target.value });
     if (e.key !== "Enter") {
       socket.emit("message.typing", {
-        user: localStorage.username
+        user: localStorage.username,
+        currentLoungeID: this.props.currentLounge.currentLounge.id
       });
     }
   }
@@ -45,7 +46,7 @@ class Chat extends Component {
         text: this.state.text,
         user: localStorage.username,
         // hard coded lounge
-        lounge: this.props.local.localData.lounges[0],
+        currentLoungeID: this.props.currentLounge.currentLounge.id,
         createdAt: new Date()
       });
       this.setState({ text: "" });
@@ -68,9 +69,10 @@ class Chat extends Component {
   componentDidMount() {
     socket.emit("user.enter", {
       user: localStorage.username,
-      // LOUNGE IS CURRENTLY HARDCODED TO FIRST OF LOUNGES LIST -- NEED TO FIX
-      lounge: this.props.local.localData.lounges[0]
+      currentLoungeID: this.props.currentLounge.currentLounge.id
     });
+
+    // What's my local data??
 
     socket.on("message.send", msg => {
       this.setState({ cache: [...this.state.cache, msg] });
@@ -109,33 +111,33 @@ class Chat extends Component {
               })}
             </ListGroup>
             */}
-            <ListGroup>
+            <ul>
               {this.state.cache.map((message, i) => {
                 return (
-                  <ListGroupItem key={i}>
-                    <p>
-                      {message.user}:
-                      <span>({moment(message.createdAt).format("LT")})</span>
-                    </p>
-                    <p>{message.text}</p>
-                  </ListGroupItem>
+                  <li key={i}>
+                    {message.user}:{" "}
+                    <span>({moment(message.createdAt).format("LT")})</span>
+                    <br />
+                    {message.text}
+                  </li>
                 );
               })}
-            </ListGroup>
+            </ul>
           </Panel>
           {this.isTyping(this.state.currentUserTyping)}
           <Panel>
             <FormControl
               type="text"
               value={this.state.text}
-              placeholder="Chatting in LOUNGE_NAME"
+              placeholder={`Chatting in ${
+                this.props.currentLounge.currentLounge.name
+              }`}
               // could also dynamically render "Lounge" vs a "Direct Message"
               // for example:
               // Message to LOUNGE_NAME
               // Message to @USER (Direct Message)
               onChange={this.handleChange}
               onKeyPress={this.handleEnterKeyPress}
-              // onKeyDown={this.handleKeyUp}
             />
           </Panel>
         </div>
@@ -149,7 +151,8 @@ function mapStateToProps(state) {
     // message: state.message,
     // data: state.data,
     global: state.global,
-    local: state.local
+    local: state.local,
+    currentLounge: state.currentLounge
   };
 }
 
