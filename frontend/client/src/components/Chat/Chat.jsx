@@ -17,25 +17,34 @@ class Chat extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleEnterKeyPress = this.handleEnterKeyPress.bind(this);
+    this.isTyping = this.isTyping.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
 
     this.state = {
       text: '',
-      cache: []
+      cache: [],
+      isTyping: false,
+      currentUserTyping: ''
     };
   }
 
   handleChange(e) {
-    console.log('message ', this.state.text);
+    socket.emit('message.typing', {
+      user: localStorage.username
+    });
     this.setState({ text: e.target.value });
+  }
+
+  handleKeyUp() {
+    socket.emit('message.typing', {
+      user: localStorage.username
+    });
   }
 
   handleEnterKeyPress(e) {
     if (e.key === 'Enter') {
-      console.log('message sent: ', this.state.text);
-      console.log('test message data', this.props.data.localData.messages);
       // send the message to db / cache
       // socket emit
-      console.log(this.props.data.localData);
 
       socket.emit('message.send', {
         text: this.state.text,
@@ -48,13 +57,34 @@ class Chat extends Component {
     }
   }
 
+  isTyping(user) {
+    let { isTyping } = this.state;
+    if (isTyping) {
+      return <div>{user} is typing...</div>;
+    } else {
+      return (
+        <div>
+          <br />
+        </div>
+      );
+    }
+  }
+
   componentDidMount() {
     socket.emit('user.enter', {
       user: localStorage.username
     });
     socket.on('message.send', msg => {
-      console.log('message listener', msg);
       this.setState({ cache: [...this.state.cache, msg] });
+    });
+    socket.on('message.typing', msg => {
+      this.setState({
+        isTyping: true,
+        currentUserTyping: msg.user
+      });
+      setTimeout(() => {
+        this.setState({ isTyping: false });
+      }, 750);
     });
   }
 
@@ -79,7 +109,6 @@ class Chat extends Component {
               })}
             </ListGroup>
             <ListGroup>
-              {/* {console.log(this.state.cache)} */}
               {this.state.cache.map((message, i) => {
                 return (
                   <ListGroupItem key={i}>
@@ -93,6 +122,7 @@ class Chat extends Component {
               })}
             </ListGroup>
           </Panel>
+          {this.isTyping(this.state.currentUserTyping)}
           <Panel>
             <FormControl
               type="text"
@@ -104,6 +134,7 @@ class Chat extends Component {
               // Message to @USER (Direct Message)
               onChange={this.handleChange}
               onKeyPress={this.handleEnterKeyPress}
+              onKeyUp={this.handleKeyUp}
             />
           </Panel>
         </div>

@@ -18,8 +18,8 @@ io.on('connection', socket => {
     io.emit('message.send', msg);
   });
 
-  socket.on('test', color => {
-    io.emit('test', color);
+  socket.on('message.typing', msg => {
+    socket.broadcast.emit('message.typing', msg);
   });
 
   // disconnect
