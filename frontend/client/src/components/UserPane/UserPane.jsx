@@ -34,7 +34,6 @@ class UserPane extends Component {
 
   render() {
     let { showUsers, didSelectUser } = this.props.userPane.userPaneData;
-
     if (didSelectUser === false) {
       let usersToLoad = showUsers ? this.state.users : this.state.friends;
       return (
@@ -48,7 +47,7 @@ class UserPane extends Component {
           })}
         </div>
       );
-    } else if (didSelectUser === true) {
+    } else {
       return (
         <div>
           <SideProfile selectedUser={this.state.selectedUser} />
