@@ -7,8 +7,8 @@ import ClubNav from "./components/ClubNav/index.jsx";
 import LoungeList from "./components/LoungeList/index.jsx";
 import Login from "./components/Auth/Login.jsx";
 import Signup from "./components/Auth/Signup.jsx";
-import TestInfo from './components/TestInfo/index.jsx';
-import Home from "./components/Home/Home.jsx"
+import TestInfo from "./components/TestInfo/index.jsx";
+import Home from "./components/Home/Home.jsx";
 
 export default class App extends Component {
   constructor() {

@@ -9,7 +9,7 @@ class UserPane extends Component {
   constructor() {
     super();
     this.state = {
-      users: ["D2", "buffalojohn", "warreng", "indabuff"],
+      users: ["D2", "buffalojuan", "warreng", "indabuff"],
       friends: [],
       selectedUser: {}
     };

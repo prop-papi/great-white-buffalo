@@ -30,17 +30,76 @@ export const updateLocalData = club => async dispatch => {
   setLocalData(localData.data, dispatch);
 };
 
-export const updateBalances = (globalData, wager) => dispatch => {
+export const updateBalances = (
+  globalData,
+  wager,
+  boolIsCreatingOrAcceptingBet
+) => dispatch => {
+  const newBalances = [
+    // this needs modularization!!!!!!!
+    {
+      available_balance: boolIsCreatingOrAcceptingBet
+        ? globalData.balances[0].available_balance - wager
+        : globalData.balances[0].available_balance + wager,
+      escrow_balance: boolIsCreatingOrAcceptingBet
+        ? globalData.balances[0].escrow_balance + wager
+        : globalData.balances[0].escrow_balance - wager
+    }
+  ];
   const g = {
     ...globalData,
-    balances: {
-      ...globalData.balances,
-      [0]: {
-        ...globalData.balances[0],
-        available_balance: globalData.balances[0].available_balance - wager,
-        escrow_balance: globalData.balances[0].escrow_balance + wager
-      }
+    balances: newBalances
+  };
+  setGlobalData(g, dispatch);
+};
+
+export const cancelMyBet = (globalData, betId, wager) => dispatch => {
+  const newBets = globalData.bets.map((bet, index) => {
+    if (bet.id !== betId) {
+      return bet;
+    } else {
+      return {
+        ...bet,
+        status: "closed"
+      };
     }
+  });
+  const newBalances = [
+    {
+      available_balance: globalData.balances[0].available_balance + wager,
+      escrow_balance: globalData.balances[0].escrow_balance - wager
+    }
+  ];
+  const g = {
+    ...globalData,
+    bets: newBets,
+    balances: newBalances
+  };
+  setGlobalData(g, dispatch);
+};
+
+export const acceptBet = (globalData, betId, wager, myId) => dispatch => {
+  const newBets = globalData.bets.map((bet, index) => {
+    if (bet.id !== betId) {
+      return bet;
+    } else {
+      return {
+        ...bet,
+        challenger: myId,
+        is_my_bet: 1
+      };
+    }
+  });
+  const newBalances = [
+    {
+      available_balance: globalData.balances[0].available_balance - wager,
+      escrow_balance: globalData.balances[0].escrow_balance + wager
+    }
+  ];
+  const g = {
+    ...globalData,
+    bets: newBets,
+    balances: newBalances
   };
   setGlobalData(g, dispatch);
 };
