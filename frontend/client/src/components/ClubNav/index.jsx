@@ -49,6 +49,7 @@ class ClubNav extends Component {
             </div>
           </NavItem>
           {this.props.global.globalData.clubs.map(club => {
+            console.log(this.props.global.globalData.globalClub[0].id);
             if (club.id !== 12) {
               return (
                 <NavItem
