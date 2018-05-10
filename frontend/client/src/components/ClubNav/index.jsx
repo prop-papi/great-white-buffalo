@@ -15,13 +15,13 @@ class ClubNav extends Component {
   }
 
   handleNavItemClick(club) {
-    console.log(club);
     this.props.updateLocalData(club.id);
     // update default club in db
     let body = {
       user: localStorage.getItem("id"),
       club: club.id
     };
+    localStorage.setItem("default_club", club.id);
     let updatedClub = axios.post(
       "http://localhost:1337/api/clubs/updateDefault",
       body
