@@ -17,6 +17,7 @@ class UserPane extends Component {
 
   componentDidMount() {
     this.fetchAllClubUsers(this.props.local.club.id);
+    this.fetchAllFriends(localStorage.id);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -38,6 +39,23 @@ class UserPane extends Component {
       })
       .catch(err => {
         console.log("Error fetch all users", err);
+      });
+  }
+
+  fetchAllFriends(id) {
+    const params = {
+      id
+    };
+    axios
+      .get("http://localhost:1337/api/userpane/friends", { params })
+      .then(response => {
+        console.log("afa", response.data);
+        this.setState({
+          friends: response.data
+        });
+      })
+      .catch(err => {
+        console.log("Error fetching friends", err);
       });
   }
 

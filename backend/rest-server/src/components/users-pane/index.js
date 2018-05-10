@@ -28,4 +28,16 @@ router.get("/allUsers", async function(req, res) {
   }
 });
 
+router.get("/friends", async function(req, res) {
+  const id = req.query.id;
+  try {
+    let friends = await usersdb.getFriends(id);
+    res.json(friends);
+  } catch (err) {
+    console.log("error", err);
+    res.status(500).send("Database error.");
+    return err;
+  }
+});
+
 module.exports = router;
