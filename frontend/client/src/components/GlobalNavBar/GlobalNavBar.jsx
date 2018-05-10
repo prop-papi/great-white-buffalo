@@ -6,6 +6,9 @@ import {
   Image,
   Dropdown,
   DropdownButton,
+  Nav,
+  Navbar,
+  NavDropdown,
   MenuItem
 } from "react-bootstrap";
 import "./GlobalNavBar.css";
@@ -30,29 +33,28 @@ class GlobalNavBar extends Component {
   render() {
     return (
       <div>
-        <Col align="left" md={2}>
-          <Image
-            className="logo"
-            src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
-            rounded
-          />
-        </Col>
-        <Col md={8} mdHidden={true} />
-        <Col align="right" md={2}>
-          {/* <ButtonToolbar > */}
-          <Dropdown pullRight id={1}>
-            <Dropdown.Toggle bsSize="large" className="glyph">
-              <Glyphicon glyph="align-justify" />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="menu">
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Notifications</MenuItem>
-              <MenuItem>Leaderboard</MenuItem>
-              <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
-            </Dropdown.Menu>
-          </Dropdown>
-          {/* </ButtonToolbar> */}
-        </Col>
+        <Navbar className="nav-bar">
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Image
+                className="logo"
+                src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
+                rounded
+              />
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Nav pullRight>
+            <Navbar.Collapse className="glyph">
+              <NavDropdown title={<Glyphicon glyph="align-justify" />}>
+                <MenuItem>Profile</MenuItem>
+                <MenuItem>Notifications</MenuItem>
+                <MenuItem>Leaderboard</MenuItem>
+                <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
+              </NavDropdown>
+            </Navbar.Collapse>
+          </Nav>
+        </Navbar>
       </div>
     );
   }
