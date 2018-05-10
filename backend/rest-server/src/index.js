@@ -6,9 +6,8 @@ const router = require("./routes/index.js");
 const path = require("path");
 const passport = require("passport");
 const PORT = process.env.PORT || 1337; // process.env.PORT || 1337;
-const request = require("request");
 const _ = require("underscore");
-const parseString = require("xml2js").parseString;
+const mongo = require("./db/models/messages/index");
 
 const app = express();
 

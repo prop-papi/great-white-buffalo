@@ -51,8 +51,6 @@ router.get("/local/:club", async function(req, res) {
     localData["club"] = JSON.parse(JSON.stringify(defaultClub[0]));
     let lounges = await loungesdb.selectAllLoungesInClub(req.params.club);
     localData["lounges"] = JSON.parse(JSON.stringify(lounges));
-    let bets = await betsdb.selectAllBetsFromClub(req.params.club);
-    localData["bets"] = JSON.parse(JSON.stringify(bets));
 
     // send response back to client
     res.json(localData);
