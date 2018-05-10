@@ -9,16 +9,29 @@ class UserPane extends Component {
   constructor() {
     super();
     this.state = {
-      users: ["D2", "buffalojuan", "warreng", "indabuff"],
+      users: [],
       friends: [],
       selectedUser: {}
     };
   }
 
+  componentDidMount() {
+    axios
+      .get("http://localhost:1337/api/userpane/allUsers")
+      .then(response => {
+        this.setState({
+          users: response.data
+        });
+      })
+      .catch(err => {
+        console.log("Error fetch all users", err);
+      });
+  }
   handleSelectedUser(username) {
     let params = {
       username
     };
+
     axios
       .get("http://localhost:1337/api/userpane/selected", { params })
       .then(response => {
@@ -40,8 +53,11 @@ class UserPane extends Component {
         <div>
           {usersToLoad.map((user, key) => {
             return (
-              <Row key={key} onClick={() => this.handleSelectedUser(user)}>
-                {user}
+              <Row
+                key={key}
+                onClick={() => this.handleSelectedUser(user.username)}
+              >
+                {user.username}
               </Row>
             );
           })}

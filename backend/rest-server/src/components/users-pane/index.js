@@ -16,4 +16,15 @@ router.get("/selected", async function(req, res) {
   }
 });
 
+router.get("/allUsers", async function(req, res) {
+  try {
+    let allUsers = await usersdb.selectAllUsers();
+    res.json(allUsers);
+  } catch (err) {
+    console.log("error", err);
+    res.status(500).send("Database error.");
+    return err;
+  }
+});
+
 module.exports = router;

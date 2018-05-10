@@ -11,6 +11,16 @@ const selectUser = async user => {
   }
 };
 
+const selectAllUsers = async () => {
+  const query = `SELECT username FROM Users`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 const getBalance = async user => {
   const query = `SELECT available_balance, escrow_balance FROM Users WHERE id='${user}';`;
   try {
@@ -34,3 +44,4 @@ const updateDefaultClub = async (user, club) => {
 module.exports.selectUser = selectUser;
 module.exports.getBalance = getBalance;
 module.exports.updateDefaultClub = updateDefaultClub;
+module.exports.selectAllUsers = selectAllUsers;
