@@ -27,7 +27,11 @@ class Home extends Component {
   }
 
   render() {
-    if (this.props.local.localData && this.props.global.globalData) {
+    if (
+      this.props.local.localData &&
+      this.props.global.globalData &&
+      this.props.userPane.userPaneData
+    ) {
       return (
         <div>
           <Grid>
@@ -92,7 +96,8 @@ function mapStateToProps(state) {
   return {
     //globalData: state.globalData,
     local: state.local,
-    global: state.global
+    global: state.global,
+    userPane: state.userPane
   };
 }
 
