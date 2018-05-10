@@ -100,9 +100,7 @@ class Chat extends Component {
                 let msg = JSON.parse(message);
                 return (
                   <li key={i}>
-                    {msg.user}:{" "}
-                    <span>({moment(msg.createdAt).format("LT")})</span>
-                    <br />
+                    {msg.user} ({moment(msg.createdAt).format("LT")}):{" "}
                     {msg.text}
                   </li>
                 );
@@ -110,9 +108,7 @@ class Chat extends Component {
               {this.state.cache.map((message, i) => {
                 return (
                   <li key={i}>
-                    {message.user}:{" "}
-                    <span>({moment(message.createdAt).format("LT")})</span>
-                    <br />
+                    {message.user} ({moment(message.createdAt).format("LT")}):{" "}
                     {message.text}
                   </li>
                 );

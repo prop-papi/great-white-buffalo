@@ -14,7 +14,6 @@ io.on("connection", socket => {
   });
 
   socket.on("message.send", msg => {
-    console.log("message: ", msg);
     io.to(msg.currentLoungeID).emit("message.send", msg);
     redisClient.lpush(msg.currentLoungeID, JSON.stringify(msg));
     getListLength(msg.currentLoungeID, (err, result) => {
