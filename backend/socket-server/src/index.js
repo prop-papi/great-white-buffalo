@@ -3,6 +3,9 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const redis = require("redis");
 const redisClient = require("../../redis-server/src/index.js").client;
+const getListLength = require("../helpers/index.js").getListLength;
+
+// redis get length helper function
 
 io.on("connection", socket => {
   socket.on("user.enter", msg => {
@@ -20,6 +23,12 @@ io.on("connection", socket => {
   socket.on("message.send", msg => {
     console.log("message: ", msg);
     io.to(msg.currentLoungeID).emit("message.send", msg);
+    redisClient.lpush(msg.currentLoungeID, JSON.stringify(msg));
+    getListLength(msg.currentLoungeID, (err, result) => {
+      if (result > 50) {
+        redisClient.rpop(msg.currentLoungeID);
+      }
+    });
   });
 
   // on user typing ...

@@ -39,13 +39,9 @@ class Chat extends Component {
 
   handleEnterKeyPress(e) {
     if (e.key === "Enter") {
-      // send the message to db / cache
-      // socket emit
-
       socket.emit("message.send", {
         text: this.state.text,
         user: localStorage.username,
-        // hard coded lounge
         currentLoungeID: this.props.currentLounge.currentLounge.id,
         createdAt: new Date()
       });
