@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Row } from "react-bootstrap";
 import { connect } from "react-redux";
-import { setUserPaneData } from "../../actions";
+import { setUserPaneData } from "../../actions/index";
 import SideProfile from "./SideProfile";
 import axios from "axios";
 

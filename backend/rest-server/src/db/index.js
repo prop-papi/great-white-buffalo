@@ -1,5 +1,4 @@
 const mysql = require("promise-mysql");
-const mongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
 const _ = require("underscore");
 
@@ -21,19 +20,26 @@ const mongoConnectString = `mongodb://${process.env.MONGO_USERNAME}:${
   process.env.MONGO_DATABASE
 }?ssl=true&replicaSet=${process.env.MONGO_DATABASE}-shard-0&authSource=admin`;
 
-let promise = mongoose.connect(mongoConnectString);
-
-let mongodb = mongoose.connection;
-mongodb.on("error", console.error.bind(console, "connection error:"));
-mongodb.once("open", async function() {
-  console.log("MySQL/Mongo databases successfully connected.");
-  // **** TEST FUNCTION to pull all messages from mongo db ****
-  // let data = await mongodb
-  //   .collection("messages")
-  //   .find({})
-  //   .toArray();
-  // console.log(data);
+mongoose.connect(mongoConnectString, function(err) {
+  if (err) {
+    console.log("Error connecting to mongo.");
+  } else {
+    console.log("MySQL/Mongo databases successfully connected.");
+  }
 });
 
+let mongodb = mongoose.connection;
+
+let messages = mongoose.Schema({
+  user: Number,
+  lounge: Number,
+  text: String,
+  media: String,
+  created_at: Date
+});
+
+let Message = mongoose.model("Messages", messages);
+
 module.exports.mysqldb = mysqldb;
+module.exports.Message = Message;
 module.exports.mongodb = mongodb;

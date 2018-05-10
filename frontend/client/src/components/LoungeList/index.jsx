@@ -20,11 +20,10 @@ class LoungeList extends Component {
 
   handleLoungeClick(lounge) {
     console.log(lounge);
-
-    // display lounge data
   }
 
   render() {
+    console.log(this.props.local);
     return (
       <div className="lounges-container">
         <Image

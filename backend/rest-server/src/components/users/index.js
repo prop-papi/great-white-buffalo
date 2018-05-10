@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const _ = require("underscore");
-const bodyParser = require("body-parser");
 const usersdb = require("../../db/models/users/index.js");
 const clubsdb = require("../../db/models/clubs/index.js");
 const loungesdb = require("../../db/models/lounges/index.js");
@@ -31,6 +30,8 @@ router.get("/:id", async function(req, res) {
     globalData["balances"] = JSON.parse(JSON.stringify(balances));
     let globalClub = await clubsdb.selectGlobalClub();
     globalData["globalClub"] = JSON.parse(JSON.stringify(globalClub));
+    let defaultClub = await clubsdb.selectDefaultClub(req.params.id);
+    globalData["defaultClub"] = JSON.parse(JSON.stringify(defaultClub));
 
     // send response back to client
     res.json(globalData);
@@ -51,8 +52,6 @@ router.get("/local/:club", async function(req, res) {
     localData["club"] = JSON.parse(JSON.stringify(defaultClub[0]));
     let lounges = await loungesdb.selectAllLoungesInClub(req.params.club);
     localData["lounges"] = JSON.parse(JSON.stringify(lounges));
-    let bets = await betsdb.selectAllBetsFromClub(req.params.club);
-    localData["bets"] = JSON.parse(JSON.stringify(bets));
 
     // send response back to client
     res.json(localData);

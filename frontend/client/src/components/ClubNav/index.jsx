@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { updateLocalData } from "../../actions";
+import axios from "axios";
 
 import { Nav, NavItem, Image, Tooltip, OverlayTrigger } from "react-bootstrap";
 
@@ -15,6 +16,16 @@ class ClubNav extends Component {
 
   handleNavItemClick(club) {
     this.props.updateLocalData(club.id);
+    // update default club in db
+    let body = {
+      user: localStorage.getItem("id"),
+      club: club.id
+    };
+    localStorage.setItem("default_club", club.id);
+    let updatedClub = axios.post(
+      "http://localhost:1337/api/clubs/updateDefault",
+      body
+    );
   }
 
   render() {
@@ -22,7 +33,7 @@ class ClubNav extends Component {
       <div className="club-container">
         <Nav bsStyle="pills" stacked>
           <NavItem
-            key={11}
+            key={this.props.global.globalData.globalClub[0].id}
             className="nav-item"
             onClick={() =>
               this.handleNavItemClick(
@@ -48,8 +59,41 @@ class ClubNav extends Component {
               </OverlayTrigger>
             </div>
           </NavItem>
+          {this.props.global.globalData.defaultClub[0].id !== 12 ? (
+            <NavItem
+              active
+              key={this.props.global.globalData.defaultClub[0].id}
+              className="nav-item"
+              onClick={() =>
+                this.handleNavItemClick(
+                  this.props.global.globalData.defaultClub[0]
+                )
+              }
+            >
+              <div className="club-logo-wrapper">
+                <OverlayTrigger
+                  placement="right"
+                  overlay={
+                    <Tooltip id="tooltip">
+                      {this.props.global.globalData.defaultClub[0].name}
+                    </Tooltip>
+                  }
+                >
+                  <Image
+                    src={this.props.global.globalData.defaultClub[0].logo}
+                    circle
+                    responsive
+                    className="nav-image"
+                  />
+                </OverlayTrigger>
+              </div>
+            </NavItem>
+          ) : null}
           {this.props.global.globalData.clubs.map(club => {
-            if (club.id !== 12) {
+            if (
+              club.id !== 12 &&
+              club.id !== this.props.global.globalData.defaultClub[0].id
+            ) {
               return (
                 <NavItem
                   key={club.id}
