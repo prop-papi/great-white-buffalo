@@ -1,0 +1,43 @@
+.searchResults {
+  height: auto;
+  max-height: 425px;
+  border-radius: 4px;
+  width: 100%;
+  background-color: #788796 !important;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  white-space: nowrap;
+  overflow-wrap: break-word;
+}
+
+.panel-body {
+  background-color: #788796;
+}
+
+.panel-title {
+  background-color: #788796;
+}
+
+.panel-heading {
+  background-color: #788796;
+}
+
+.panel-group {
+  background-color: #788796;
+}
+
+.panel {
+  background-color: #788796;
+}
+
+.panel-default {
+  background-color: #788796 !important;
+}
+
+.panel-default > .panel-heading {
+  background-color: #788796 !important;
+}

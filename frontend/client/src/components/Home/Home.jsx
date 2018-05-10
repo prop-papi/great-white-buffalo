@@ -3,6 +3,7 @@ import { Grid, Row, Col } from "react-bootstrap";
 import ClubNav from "../ClubNav/index";
 import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
+import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
 import { fetchHomeData } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";

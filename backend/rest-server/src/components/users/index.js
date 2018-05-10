@@ -13,7 +13,6 @@ router.get("/:id", async function(req, res) {
   // req.params.id is our user id, req.params.club is the default club
   let globalData = {};
   let myClubs = [];
-
   try {
     let clubs = await clubsdb.selectUsersClubs(req.params.id);
     // create array of my clubs
@@ -23,7 +22,10 @@ router.get("/:id", async function(req, res) {
     // grab all data for each club in array and assign to global object
     let clubsData = await clubsdb.selectAllClubsData(myClubs);
     globalData["clubs"] = JSON.parse(JSON.stringify(clubsData));
-    let betsData = await betsdb.selectAllBetsFromClubsList(myClubs);
+    let betsData = await betsdb.selectAllBetsFromClubsList(
+      myClubs,
+      req.params.id
+    );
     globalData["bets"] = JSON.parse(JSON.stringify(betsData));
     let balances = await usersdb.getBalance(req.params.id);
     globalData["balances"] = JSON.parse(JSON.stringify(balances));
