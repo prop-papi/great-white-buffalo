@@ -16,7 +16,6 @@ class UserPane extends Component {
   }
 
   handleSelectedUser(username) {
-    console.log(username);
     let params = {
       username
     };

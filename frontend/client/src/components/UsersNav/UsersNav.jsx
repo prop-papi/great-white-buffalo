@@ -7,16 +7,13 @@ import "../MainNavBar/MainNavBar.css";
 class UsersNav extends Component {
   constructor() {
     super();
-    this.state = {
-      userPane: {}
-    };
   }
 
-  componentDidMount() {
-    this.state.userPane = Object.assign({}, this.props.userPane);
-  }
   handleButton(e) {
-    e.target.value;
+    let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
+    newUserPane.showUsers = e.target.value === "Users" ? true : false;
+    newUserPane.didSelectUser = false;
+    this.props.setUserPaneData(newUserPane);
   }
 
   render() {
