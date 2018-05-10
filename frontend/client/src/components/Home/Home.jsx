@@ -70,7 +70,7 @@ class Home extends Component {
               >
                 <MainNavBar />
                 <br />
-                <CreateBet />
+                <SearchBets />
               </Col>
               <Col
                 xs={2}

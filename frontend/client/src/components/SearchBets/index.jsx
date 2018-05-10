@@ -123,16 +123,6 @@ class SearchBets extends React.Component {
                 {this.state.openBets.map(b => <Bet bet={b} />)}
               </Panel.Body>
             </Panel>
-            {/* <h3>My Open Wagers ({this.state.myOpenBets.length})</h3> */}
-            {/* {this.state.myOpenBets.map(b => <Bet bet={b} />)} */}
-            {/* <h3>My Current Wagers ({this.state.myCurrentBets.length})</h3> */}
-            {/* {this.state.myCurrentBets.map(b => <Bet bet={b} />)} */}
-            {/* <h3>
-              Available {this.props.local.localData.club.name} Wagers ({
-                this.state.openBets.length
-              })
-            </h3> */}
-            {/* {this.state.openBets.map(b => <Bet bet={b} />)} */}
           </PanelGroup>
         </div>
       </div>
