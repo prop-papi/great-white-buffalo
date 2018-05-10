@@ -12,6 +12,19 @@ import "./GlobalNavBar.css";
 class GlobalNavBar extends Component {
   constructor() {
     super();
+
+    this.logout = this.logout.bind(this);
+  }
+
+  logout() {
+    localStorage.removeItem("username");
+    localStorage.removeItem("id");
+    localStorage.removeItem("win_ratio");
+    localStorage.removeItem("reputation");
+    localStorage.removeItem("default_club");
+    localStorage.removeItem("persist:root");
+    document.cookie = "";
+    this.props.history.push("/login");
   }
 
   render() {
@@ -35,7 +48,7 @@ class GlobalNavBar extends Component {
               <MenuItem>Profile</MenuItem>
               <MenuItem>Notifications</MenuItem>
               <MenuItem>Leaderboard</MenuItem>
-              <MenuItem>Logout</MenuItem>
+              <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
             </Dropdown.Menu>
           </Dropdown>
           {/* </ButtonToolbar> */}

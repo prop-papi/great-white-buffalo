@@ -1,7 +1,6 @@
 .club-container {
   width: 100%;
-  height: 650px;
-  /* float: left; */
+  height: 85vh;
   overflow-y: scroll;
   overflow-x: visible;
 }
