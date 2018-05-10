@@ -29,7 +29,6 @@ class LoungeList extends Component {
   // }
 
   render() {
-    console.log(this.props.local);
     return (
       <div className="lounges-container">
         <Image
