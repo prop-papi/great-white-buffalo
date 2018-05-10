@@ -16,8 +16,21 @@ class UserPane extends Component {
   }
 
   componentDidMount() {
+    this.fetchAllClubUsers(this.props.local.club.id);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.local.club.id !== this.props.local.club.id) {
+      this.fetchAllClubUsers(this.props.local.club.id);
+    }
+  }
+
+  fetchAllClubUsers(id) {
+    const params = {
+      clubID: id
+    };
     axios
-      .get("http://localhost:1337/api/userpane/allUsers")
+      .get("http://localhost:1337/api/userpane/allUsers", { params })
       .then(response => {
         this.setState({
           users: response.data
@@ -27,6 +40,7 @@ class UserPane extends Component {
         console.log("Error fetch all users", err);
       });
   }
+
   handleSelectedUser(username) {
     let params = {
       username
@@ -75,6 +89,7 @@ class UserPane extends Component {
 
 const mapStateToProps = state => {
   return {
+    local: state.local.localData,
     userPane: state.userPane
   };
 };

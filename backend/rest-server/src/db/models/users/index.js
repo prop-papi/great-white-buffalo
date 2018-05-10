@@ -11,10 +11,15 @@ const selectUser = async user => {
   }
 };
 
-const selectAllUsers = async () => {
-  const query = `SELECT username FROM Users`;
+const selectAllUsersInClub = async clubID => {
+  const query = `SELECT greatwhitebuffalo.Users.username 
+  FROM greatwhitebuffalo.UsersClubs
+  INNER JOIN greatwhitebuffalo.Users 
+  ON greatwhitebuffalo.UsersClubs.user = greatwhitebuffalo.Users.id
+  WHERE greatwhitebuffalo.UsersClubs.club = ?;`;
+  //const query = `SELECT username FROM Users WHERE `;
   try {
-    return await mysqldb.query(query);
+    return await mysqldb.query(query, [clubID]);
   } catch (err) {
     console.log("error", err);
     return err;
@@ -44,4 +49,4 @@ const updateDefaultClub = async (user, club) => {
 module.exports.selectUser = selectUser;
 module.exports.getBalance = getBalance;
 module.exports.updateDefaultClub = updateDefaultClub;
-module.exports.selectAllUsers = selectAllUsers;
+module.exports.selectAllUsersInClub = selectAllUsersInClub;

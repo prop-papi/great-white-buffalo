@@ -17,8 +17,9 @@ router.get("/selected", async function(req, res) {
 });
 
 router.get("/allUsers", async function(req, res) {
+  const clubID = req.query.clubID;
   try {
-    let allUsers = await usersdb.selectAllUsers();
+    let allUsers = await usersdb.selectAllUsersInClub(clubID);
     res.json(allUsers);
   } catch (err) {
     console.log("error", err);
