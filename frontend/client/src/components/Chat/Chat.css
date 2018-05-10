@@ -1,0 +1,15 @@
+.main-component-nav {
+  width: 100%;
+  background-color: red;
+  height: 50px;
+  margin: 0px;
+}
+
+.chat-main-container {
+  padding: 20px 20px;
+}
+
+.chat-main-container span {
+  align-content: right;
+  color: brown;
+}

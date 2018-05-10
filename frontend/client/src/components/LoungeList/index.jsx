@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { updateCurrentLounge } from "../../actions/loungeActions.js";
 
 import {
   ListGroup,
@@ -18,9 +19,14 @@ class LoungeList extends Component {
     this.handleLoungeClick = this.handleLoungeClick.bind(this);
   }
 
-  handleLoungeClick(lounge) {
-    console.log(lounge);
+  async handleLoungeClick(lounge) {
+    await this.props.updateCurrentLounge(lounge);
+    // display lounge data
   }
+
+  // async componentDidMount() {
+  //   await this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
+  // }
 
   render() {
     console.log(this.props.local);
@@ -55,8 +61,18 @@ class LoungeList extends Component {
 
 function mapStateToProps(state) {
   return {
-    local: state.local
+    local: state.local,
+    currentLounge: state.currentLounge
   };
 }
 
-export default connect(mapStateToProps)(LoungeList);
+function bindActionsToDispatch(dispatch) {
+  return bindActionCreators(
+    {
+      updateCurrentLounge: updateCurrentLounge
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, bindActionsToDispatch)(LoungeList);

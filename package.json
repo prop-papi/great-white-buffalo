@@ -6,7 +6,9 @@
   "scripts": {
     "test": "blank",
     "react-dev": "webpack -d --watch",
-    "server-dev": "nodemon backend/rest-server/src/index.js"
+    "server-dev": "nodemon backend/rest-server/src/index.js",
+    "start:socket-server": "nodemon backend/socket-server/src/index.js",
+    "start:redis-server": "nodemon backend/redis-server/src/index.js"
   },
   "repository": {
     "type": "git",
@@ -48,11 +50,14 @@
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
+    "redis": "^2.8.0",
     "redux": "^3.7.2",
     "redux-persist": "^5.9.1",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
     "request": "^2.85.0",
+    "socket.io": "^2.1.0",
+    "socket.io-client": "^2.1.0",
     "webpack": "^4.6.0",
     "xml2js": "^0.4.19"
   },

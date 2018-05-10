@@ -9,6 +9,7 @@ import Login from "./components/Auth/Login.jsx";
 import Signup from "./components/Auth/Signup.jsx";
 import TestInfo from "./components/TestInfo/index.jsx";
 import Home from "./components/Home/Home.jsx";
+import Chat from "./components/Chat/Chat.jsx";
 
 export default class App extends Component {
   constructor() {
@@ -27,6 +28,7 @@ export default class App extends Component {
           <Route path="/test" component={TestInfo} />
           <Route path="/clubnav" component={ClubNav} />
           <Route path="/lounges" component={LoungeList} />
+          <Route path="/chat" component={Chat} />
         </Switch>
       </div>
     );
