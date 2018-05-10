@@ -22,6 +22,8 @@ import {
   Alert
 } from "react-bootstrap";
 
+// add confirmation dialogue w/ bet details!!!
+
 class CreateBet extends React.Component {
   constructor(props) {
     super(props);
@@ -200,8 +202,10 @@ class CreateBet extends React.Component {
           });
           this.props.updateBalances(
             this.props.global.globalData,
-            Number(wager)
+            Number(wager),
+            true
           );
+          // add bet to bets array in redux?
         }
       } catch (err) {
         this.setState({ showBetFailAlert: true });
@@ -366,7 +370,7 @@ class CreateBet extends React.Component {
                 style={this.alertStyle}
                 onDismiss={this.handleDismissCreateError}
               >
-                <h4>Created wager successfully!!!</h4>
+                <h4>Wager created successfully!!!</h4>
                 <p>
                   Congratulations, your wager has been successfully created. You
                   can view all of your wagers from your profile.

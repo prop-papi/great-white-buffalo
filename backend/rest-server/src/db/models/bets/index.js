@@ -29,8 +29,11 @@ const insertNewBet = async (
   }
 };
 
-const selectAllBetsFromClubsList = async clubs => {
-  const query = `select * from Bets WHERE club in (${[...clubs]})`;
+const selectAllBetsFromClubsList = async (clubs, myId) => {
+  const query = `SELECT *, IF ((Bets.creator=${myId} OR Bets.challenger=${myId}), 1, 0) AS is_my_bet FROM Bets WHERE club in (${[
+    //
+    ...clubs
+  ]}) ORDER BY is_my_bet DESC, status, id`;
   try {
     return await mysqldb.query(query);
   } catch (err) {
@@ -49,6 +52,30 @@ const selectAllBetsFromClub = async club => {
   }
 };
 
+// UPDATE `greatwhitebuffalo`.`Bets` SET `status`='closed' WHERE `id`='10';
+
+const cancelBet = async betId => {
+  const query = `UPDATE Bets SET status='closed' WHERE id=${betId};`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const acceptBet = async (betId, myId) => {
+  const query = `UPDATE Bets SET challenger=${myId} WHERE id=${betId};`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.insertNewBet = insertNewBet;
 module.exports.selectAllBetsFromClubsList = selectAllBetsFromClubsList;
 module.exports.selectAllBetsFromClub = selectAllBetsFromClub;
+module.exports.cancelBet = cancelBet;
+module.exports.acceptBet = acceptBet;
