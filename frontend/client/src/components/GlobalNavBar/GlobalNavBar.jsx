@@ -12,6 +12,7 @@ import {
   MenuItem
 } from "react-bootstrap";
 import "./GlobalNavBar.css";
+import Notifications from "../Notifications/index";
 class GlobalNavBar extends Component {
   constructor() {
     super();
@@ -33,6 +34,7 @@ class GlobalNavBar extends Component {
   render() {
     return (
       <div>
+<<<<<<< HEAD
         <Navbar className="nav-bar">
           <Navbar.Header>
             <Navbar.Brand>
@@ -48,6 +50,26 @@ class GlobalNavBar extends Component {
               title={<Glyphicon glyph="align-justify" />}
               id="user-dropdown"
             >
+=======
+        <Col align="left" md={2}>
+          <Image
+            className="logo"
+            src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
+            rounded
+          />
+        </Col>
+        <Col md={8} mdHidden={true} />
+        <Col align="right" md={1}>
+          <Notifications />
+        </Col>
+        <Col align="right" md={1}>
+          {/* <ButtonToolbar > */}
+          <Dropdown pullRight id={1}>
+            <Dropdown.Toggle bsSize="large" className="glyph">
+              <Glyphicon glyph="align-justify" />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="menu">
+>>>>>>> working on notifications
               <MenuItem>Profile</MenuItem>
               <MenuItem>Notifications</MenuItem>
               <MenuItem>Leaderboard</MenuItem>
