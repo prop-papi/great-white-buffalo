@@ -6,6 +6,9 @@ import {
   Image,
   Dropdown,
   DropdownButton,
+  Nav,
+  Navbar,
+  NavDropdown,
   MenuItem
 } from "react-bootstrap";
 import "./GlobalNavBar.css";
@@ -30,29 +33,28 @@ class GlobalNavBar extends Component {
   render() {
     return (
       <div>
-        <Col align="left" md={2}>
-          <Image
-            className="logo"
-            src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
-            rounded
-          />
-        </Col>
-        <Col md={8} mdHidden={true} />
-        <Col align="right" md={2}>
-          {/* <ButtonToolbar > */}
-          <Dropdown pullRight id={1}>
-            <Dropdown.Toggle bsSize="large" className="glyph">
-              <Glyphicon glyph="align-justify" />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="menu">
+        <Navbar className="nav-bar">
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Image
+                className="logo"
+                src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
+                rounded
+              />
+            </Navbar.Brand>
+          </Navbar.Header>
+          <Nav pullRight>
+            <NavDropdown
+              title={<Glyphicon glyph="align-justify" />}
+              id="user-dropdown"
+            >
               <MenuItem>Profile</MenuItem>
               <MenuItem>Notifications</MenuItem>
               <MenuItem>Leaderboard</MenuItem>
               <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
-            </Dropdown.Menu>
-          </Dropdown>
-          {/* </ButtonToolbar> */}
-        </Col>
+            </NavDropdown>
+          </Nav>
+        </Navbar>
       </div>
     );
   }

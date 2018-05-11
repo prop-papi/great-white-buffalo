@@ -9,16 +9,66 @@ class UserPane extends Component {
   constructor() {
     super();
     this.state = {
-      users: ["D2", "buffalojuan", "warreng", "indabuff"],
+      users: [],
       friends: [],
       selectedUser: {}
     };
+  }
+
+  componentDidMount() {
+    this.fetchAllClubUsers(this.props.local.club.id);
+    this.fetchAllFriends(localStorage.id);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.local.club.id !== this.props.local.club.id) {
+      this.fetchAllClubUsers(this.props.local.club.id);
+    }
+  }
+
+  fetchAllClubUsers(id) {
+    const params = {
+      clubID: id
+    };
+    axios
+      .get("http://localhost:1337/api/userpane/allUsers", { params })
+      .then(response => {
+        this.setState({
+          users: response.data
+        });
+      })
+      .catch(err => {
+        console.log("Error fetch all users", err);
+      });
+  }
+
+  fetchAllFriends(id) {
+    const params = {
+      id
+    };
+    axios
+      .get("http://localhost:1337/api/userpane/friends", { params })
+      .then(response => {
+        let friends = [];
+        response.data.forEach(val => {
+          val.user1 === localStorage.username
+            ? friends.push({ username: val.user2 })
+            : friends.push({ username: val.user1 });
+        });
+        this.setState({
+          friends
+        });
+      })
+      .catch(err => {
+        console.log("Error fetching friends", err);
+      });
   }
 
   handleSelectedUser(username) {
     let params = {
       username
     };
+
     axios
       .get("http://localhost:1337/api/userpane/selected", { params })
       .then(response => {
@@ -40,8 +90,11 @@ class UserPane extends Component {
         <div>
           {usersToLoad.map((user, key) => {
             return (
-              <Row key={key} onClick={() => this.handleSelectedUser(user)}>
-                {user}
+              <Row
+                key={key}
+                onClick={() => this.handleSelectedUser(user.username)}
+              >
+                {user.username}
               </Row>
             );
           })}
@@ -59,6 +112,7 @@ class UserPane extends Component {
 
 const mapStateToProps = state => {
   return {
+    local: state.local.localData,
     userPane: state.userPane
   };
 };

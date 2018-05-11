@@ -13,7 +13,11 @@ class SideProfile extends Component {
       <div>
         <div className="side-profile">
           <Row>
-            <Image src={this.props.selectedUser.picture} circle />
+            <Image
+              className="profile-img"
+              src={this.props.selectedUser.picture}
+              circle
+            />
           </Row>
           <Row>{this.props.selectedUser.username}</Row>
           <div className="bio">

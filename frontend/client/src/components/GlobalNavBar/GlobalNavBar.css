@@ -1,11 +1,10 @@
 .glyph {
-  background-color: rgb(90,105,120);
-  border: none
-  
+  background-color: rgb(90, 105, 120);
+  border: none;
 }
 
 .glyph:hover {
-  background-color: rgb(70,85,100);
+  background-color: rgb(70, 85, 100);
 }
 
 .glyph:active {
@@ -16,19 +15,29 @@
   background-color: transparent !important;
 }
 
-.menu {
-  background-color: rgb(70,85,100);
+.dropdown-menu {
+  background-color: rgb(70, 85, 100);
 }
 
-a{
-  color: white !important;
-}
-a:hover{
+.dropdown-toggle:focus {
   background-color: transparent !important;
-  color: rgb(90,105,120) !important;
+}
+
+a {
+  color: white !important;
+  background-color: transparent !important;
+}
+a:hover {
+  background-color: transparent !important;
+  color: rgb(90, 105, 120) !important;
 }
 
 .logo {
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
+}
+
+.nav-bar {
+  background-color: rgb(90, 105, 120);
+  border: none;
 }
