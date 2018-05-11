@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { FormControl, ListGroup, ListGroupItem, Panel } from "react-bootstrap";
+import {
+  FormControl,
+  ListGroup,
+  ListGroupItem,
+  Panel,
+  Grid,
+  Row,
+  Col
+} from "react-bootstrap";
 import moment from "moment";
 import io from "socket.io-client";
 
@@ -9,7 +17,7 @@ import io from "socket.io-client";
 import "./Chat.css";
 
 // connection to socket server
-const socket = io("http://localhost:3000");
+const socket = io("http://localhost:3000/chat");
 
 class Chat extends Component {
   constructor(props) {
@@ -53,15 +61,20 @@ class Chat extends Component {
   isTyping(user) {
     let { isTyping } = this.state;
     if (isTyping) {
-      return <div>{user} is typing...</div>;
-    } else {
       return (
-        <div>
-          <br />
-        </div>
+        <Row>
+          <Col xs={2} sm={1.5} md={1.25} lg={1} />
+          <Col xs={10} sm={10.5} md={10.75} lg={11} className="chat-username">
+            <a>{user} </a>is typing...
+          </Col>
+        </Row>
       );
     }
   }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  };
 
   componentDidMount() {
     socket.emit("user.enter", {
@@ -75,6 +88,7 @@ class Chat extends Component {
 
     socket.on("message.send", msg => {
       this.setState({ cache: [...this.state.cache, msg] });
+      this.scrollToBottom();
     });
 
     socket.on("message.typing", msg => {
@@ -85,52 +99,76 @@ class Chat extends Component {
       setTimeout(() => {
         this.setState({ isTyping: false });
       }, 1500);
+      this.scrollToBottom();
     });
   }
 
   render() {
     return (
-      <div>
-        <h1 className="main-component-nav">MAIN COMPONENT NAV BAR GOES HERE</h1>
-        <br />
+      <div className="chat-background">
         <div className="chat-main-container">
-          <Panel>
-            <ul>
-              {this.state.recent50Messages.map((message, i) => {
-                let msg = JSON.parse(message);
-                return (
-                  <li key={i}>
-                    {msg.user} ({moment(msg.createdAt).format("LT")}):{" "}
+          <Grid className="chat-display">
+            {this.state.recent50Messages.map((message, i) => {
+              let msg = JSON.parse(message);
+              return (
+                <Row key={i}>
+                  <Col xs={2} sm={1.5} md={1.25} lg={1} className="time-stamp">
+                    ({moment(msg.createdAt).format("LT")}) |
+                  </Col>
+                  <Col
+                    xs={10}
+                    sm={10.5}
+                    md={10.75}
+                    lg={11}
+                    className="chat-username"
+                  >
+                    <a>{msg.user}: </a>
                     {msg.text}
-                  </li>
-                );
-              })}
-              {this.state.cache.map((message, i) => {
-                return (
-                  <li key={i}>
-                    {message.user} ({moment(message.createdAt).format("LT")}):{" "}
+                  </Col>
+                </Row>
+              );
+            })}
+            {this.state.cache.map((message, i) => {
+              return (
+                <Row key={i}>
+                  <Col xs={2} sm={1.5} md={1.25} lg={1} className="time-stamp">
+                    ({moment(message.createdAt).format("LT")}) |
+                  </Col>
+                  <Col
+                    xs={10}
+                    sm={10.5}
+                    md={10.75}
+                    lg={11}
+                    className="chat-username"
+                  >
+                    <a>{message.user}: </a>
                     {message.text}
-                  </li>
-                );
-              })}
-            </ul>
-          </Panel>
-          {this.isTyping(this.state.currentUserTyping)}
-          <Panel>
-            <FormControl
-              type="text"
-              value={this.state.text}
-              placeholder={`Chatting in ${
-                this.props.currentLounge.currentLounge.name
-              }`}
-              // could also dynamically render "Lounge" vs a "Direct Message"
-              // for example:
-              // Message to LOUNGE_NAME
-              // Message to @USER (Direct Message)
-              onChange={this.handleChange}
-              onKeyPress={this.handleEnterKeyPress}
+                  </Col>
+                </Row>
+              );
+            })}
+            <div
+              ref={el => {
+                this.messagesEnd = el;
+              }}
             />
-          </Panel>
+            {this.isTyping(this.state.currentUserTyping)}
+          </Grid>
+        </div>
+        <div className="message-input">
+          <FormControl
+            type="text"
+            value={this.state.text}
+            placeholder={`Chatting in ${
+              this.props.currentLounge.currentLounge.name
+            }`}
+            // could also dynamically render "Lounge" vs a "Direct Message"
+            // for example:
+            // Message to LOUNGE_NAME
+            // Message to @USER (Direct Message)
+            onChange={this.handleChange}
+            onKeyPress={this.handleEnterKeyPress}
+          />
         </div>
       </div>
     );
