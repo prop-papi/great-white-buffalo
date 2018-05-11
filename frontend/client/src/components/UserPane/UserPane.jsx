@@ -10,8 +10,7 @@ class UserPane extends Component {
     super();
     this.state = {
       users: [],
-      friends: [],
-      selectedUser: {}
+      friends: []
     };
   }
 
@@ -72,9 +71,10 @@ class UserPane extends Component {
     axios
       .get("http://localhost:1337/api/userpane/selected", { params })
       .then(response => {
-        this.setState({ selectedUser: response.data[0] });
+        //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
         newUserPane.didSelectUser = true;
+        newUserPane.selectedUser = response.data[0];
         this.props.setUserPaneData(newUserPane);
       })
       .catch(err => {
@@ -103,7 +103,10 @@ class UserPane extends Component {
     } else {
       return (
         <div>
-          <SideProfile selectedUser={this.state.selectedUser} />
+          <SideProfile
+            friends={this.state.friends}
+            fetchFriends={this.fetchAllFriends.bind(this)}
+          />
         </div>
       );
     }
