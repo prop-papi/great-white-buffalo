@@ -216,7 +216,7 @@ class Bet extends React.Component {
                     </Confirm>
                   ) : null}
                   {this.props.status === "active"
-                    ? "Active Bet! anything I want to see in here?"
+                    ? "Active Bet! anything I want to see in here? Don't Show expiration date for active bets! Just end date! Make the description field clearer who is on what side"
                     : null}
                   {this.props.status === "review" ? (
                     <div>
