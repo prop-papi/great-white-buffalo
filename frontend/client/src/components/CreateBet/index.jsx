@@ -143,13 +143,15 @@ class CreateBet extends React.Component {
         this.state.expiresTime * 1000 -
         43200000
     ).toISOString();
-    const formattedExpiresAt = moment(expiresAt).format("YYYY-MM-DD HH:mm:ss");
+    const formattedExpiresAt = moment
+      .utc(expiresAt)
+      .format("YYYY-MM-DD HH:mm:ss");
     const endsAt = new Date(
       new Date(this.state.endDate).getTime() +
         this.state.endTime * 1000 -
         43200000
     ).toISOString();
-    const formattedEndsAt = moment(endsAt).format("YYYY-MM-DD HH:mm:ss");
+    const formattedEndsAt = moment.utc(endsAt).format("YYYY-MM-DD HH:mm:ss");
     const { club, wager, odds, description } = this.state;
     if (
       new Date(expiresAt) >= new Date(currently) &&
