@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
+import moment from "moment";
 import Confirm from "react-confirm-bootstrap";
 import { cancelMyBet, acceptBet } from "../../actions";
 import "./index.css";
@@ -16,6 +17,7 @@ import {
   Form,
   MenuItem,
   Col,
+  Panel,
   ControlLabel,
   Alert
 } from "react-bootstrap";
@@ -27,7 +29,12 @@ class Bet extends React.Component {
 
     this.state = {
       showCancelBetError: false,
-      showAcceptBetError: false
+      showAcceptBetError: false,
+      myVote: props.bet.is_my_bet
+        ? localStorage.id === props.bet.creator
+          ? "creator"
+          : "challenger"
+        : "N/A"
     };
 
     this.cancelBet = this.cancelBet.bind(this);
@@ -35,22 +42,24 @@ class Bet extends React.Component {
     this.onConfirm = this.onConfirm.bind(this);
     this.handleCancelBetError = this.handleCancelBetError.bind(this);
     this.handleAcceptBetError = this.handleAcceptBetError.bind(this);
-
-    this.tooltips = [
-      // will i need this?
-      <Tooltip id="tooltip">IF I NEED A TOOLTIP IN HERE</Tooltip>
-    ];
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    if (!this.props.status) {
+      // figure out status of bets if this wasn't directly called from searchBets
+    }
+  }
 
   componentWillReceiveProps(newProps) {}
 
   onConfirm() {
-    if (this.props.bet.is_my_bet) {
+    if (this.props.status === "open") {
       this.cancelBet();
-    } else {
+    } else if (this.props.status === "notMine") {
       this.acceptBet();
+    } else {
+      alert("I need to handle for wager resolution!!!");
+      // send to db marking this bet as won or lost and error handling in insert
     }
   }
 
@@ -117,65 +126,130 @@ class Bet extends React.Component {
         className="wholeBet"
         id={this.props.bet.is_my_bet ? "myBet" : "othersBet"}
       >
-        <div className="row">
-          <div className="col-md-10" id="betInfo">
-            {this.props.bet.description}
-            {"  "}
-            {this.props.bet.odds}
-            {" odds  "}
-            {this.props.bet.wager} token(s)
-          </div>
-          <div className="col-md-2">
-            {this.props.bet.challenger !== null ? null : (
-              <Confirm
-                onConfirm={this.onConfirm}
-                value={this.props.bet.is_my_bet ? 1 : 0}
-                body={
-                  this.props.bet.is_my_bet
-                    ? "Are you sure you want to cancel this wager?"
-                    : "Are you sure you want to accept this wager?"
-                }
-                confirmText="Confirm"
-                title={this.props.bet.is_my_bet ? "Cancel Wager" : "Take Wager"}
-              >
-                <button>
-                  {this.props.bet.is_my_bet ? "Cancel Wager" : "Take Wager"}
-                </button>
-              </Confirm>
-            )}
-          </div>
-        </div>
-        {this.state.showCancelBetError ? (
-          <Alert
-            bsStyle="danger"
-            style={this.alertStyle}
-            onDismiss={this.handleCancelBetError}
-          >
-            <h4>Someone has already accepted this bet!</h4>
-            <p>
-              Sorry, you were too late! This bet will be displayed in active
-              wagers upon refresh.
-            </p>
-            <p>
-              <Button onClick={this.handleCancelBetError}>Close</Button>
-            </p>
-          </Alert>
-        ) : null}
-        {this.state.showAcceptBetError ? (
-          <Alert
-            bsStyle="danger"
-            style={this.alertStyle}
-            onDismiss={this.handleAcceptBetError}
-          >
-            <h4>Cannot accept this bet!</h4>
-            <p>
-              Sorry, this bet was either canceled or accepted by another user.
-            </p>
-            <p>
-              <Button onClick={this.handleAcceptBetError}>Close</Button>
-            </p>
-          </Alert>
-        ) : null}
+        <Panel id="collapsible-panel">
+          <Panel.Heading>
+            <Panel.Title toggle>
+              <div className="row">
+                <div className="col-md-9" id="betInfo">
+                  {this.props.bet.description}
+                </div>
+                <div className="col-md-3">{this.props.bet.wager} token(s)</div>
+              </div>
+            </Panel.Title>
+          </Panel.Heading>
+          <Panel.Collapse>
+            <Panel.Body>
+              <div className="row">
+                {this.state.showCancelBetError ? (
+                  <Alert
+                    bsStyle="danger"
+                    style={this.alertStyle}
+                    onDismiss={this.handleCancelBetError}
+                  >
+                    <h4>Someone has already accepted this bet!</h4>
+                    <p>
+                      Sorry, you were too late! This bet will be displayed in
+                      active wagers upon refresh.
+                    </p>
+                    <p>
+                      <Button onClick={this.handleCancelBetError}>Close</Button>
+                    </p>
+                  </Alert>
+                ) : null}
+                {this.state.showAcceptBetError ? (
+                  <Alert
+                    bsStyle="danger"
+                    style={this.alertStyle}
+                    onDismiss={this.handleAcceptBetError}
+                  >
+                    <h4>Cannot accept this bet!</h4>
+                    <p>
+                      Sorry, this bet was either canceled or accepted by another
+                      user.
+                    </p>
+                    <p>
+                      <Button onClick={this.handleAcceptBetError}>Close</Button>
+                    </p>
+                  </Alert>
+                ) : null}
+                <div className="col-md-8" id="betInfo">
+                  {/* need to pull the challenger name, creator name, club name?? from the db on initial fetch as join */}
+                  My opponent: (username goes here)
+                  <br />
+                  Club: (clubname goes here)
+                  <br /> <br />
+                  {"Odds: " + this.props.bet.odds} <br />
+                  {"Bet expiration: " +
+                    moment(new Date(this.props.bet.expires)).format(
+                      "MMMM Do YYYY, h:mm a"
+                    ) +
+                    " (" +
+                    moment(new Date(this.props.bet.expires)).fromNow() +
+                    ")"}
+                  <br />
+                  {"Bet end: " +
+                    moment(new Date(this.props.bet.end_at)).format(
+                      "MMMM Do YYYY, h:mm a"
+                    ) +
+                    " (" +
+                    moment(new Date(this.props.bet.end_at)).fromNow() +
+                    ")"}
+                </div>
+                <div className="col-md-4" id="betActionInfo">
+                  {this.props.status === "open" ? (
+                    <Confirm
+                      onConfirm={this.onConfirm}
+                      value={1}
+                      body="Are you sure you want to cancel this wager?"
+                      confirmText="Confirm"
+                      title="Cancel Wager"
+                    >
+                      <button>Cancel Wager</button>
+                    </Confirm>
+                  ) : null}
+                  {this.props.status === "active"
+                    ? "Active Bet! anything I want to see in here?"
+                    : null}
+                  {this.props.status === "review" ? (
+                    <div>
+                      {/* ONLY RENDER THESE BUTTONS IF I HAVENT ALREADY VOTED ON IT */}
+                      <Confirm
+                        onConfirm={this.onConfirm}
+                        value={1}
+                        body="Are you sure you won this bet? If you did not it will hurt your reputation by saying you did"
+                        confirmText="Confirm"
+                        title="Won Wager"
+                      >
+                        <button>I won</button>
+                      </Confirm>
+                      <br /> <br />
+                      <Confirm
+                        onConfirm={this.onConfirm}
+                        value={1}
+                        body="I lost this bet."
+                        confirmText="Confirm"
+                        title="Lost Wager"
+                      >
+                        <button>I lost</button>
+                      </Confirm>
+                    </div>
+                  ) : null}
+                  {this.props.status === "notMine" ? (
+                    <Confirm
+                      onConfirm={this.onConfirm}
+                      value={0}
+                      body="Are you sure you want to accept this wager?"
+                      confirmText="Confirm"
+                      title="Take Wager"
+                    >
+                      <button>Take Wager</button>
+                    </Confirm>
+                  ) : null}
+                </div>
+              </div>
+            </Panel.Body>
+          </Panel.Collapse>
+        </Panel>
       </div>
     );
   }
