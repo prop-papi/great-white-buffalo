@@ -52,23 +52,19 @@ class SearchBets extends React.Component {
     var tempMyReview = []; // change this and expires at to cron job or mysql event every 30 min or hour???!!!!
     var tempMyHistorical = [];
     var tempOpen = [];
-    const now = new Date();
     newProps.global.globalData.bets.forEach(b => {
       if (b.is_my_bet) {
         if (b.status === "pending") {
-          if (b.challenger === null) {
-            tempMyOpen.push(b);
-          } else if (now < new Date(b.end_at)) {
-            tempMyCurrent.push(b);
-          } else {
-            tempMyReview.push(b);
-          }
+          tempMyOpen.push(b);
+        } else if (b.status === "active") {
+          tempMyCurrent.push(b);
+        } else if (b.status === "ended") {
+          tempMyReview.push(b);
         } else {
           tempMyHistorical.push(b);
         }
       } else if (
         b.status === "pending" &&
-        b.challenger === null &&
         (newProps.local.localData.club.name === "Global" ||
           newProps.local.localData.club.id === b.club)
       ) {
@@ -134,6 +130,10 @@ class SearchBets extends React.Component {
               eventKey={4}
               title={"History (" + this.state.myHistoricalBets.length + ")"}
             >
+              <h3>
+                Make a clickable list here to change between canceled expired or
+                resolved!!!
+              </h3>
               {this.state.myHistoricalBets.map(b => (
                 <Bet key={b.id} bet={b} status="history" />
               ))}

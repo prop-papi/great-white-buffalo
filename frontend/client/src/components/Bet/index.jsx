@@ -23,7 +23,6 @@ import {
 } from "react-bootstrap";
 
 class Bet extends React.Component {
-  // note we do not export the actual React component
   constructor(props) {
     super(props);
 
@@ -31,10 +30,11 @@ class Bet extends React.Component {
       showCancelBetError: false,
       showAcceptBetError: false,
       myVote: props.bet.is_my_bet
-        ? localStorage.id === props.bet.creator
+        ? Number(localStorage.id) === props.bet.creator
           ? "creator"
           : "challenger"
-        : "N/A"
+        : "N/A",
+      timeZoneOffset: new Date().getTimezoneOffset()
     };
 
     this.cancelBet = this.cancelBet.bind(this);
@@ -97,7 +97,6 @@ class Bet extends React.Component {
   }
 
   async acceptBet() {
-    // what if someone canceled before i re-render?
     try {
       const data = await axios.post(`http://localhost:1337/api/bets/accept`, {
         betId: this.props.bet.id,
@@ -173,29 +172,38 @@ class Bet extends React.Component {
                   </Alert>
                 ) : null}
                 <div className="col-md-8" id="betInfo">
-                  {/* need to pull the challenger name, creator name, club name?? from the db on initial fetch as join */}
-                  My opponent: (username goes here)
+                  {"My "}
+                  {this.state.myVote === "N/A" ? "potential " : ""}
+                  {"opponent: "}
+                  {this.state.myVote === "creator"
+                    ? this.props.bet.challenger_name
+                    : this.props.bet.creator_name}
                   <br />
-                  Club: (clubname goes here)
+                  {"Club: " + this.props.bet.club_name}
                   <br /> <br />
                   {"Odds: " + this.props.bet.odds} <br />
                   {"Bet expiration: " +
-                    moment(new Date(this.props.bet.expires)).format(
-                      "MMMM Do YYYY, h:mm a"
-                    ) +
+                    moment(new Date(this.props.bet.expires))
+                      .subtract("minutes", this.state.timeZoneOffset)
+                      .format("MMMM Do YYYY, h:mm a") +
                     " (" +
-                    moment(new Date(this.props.bet.expires)).fromNow() +
+                    moment(new Date(this.props.bet.expires))
+                      .subtract("minutes", this.state.timeZoneOffset)
+                      .fromNow() +
                     ")"}
                   <br />
                   {"Bet end: " +
-                    moment(new Date(this.props.bet.end_at)).format(
-                      "MMMM Do YYYY, h:mm a"
-                    ) +
+                    moment(new Date(this.props.bet.end_at))
+                      .subtract("minutes", this.state.timeZoneOffset)
+                      .format("MMMM Do YYYY, h:mm a") +
                     " (" +
-                    moment(new Date(this.props.bet.end_at)).fromNow() +
+                    moment(new Date(this.props.bet.end_at))
+                      .subtract("minutes", this.state.timeZoneOffset)
+                      .fromNow() +
                     ")"}
                 </div>
                 <div className="col-md-4" id="betActionInfo">
+                  {this.props.bet.status}
                   {this.props.status === "open" ? (
                     <Confirm
                       onConfirm={this.onConfirm}
@@ -234,6 +242,9 @@ class Bet extends React.Component {
                       </Confirm>
                     </div>
                   ) : null}
+                  {this.props.status === "history"
+                    ? "Historical bet! Show result!"
+                    : null}
                   {this.props.status === "notMine" ? (
                     <Confirm
                       onConfirm={this.onConfirm}
