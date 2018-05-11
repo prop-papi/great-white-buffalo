@@ -32,6 +32,7 @@ router.get("/friends", async function(req, res) {
   const id = req.query.id;
   try {
     let friends = await usersdb.getFriends(id);
+    // console.log(friends);
     res.json(friends);
   } catch (err) {
     console.log("error", err);

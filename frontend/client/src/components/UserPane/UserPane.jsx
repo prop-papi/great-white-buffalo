@@ -49,9 +49,14 @@ class UserPane extends Component {
     axios
       .get("http://localhost:1337/api/userpane/friends", { params })
       .then(response => {
-        console.log("afa", response.data);
+        let friends = [];
+        response.data.forEach(val => {
+          val.user1 === localStorage.username
+            ? friends.push({ username: val.user2 })
+            : friends.push({ username: val.user1 });
+        });
         this.setState({
-          friends: response.data
+          friends
         });
       })
       .catch(err => {

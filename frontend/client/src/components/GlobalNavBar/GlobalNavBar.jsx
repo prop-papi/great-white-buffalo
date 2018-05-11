@@ -42,17 +42,17 @@ class GlobalNavBar extends Component {
                 rounded
               />
             </Navbar.Brand>
-            <Navbar.Toggle />
           </Navbar.Header>
           <Nav pullRight>
-            <Navbar.Collapse className="glyph">
-              <NavDropdown title={<Glyphicon glyph="align-justify" />}>
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>Notifications</MenuItem>
-                <MenuItem>Leaderboard</MenuItem>
-                <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
-              </NavDropdown>
-            </Navbar.Collapse>
+            <NavDropdown
+              title={<Glyphicon glyph="align-justify" />}
+              id="user-dropdown"
+            >
+              <MenuItem>Profile</MenuItem>
+              <MenuItem>Notifications</MenuItem>
+              <MenuItem>Leaderboard</MenuItem>
+              <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
+            </NavDropdown>
           </Nav>
         </Navbar>
       </div>

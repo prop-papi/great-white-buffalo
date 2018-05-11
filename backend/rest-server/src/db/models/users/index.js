@@ -27,8 +27,10 @@ const selectAllUsersInClub = async clubID => {
 };
 
 const getFriends = async user => {
-  const query = `SELECT * FROM Friends 
-  WHERE (Friends.user_1 = ? OR Friends.user_2 = ?) 
+  const query = `SELECT u1.username AS user1, u2.username AS user2 FROM Friends
+  inner join Users u1 on u1.id = user_1
+  inner join Users u2 on u2.id = user_2
+  WHERE (Friends.user_1 = ? OR Friends.user_2 = ?)
   AND Friends.status = 1;`;
 
   try {
