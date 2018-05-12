@@ -169,7 +169,7 @@ let makeSportRequest = async (sport, date, loungeDate, club, backupDate) => {
       let checkLoungeExist = await loungedb.checkLoungeExist(loungeName);
       if (!checkLoungeExist.length) {
         let insert = await loungedb.insertLounge(club, loungeName, gameTime);
-        console.log("New Lounge Added.");
+        console.log("New Lounge " + loungeName + " Added.");
       }
     });
   });
@@ -227,6 +227,7 @@ let archiveLounges = async () => {
   // update is_archived to 1 for all ids that are 2 days old
   if (idsToArchive.length) {
     let archive = await loungedb.archiveLounges(idsToArchive);
+    console.log("Lounge ids " + idsToArchive + " have been archived.");
   }
 };
 

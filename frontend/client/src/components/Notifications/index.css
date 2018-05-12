@@ -1,0 +1,50 @@
+.notification-logo {
+  width: 45px;
+  height: 45px;
+}
+
+.notification-logo-wrapper {
+  float: left;
+}
+
+.notification-wrapper {
+  padding: 10px 10px 0px 10px;
+}
+
+.notification-message {
+  font-size: 12px;
+  margin: 10px 10px 10px 10px;
+}
+
+.notifications-list:hover {
+  background-color: lightgray;
+  border-radius: 4px;
+}
+
+.button-list-item {
+  padding: 5px;
+}
+
+.notification-message-request {
+  font-size: 12px;
+  margin: 10px;
+}
+
+.li-message {
+  margin-right: auto;
+}
+
+.bet-resolve-message {
+  font-size: 12px;
+  margin: 10px 10px 10px 10px;
+}
+
+.bet-resolve-button-top {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.bet-resolve-button-bottom {
+  font-size: 12px;
+  margin: 10px;
+}
