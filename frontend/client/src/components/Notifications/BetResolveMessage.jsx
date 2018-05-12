@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ListGroupItem, Image, Button } from "react-bootstrap";
 import "./index.css";
 
-class NotificationMessage extends Component {
+class BetResolveMessage extends Component {
   constructor(props) {
     super(props);
   }
@@ -19,8 +19,10 @@ class NotificationMessage extends Component {
             />
           </li>
           <li className="li li-message">
-            <p className="notification-message">
-              {this.props.data.partner_username} accepted your friend request!
+            <p className="bet-resolve-message">
+              Your bet: <strong>{this.props.data.description}</strong> with{" "}
+              {this.props.data.partner_username} is completed and ready to be
+              resolved! Review your bet to give us the outcome.
             </p>
           </li>
         </ul>
@@ -29,4 +31,4 @@ class NotificationMessage extends Component {
   }
 }
 
-export default NotificationMessage;
+export default BetResolveMessage;

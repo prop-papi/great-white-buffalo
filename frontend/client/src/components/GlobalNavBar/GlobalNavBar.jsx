@@ -11,6 +11,8 @@ import {
 import { connect } from "react-redux";
 import NotificationMessage from "./../Notifications/NotificationMessage.jsx";
 import FriendRequest from "./../Notifications/FriendRequest.jsx";
+import BetResolveMessage from "./../Notifications/BetResolveMessage.jsx";
+import BetResolveInput from "./../Notifications/BetResolveInput.jsx";
 
 class GlobalNavBar extends Component {
   constructor() {
@@ -18,7 +20,7 @@ class GlobalNavBar extends Component {
 
     this.state = {
       showMenu: false,
-      showNotifications: true
+      showNotifications: false
     };
 
     this.showMenu = this.showMenu.bind(this);
@@ -60,8 +62,9 @@ class GlobalNavBar extends Component {
           />
         </li>
         <li className="li right">
-          <span className="label">
-            Win Ratio: {localStorage.getItem("win_ratio")}
+          <span className="label win-ratio">
+            Wager Win Ratio: {Number(localStorage.getItem("win_ratio")) * 100}
+            {"%"}
           </span>
         </li>
         <li className="li notify-icon">
@@ -78,6 +81,8 @@ class GlobalNavBar extends Component {
                     return <NotificationMessage key={n.id} data={n} />;
                   } else if (n.type === 2) {
                     return <FriendRequest key={n.id} data={n} />;
+                  } else if (n.type === 1) {
+                    return <BetResolveInput key={n.id} data={n} />;
                   }
                 })}
               </div>

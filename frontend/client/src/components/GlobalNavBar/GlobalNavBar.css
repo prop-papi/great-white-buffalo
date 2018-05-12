@@ -92,10 +92,18 @@ a:hover {
   z-index: 1;
   border-radius: 5px;
   right: 40%;
-  max-height: 250px;
+  max-height: 290px;
 }
 
 .notifications-wrapper {
   position: relative;
   display: inline-block;
+}
+
+.notifications > *:last-child {
+  padding-bottom: 10px;
+}
+
+.win-ratio {
+  font-family: fantasy;
 }

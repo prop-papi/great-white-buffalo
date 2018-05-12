@@ -12,7 +12,7 @@
 }
 
 .notification-message {
-  font-size: 14px;
+  font-size: 12px;
   margin: 10px 10px 10px 10px;
 }
 
@@ -32,4 +32,19 @@
 
 .li-message {
   margin-right: auto;
+}
+
+.bet-resolve-message {
+  font-size: 12px;
+  margin: 10px 10px 10px 10px;
+}
+
+.bet-resolve-button-top {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.bet-resolve-button-bottom {
+  font-size: 12px;
+  margin: 10px;
 }
