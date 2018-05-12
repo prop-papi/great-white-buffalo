@@ -11,15 +11,15 @@ const selectUser = async user => {
   }
 };
 
-const selectAllUsersInClub = async clubID => {
+const selectAllUsersInClub = async (clubID, currUser) => {
   const query = `SELECT Users.username 
   FROM UsersClubs
   INNER JOIN Users 
   ON UsersClubs.user = Users.id
-  WHERE UsersClubs.club = ?;`;
+  WHERE (UsersClubs.club = ? AND Users.username != ?);`;
 
   try {
-    return await mysqldb.query(query, [clubID]);
+    return await mysqldb.query(query, [clubID, currUser]);
   } catch (err) {
     console.log("error", err);
     return err;
