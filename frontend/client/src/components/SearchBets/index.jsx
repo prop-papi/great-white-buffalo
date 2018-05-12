@@ -58,7 +58,7 @@ class SearchBets extends React.Component {
           tempMyOpen.push(b);
         } else if (b.status === "active") {
           tempMyCurrent.push(b);
-        } else if (b.status === "ended") {
+        } else if (b.status === "voting" || b.status === "disputed") {
           tempMyReview.push(b);
         } else {
           tempMyHistorical.push(b);
@@ -106,25 +106,19 @@ class SearchBets extends React.Component {
               eventKey={1}
               title={"Open (" + this.state.myOpenBets.length + ")"}
             >
-              {this.state.myOpenBets.map(b => (
-                <Bet key={b.id} bet={b} status="open" />
-              ))}
+              {this.state.myOpenBets.map(b => <Bet key={b.id} bet={b} />)}
             </Tab>
             <Tab
               eventKey={2}
               title={"Active (" + this.state.myCurrentBets.length + ")"}
             >
-              {this.state.myCurrentBets.map(b => (
-                <Bet key={b.id} bet={b} status="active" />
-              ))}
+              {this.state.myCurrentBets.map(b => <Bet key={b.id} bet={b} />)}
             </Tab>
             <Tab
               eventKey={3}
               title={"Review (" + this.state.myReviewBets.length + ")"}
             >
-              {this.state.myReviewBets.map(b => (
-                <Bet key={b.id} bet={b} status="review" />
-              ))}
+              {this.state.myReviewBets.map(b => <Bet key={b.id} bet={b} />)}
             </Tab>
             <Tab
               eventKey={4}
@@ -134,9 +128,7 @@ class SearchBets extends React.Component {
                 Make a clickable list here to change between canceled expired or
                 resolved!!!
               </h3>
-              {this.state.myHistoricalBets.map(b => (
-                <Bet key={b.id} bet={b} status="history" />
-              ))}
+              {this.state.myHistoricalBets.map(b => <Bet key={b.id} bet={b} />)}
             </Tab>
             <Tab
               eventKey={5}
@@ -148,9 +140,7 @@ class SearchBets extends React.Component {
                 ")"
               }
             >
-              {this.state.openBets.map(b => (
-                <Bet key={b.id} bet={b} status="notMine" />
-              ))}
+              {this.state.openBets.map(b => <Bet key={b.id} bet={b} />)}
             </Tab>
           </Tabs>
 

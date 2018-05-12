@@ -39,29 +39,12 @@ class Bet extends React.Component {
 
     this.cancelBet = this.cancelBet.bind(this);
     this.acceptBet = this.acceptBet.bind(this);
-    this.onConfirm = this.onConfirm.bind(this);
     this.handleCancelBetError = this.handleCancelBetError.bind(this);
     this.handleAcceptBetError = this.handleAcceptBetError.bind(this);
-  }
-
-  componentDidMount() {
-    if (!this.props.status) {
-      // figure out status of bets if this wasn't directly called from searchBets
-    }
+    this.vote = this.vote.bind(this);
   }
 
   componentWillReceiveProps(newProps) {}
-
-  onConfirm() {
-    if (this.props.status === "open") {
-      this.cancelBet();
-    } else if (this.props.status === "notMine") {
-      this.acceptBet();
-    } else {
-      alert("I need to handle for wager resolution!!!");
-      // send to db marking this bet as won or lost and error handling in insert
-    }
-  }
 
   handleCancelBetError() {
     this.setState({
@@ -73,6 +56,11 @@ class Bet extends React.Component {
     this.setState({
       showAcceptBetError: false
     });
+  }
+
+  async vote(v) {
+    // i have v 1 or 0 which will go into myVote _vote in the DB
+    // DB trigger to see if both vote fields are there then do result
   }
 
   async cancelBet() {
@@ -110,6 +98,7 @@ class Bet extends React.Component {
             this.props.bet.wager,
             localStorage.id
           );
+          this.setState({ myVote: "challenger" });
         } else {
           this.setState({ showAcceptBetError: true });
         }
@@ -203,10 +192,10 @@ class Bet extends React.Component {
                     ")"}
                 </div>
                 <div className="col-md-4" id="betActionInfo">
-                  {this.props.bet.status}
-                  {this.props.status === "open" ? (
+                  {this.props.bet.status === "pending" &&
+                  this.state.myVote === "creator" ? (
                     <Confirm
-                      onConfirm={this.onConfirm}
+                      onConfirm={this.cancelBet}
                       value={1}
                       body="Are you sure you want to cancel this wager?"
                       confirmText="Confirm"
@@ -215,14 +204,14 @@ class Bet extends React.Component {
                       <button>Cancel Wager</button>
                     </Confirm>
                   ) : null}
-                  {this.props.status === "active"
+                  {this.props.bet.status === "active"
                     ? "Active Bet! anything I want to see in here? Don't Show expiration date for active bets! Just end date! Make the description field clearer who is on what side"
                     : null}
-                  {this.props.status === "review" ? (
+                  {this.props.bet.status === "voting" ? (
                     <div>
                       {/* ONLY RENDER THESE BUTTONS IF I HAVENT ALREADY VOTED ON IT */}
                       <Confirm
-                        onConfirm={this.onConfirm}
+                        onConfirm={() => this.vote(1)}
                         value={1}
                         body="Are you sure you won this bet? If you did not it will hurt your reputation by saying you did"
                         confirmText="Confirm"
@@ -232,7 +221,7 @@ class Bet extends React.Component {
                       </Confirm>
                       <br /> <br />
                       <Confirm
-                        onConfirm={this.onConfirm}
+                        onConfirm={() => this.vote(0)}
                         value={1}
                         body="I lost this bet."
                         confirmText="Confirm"
@@ -242,12 +231,18 @@ class Bet extends React.Component {
                       </Confirm>
                     </div>
                   ) : null}
-                  {this.props.status === "history"
-                    ? "Historical bet! Show result!"
+                  {this.props.bet.status === "disputed" ? (
+                    <div>This bet is in dispute!!!</div>
+                  ) : null}
+                  {this.props.bet.status === "canceled" ||
+                  this.props.bet.status === "expired" ||
+                  this.props.bet.status === "resolved"
+                    ? "This bet has been " + this.props.bet.status
                     : null}
-                  {this.props.status === "notMine" ? (
+                  {this.props.bet.status === "pending" &&
+                  this.state.myVote === "N/A" ? (
                     <Confirm
-                      onConfirm={this.onConfirm}
+                      onConfirm={this.acceptBet}
                       value={0}
                       body="Are you sure you want to accept this wager?"
                       confirmText="Confirm"
