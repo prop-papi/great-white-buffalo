@@ -21,12 +21,20 @@ class UsersNav extends Component {
       <div>
         <Row className="nav-row">
           <Col align="center" md={6}>
-            <Button onClick={e => this.handleButton(e)} value="Users">
+            <Button
+              className="nav-button"
+              onClick={e => this.handleButton(e)}
+              value="Users"
+            >
               Users
             </Button>
           </Col>
           <Col align="center" md={6}>
-            <Button onClick={e => this.handleButton(e)} value="Friends">
+            <Button
+              className="nav-button"
+              onClick={e => this.handleButton(e)}
+              value="Friends"
+            >
               Friends
             </Button>
           </Col>
