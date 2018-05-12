@@ -3,35 +3,27 @@ import { ListGroupItem, Image, Button } from "react-bootstrap";
 import "./index.css";
 
 class NotificationMessage extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   render() {
     return (
       <div className="notification-wrapper">
-        <div class="box logo">A</div>
-        <div class="box message">B</div>
-        {/* <ListGroupItem className="notification">
-          <div className="notification-logo-wrapper">
+        <ul className="horizontal-list notifications-list" role="navigation">
+          <li className="logo li">
             <Image
               className="notification-logo"
-              src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/7320.jpg"
-              circle
+              src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
+              rounded
             />
-          </div>
-          <div className="notification-message-wrapper">
+          </li>
+          <li className="li li-message">
             <p className="notification-message">
-              Your bet with Derek: "Cavs win the Finals" is finished, report the
-              results.
+              {this.props.data.partner_username} accepted your friend request!
             </p>
-          </div>
-          <div className="notification-button-wrapper">
-            <Button className="notification-button" bsStyle="success">
-              Success
-            </Button>
-          </div>
-        </ListGroupItem> */}
+          </li>
+        </ul>
       </div>
     );
   }

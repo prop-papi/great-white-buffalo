@@ -36,11 +36,11 @@ class Home extends Component {
       return (
         <div>
           <Grid>
-            <Row style={{ height: "10%" }}>
+            <Row className="navbar-container">
               <Col
                 md={12}
                 align="center"
-                style={{ backgroundColor: "rgb(90,105,120)", height: "100%" }}
+                style={{ backgroundColor: "rgb(90,105,120)", height: "7vh" }}
               >
                 <GlobalNavBar history={this.props.history} />
               </Col>

@@ -6,6 +6,7 @@ const usersdb = require("../../db/models/users/index.js");
 const clubsdb = require("../../db/models/clubs/index.js");
 const loungesdb = require("../../db/models/lounges/index.js");
 const betsdb = require("../../db/models/bets/index.js");
+const notificationsdb = require("../../db/models/notifications/index.js");
 
 // fetch global and local club data on user login
 router.get("/:id", async function(req, res) {
@@ -32,6 +33,10 @@ router.get("/:id", async function(req, res) {
     globalData["globalClub"] = JSON.parse(JSON.stringify(globalClub));
     let defaultClub = await clubsdb.selectDefaultClub(req.params.id);
     globalData["defaultClub"] = JSON.parse(JSON.stringify(defaultClub));
+    let notifications = await notificationsdb.selectUsersNotifications(
+      req.params.id
+    );
+    globalData["notifications"] = JSON.parse(JSON.stringify(notifications));
 
     // send response back to client
     res.json(globalData);

@@ -1,23 +1,41 @@
 import React, { Component } from "react";
+import "./GlobalNavBar.css";
 import {
-  Col,
-  Glyphicon,
-  ButtonToolbar,
   Image,
   Dropdown,
-  DropdownButton,
-  Nav,
-  Navbar,
-  NavDropdown,
-  MenuItem
+  MenuItem,
+  Glyphicon,
+  CustomToggle,
+  CustomMenu
 } from "react-bootstrap";
-import "./GlobalNavBar.css";
-import Notifications from "../Notifications/index";
+import { connect } from "react-redux";
+import NotificationMessage from "./../Notifications/NotificationMessage.jsx";
+import FriendRequest from "./../Notifications/FriendRequest.jsx";
+
 class GlobalNavBar extends Component {
   constructor() {
     super();
 
-    this.logout = this.logout.bind(this);
+    this.state = {
+      showMenu: false,
+      showNotifications: true
+    };
+
+    this.showMenu = this.showMenu.bind(this);
+    this.showNotificationList = this.showNotificationList.bind(this);
+  }
+
+  showMenu() {
+    // change state here
+    this.setState({ showMenu: !this.state.showMenu, showNotifications: false });
+  }
+
+  showNotificationList() {
+    // change state here
+    this.setState({
+      showNotifications: !this.state.showNotifications,
+      showMenu: false
+    });
   }
 
   logout() {
@@ -33,53 +51,66 @@ class GlobalNavBar extends Component {
 
   render() {
     return (
-      <div>
-<<<<<<< HEAD
-        <Navbar className="nav-bar">
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Image
-                className="logo"
-                src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
-                rounded
-              />
-            </Navbar.Brand>
-          </Navbar.Header>
-          <Nav pullRight>
-            <NavDropdown
-              title={<Glyphicon glyph="align-justify" />}
-              id="user-dropdown"
-            >
-=======
-        <Col align="left" md={2}>
+      <ul className="horizontal-list" role="navigation">
+        <li className="logo li">
           <Image
             className="logo"
             src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
             rounded
           />
-        </Col>
-        <Col md={8} mdHidden={true} />
-        <Col align="right" md={1}>
-          <Notifications />
-        </Col>
-        <Col align="right" md={1}>
-          {/* <ButtonToolbar > */}
-          <Dropdown pullRight id={1}>
-            <Dropdown.Toggle bsSize="large" className="glyph">
-              <Glyphicon glyph="align-justify" />
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="menu">
->>>>>>> working on notifications
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Notifications</MenuItem>
-              <MenuItem>Leaderboard</MenuItem>
-              <MenuItem onClick={() => this.logout()}>Logout</MenuItem>
-            </NavDropdown>
-          </Nav>
-        </Navbar>
-      </div>
+        </li>
+        <li className="li right">
+          <span className="label">
+            Win Ratio: {localStorage.getItem("win_ratio")}
+          </span>
+        </li>
+        <li className="li notify-icon">
+          <div className="notifications-wrapper">
+            <i
+              className="fa fa-exclamation-circle"
+              style={{ fontSize: "30px" }}
+              onClick={this.showNotificationList}
+            />
+            {this.state.showNotifications ? (
+              <div className="notifications">
+                {this.props.global.globalData.notifications.map(n => {
+                  if (n.type === 0) {
+                    return <NotificationMessage key={n.id} data={n} />;
+                  } else if (n.type === 2) {
+                    return <FriendRequest key={n.id} data={n} />;
+                  }
+                })}
+              </div>
+            ) : null}
+          </div>
+        </li>
+        <li className="li right">
+          <Glyphicon
+            glyph="align-justify"
+            className="menu-dropdown"
+            onClick={this.showMenu}
+          />
+          {this.state.showMenu ? (
+            <div className="dropdown-content">
+              <a href="#">Profile</a>
+              <a href="#">Leaderboards</a>
+              <a href="#" onClick={() => this.logout()}>
+                Logout
+              </a>
+            </div>
+          ) : null}
+        </li>
+      </ul>
     );
   }
 }
 
-export default GlobalNavBar;
+function mapStateToProps(state) {
+  // specifies the slice of state this compnent wants and provides it
+  return {
+    //globalData: state.globalData,
+    global: state.global
+  };
+}
+
+export default connect(mapStateToProps)(GlobalNavBar);
