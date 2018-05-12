@@ -27,7 +27,8 @@ class UserPane extends Component {
 
   fetchAllClubUsers(id) {
     const params = {
-      clubID: id
+      clubID: id,
+      currUser: localStorage.username
     };
     axios
       .get("http://localhost:1337/api/userpane/allUsers", { params })
