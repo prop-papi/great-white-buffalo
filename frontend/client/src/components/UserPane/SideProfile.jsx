@@ -3,17 +3,20 @@ import axios from "axios";
 import { Image, Row, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import "./SideProfile.css";
+import Bet from "../Bet";
 
 class SideProfile extends Component {
   constructor() {
     super();
     this.state = {
-      isFriend: null
+      isFriend: null,
+      myBets: []
     };
   }
 
   componentDidMount() {
     this.checkIfFriend();
+    this.findMyBets();
   }
 
   checkIfFriend() {
@@ -26,6 +29,19 @@ class SideProfile extends Component {
         this.setState({ isFriend: false });
       }
     }
+  }
+
+  findMyBets() {
+    let myBets = [];
+    const selectedUserName = this.props.userPane.selectedUser.username;
+    this.props.global.bets.forEach(bet => {
+      if (bet.creator_name === selectedUserName && bet.status === "pending") {
+        myBets.push(bet);
+      }
+    });
+    this.setState({ myBets }, () => {
+      console.log(this.state.myBets);
+    });
   }
 
   handleFriend() {
@@ -94,6 +110,7 @@ class SideProfile extends Component {
                 this.props.userPane.selectedUser.wins}{" "}
               Losses
             </Row>
+            <br />
             <Row>
               <Button
                 className="add-friend"
@@ -103,7 +120,14 @@ class SideProfile extends Component {
               </Button>
             </Row>
           </div>
-          <Row>Open Bets</Row>
+          <Row>
+            {this.state.myBets.length === 0
+              ? "This user has no open bets :("
+              : "Open Bets"}
+          </Row>
+          {this.state.myBets.map((bet, key) => {
+            return <Bet bet={bet} key={key} />;
+          })}
         </div>
       </div>
     );
@@ -112,7 +136,8 @@ class SideProfile extends Component {
 
 const mapStateToProps = state => {
   return {
-    userPane: state.userPane.userPaneData
+    userPane: state.userPane.userPaneData,
+    global: state.global.globalData
   };
 };
 
