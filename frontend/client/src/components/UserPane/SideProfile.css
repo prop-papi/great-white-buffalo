@@ -17,3 +17,9 @@
 .side-profile .add-friend {
   border-radius: 20px;
 }
+
+.userpane-row {
+  color: rgb(174, 176, 178);
+  padding-top: 10px;
+  padding-left: 10px;
+}

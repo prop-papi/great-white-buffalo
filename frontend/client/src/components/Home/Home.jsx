@@ -40,7 +40,7 @@ class Home extends Component {
               <Col
                 md={12}
                 align="center"
-                style={{ backgroundColor: "rgb(90,105,120)", height: "7vh" }}
+                style={{ backgroundColor: "rgb(37,39,44)", height: "7vh" }}
               >
                 <GlobalNavBar history={this.props.history} />
               </Col>
@@ -50,7 +50,7 @@ class Home extends Component {
                 xs={1}
                 sm={1}
                 md={1}
-                style={{ backgroundColor: "rgb(90,105,120)", height: "90vh" }}
+                style={{ backgroundColor: "rgb(37,39,44)", height: "93vh" }}
               >
                 <ClubNav />
               </Col>
@@ -58,7 +58,7 @@ class Home extends Component {
                 xs={2}
                 sm={2}
                 md={2}
-                style={{ backgroundColor: "rgb(100,115,130)", height: "90vh" }}
+                style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
               >
                 <LoungeList />
               </Col>
@@ -66,7 +66,7 @@ class Home extends Component {
                 xs={7}
                 sm={7}
                 md={7}
-                style={{ backgroundColor: "rgb(120,135,150)", height: "90vh" }}
+                style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
               >
                 <MainNavBar />
                 <br />
@@ -76,7 +76,7 @@ class Home extends Component {
                 xs={2}
                 sm={2}
                 md={2}
-                style={{ backgroundColor: "rgb(130,145,160)", height: "90vh" }}
+                style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
               >
                 <UsersNav />
                 <UserPane />

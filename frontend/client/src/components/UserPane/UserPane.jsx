@@ -94,6 +94,7 @@ class UserPane extends Component {
               <Row
                 key={key}
                 onClick={() => this.handleSelectedUser(user.username)}
+                className="userpane-row"
               >
                 {user.username}
               </Row>
