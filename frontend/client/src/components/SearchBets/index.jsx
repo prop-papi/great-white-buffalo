@@ -13,6 +13,8 @@ import {
   Tooltip,
   Button,
   Form,
+  Tabs,
+  Tab,
   MenuItem,
   Panel,
   PanelGroup,
@@ -28,7 +30,10 @@ class SearchBets extends React.Component {
       searchValue: "",
       myOpenBets: [],
       myCurrentBets: [],
-      openBets: []
+      myReviewBets: [],
+      myHistoricalBets: [],
+      openBets: [],
+      openBetsName: `All Open Bets in ${props.local.localData.club.name}`
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,29 +49,35 @@ class SearchBets extends React.Component {
   componentWillReceiveProps(newProps) {
     var tempMyOpen = [];
     var tempMyCurrent = [];
+    var tempMyReview = []; // change this and expires at to cron job or mysql event every 30 min or hour???!!!!
+    var tempMyHistorical = [];
     var tempOpen = [];
     newProps.global.globalData.bets.forEach(b => {
-      if (b.status === "pending") {
-        if (b.is_my_bet) {
-          if (b.challenger === null) {
-            tempMyOpen.push(b);
-          } else {
-            tempMyCurrent.push(b);
-          }
-        } else if (b.challenger === null) {
-          if (
-            newProps.local.localData.club.name === "Global" ||
-            newProps.local.localData.club.id === b.club
-          ) {
-            tempOpen.push(b);
-          }
+      if (b.is_my_bet) {
+        if (b.status === "pending") {
+          tempMyOpen.push(b);
+        } else if (b.status === "active") {
+          tempMyCurrent.push(b);
+        } else if (b.status === "voting" || b.status === "disputed") {
+          tempMyReview.push(b);
+        } else {
+          tempMyHistorical.push(b);
         }
+      } else if (
+        b.status === "pending" &&
+        (newProps.local.localData.club.name === "Global" ||
+          newProps.local.localData.club.id === b.club)
+      ) {
+        tempOpen.push(b);
       }
     });
     this.setState({
       myOpenBets: tempMyOpen,
       myCurrentBets: tempMyCurrent,
-      openBets: tempOpen
+      myReviewBets: tempMyReview,
+      myHistoricalBets: tempMyHistorical,
+      openBets: tempOpen,
+      openBetsName: `All Open Bets in ${newProps.local.localData.club.name}`
     });
   }
 
@@ -81,49 +92,65 @@ class SearchBets extends React.Component {
   render() {
     return (
       <div className="searchBox">
-        <input
+        {/* <input
           type="text"
           placeholder="this currently does nothing"
           value={this.state.searchValue}
           onChange={this.handleChange}
         />
-        <input type="submit" value="Submit" onClick={this.handleSubmit} />
+        <input type="submit" value="Submit" onClick={this.handleSubmit} /> */}
         <br /> <br />
         <div className="searchResults">
-          <PanelGroup accordion id="accordion" defaultActiveKey="3">
-            <Panel eventKey="1">
-              <Panel.Heading>
-                <Panel.Title toggle>
-                  My Open Wagers ({this.state.myOpenBets.length})
-                </Panel.Title>
-              </Panel.Heading>
-              <Panel.Body collapsible>
-                {this.state.myOpenBets.map(b => <Bet key={b.id} bet={b} />)}
-              </Panel.Body>
-            </Panel>
-            <Panel eventKey="2">
-              <Panel.Heading>
-                <Panel.Title toggle>
-                  My Active Wagers ({this.state.myCurrentBets.length})
-                </Panel.Title>
-              </Panel.Heading>
-              <Panel.Body collapsible>
-                {this.state.myCurrentBets.map(b => <Bet key={b.id} bet={b} />)}
-              </Panel.Body>
-            </Panel>
-            <Panel eventKey="3">
-              <Panel.Heading>
-                <Panel.Title toggle>
-                  Available {this.props.local.localData.club.name} Wagers ({
-                    this.state.openBets.length
-                  })
-                </Panel.Title>
-              </Panel.Heading>
-              <Panel.Body collapsible>
-                {this.state.openBets.map(b => <Bet key={b.id} bet={b} />)}
-              </Panel.Body>
-            </Panel>
-          </PanelGroup>
+          <Tabs defaultActiveKey={5} id="betTabs">
+            <Tab
+              eventKey={1}
+              title={"Open (" + this.state.myOpenBets.length + ")"}
+            >
+              {this.state.myOpenBets.map(b => <Bet key={b.id} bet={b} />)}
+            </Tab>
+            <Tab
+              eventKey={2}
+              title={"Active (" + this.state.myCurrentBets.length + ")"}
+            >
+              {this.state.myCurrentBets.map(b => <Bet key={b.id} bet={b} />)}
+            </Tab>
+            <Tab
+              eventKey={3}
+              title={"Review (" + this.state.myReviewBets.length + ")"}
+            >
+              {this.state.myReviewBets.map(b => <Bet key={b.id} bet={b} />)}
+            </Tab>
+            <Tab
+              eventKey={4}
+              title={"History (" + this.state.myHistoricalBets.length + ")"}
+            >
+              <h3>
+                Make a clickable list here to change between canceled expired or
+                resolved!!!
+              </h3>
+              {this.state.myHistoricalBets.map(b => <Bet key={b.id} bet={b} />)}
+            </Tab>
+            <Tab
+              eventKey={5}
+              title={
+                "All Open Wagers in " +
+                this.props.local.localData.club.name +
+                " (" +
+                this.state.openBets.length +
+                ")"
+              }
+            >
+              {this.state.openBets.map(b => <Bet key={b.id} bet={b} />)}
+            </Tab>
+          </Tabs>
+
+          {/* My Open Wagers ({this.state.myOpenBets.length}) */}
+          {/* {this.state.myOpenBets.map(b => <Bet key={b.id} bet={b} />)} */}
+          {/* My Active Wagers ({this.state.myCurrentBets.length}) */}
+          {/* {this.state.myCurrentBets.map(b => <Bet key={b.id} bet={b} />)} */}
+          {/* Available {this.props.local.localData.club.name} Wagers ({ */}
+          {/* this.state.openBets.length */}
+          {/* {this.state.openBets.map(b => <Bet key={b.id} bet={b} />)} */}
         </div>
       </div>
     );

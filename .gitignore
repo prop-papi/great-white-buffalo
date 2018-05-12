@@ -60,3 +60,4 @@ typings/
 bundle.js
 package-lock.json
 
+*.sql

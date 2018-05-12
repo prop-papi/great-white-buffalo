@@ -60,7 +60,7 @@ export const cancelMyBet = (globalData, betId, wager) => dispatch => {
     } else {
       return {
         ...bet,
-        status: "closed"
+        status: "canceled"
       };
     }
   });
@@ -86,7 +86,8 @@ export const acceptBet = (globalData, betId, wager, myId) => dispatch => {
       return {
         ...bet,
         challenger: myId,
-        is_my_bet: 1
+        is_my_bet: 1,
+        status: "active"
       };
     }
   });
