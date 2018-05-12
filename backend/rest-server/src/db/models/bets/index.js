@@ -76,8 +76,36 @@ const acceptBet = async (betId, myId) => {
   }
 };
 
+const voteLoss = async (
+  betId,
+  status,
+  result,
+  creator_vote,
+  challenger_vote
+) => {
+  const query = `UPDATE Bets SET status='${status}', result=${result}, creator_vote=${creator_vote}, challenger_vote=${challenger_vote} WHERE id=${betId};`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const voteWin = async (betId, updateField, checkField) => {
+  const query = `UPDATE Bets SET ${updateField} = 1, status = IF(${checkField} = 1, 'disputed', status) WHERE id = ${betId};`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.insertNewBet = insertNewBet;
 module.exports.selectAllBetsFromClubsList = selectAllBetsFromClubsList;
 module.exports.selectAllBetsFromClub = selectAllBetsFromClub;
 module.exports.cancelBet = cancelBet;
 module.exports.acceptBet = acceptBet;
+module.exports.voteLoss = voteLoss;
+module.exports.voteWin = voteWin;

@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import axios from "axios";
 import moment from "moment";
 import Confirm from "react-confirm-bootstrap";
-import { cancelMyBet, acceptBet } from "../../actions";
+import { cancelMyBet, acceptBet, voteOnBet } from "../../actions";
 import "./index.css";
 import {
   ButtonToolbar,
@@ -23,6 +23,7 @@ import {
 } from "react-bootstrap";
 
 class Bet extends React.Component {
+  // *******Need to get reputation of both parties to display on bet, and in the future filter who can bet on my items based on their repuation*****
   constructor(props) {
     super(props);
 
@@ -33,6 +34,11 @@ class Bet extends React.Component {
         ? Number(localStorage.id) === props.bet.creator
           ? "creator"
           : "challenger"
+        : "N/A",
+      myVoteResult: props.bet.is_my_bet
+        ? Number(localStorage.id) === props.bet.creator
+          ? props.bet.creator_vote
+          : props.bet.challenger_vote
         : "N/A",
       timeZoneOffset: new Date().getTimezoneOffset()
     };
@@ -59,8 +65,31 @@ class Bet extends React.Component {
   }
 
   async vote(v) {
-    // i have v 1 or 0 which will go into myVote _vote in the DB
-    // DB trigger to see if both vote fields are there then do result
+    try {
+      const data = await axios.post(`http://localhost:1337/api/bets/vote`, {
+        bet: this.props.bet,
+        myId: Number(localStorage.id),
+        vote: v
+      });
+      console.log(data);
+      // redux stuff here!
+      if (data.status === 200) {
+        if (data.data.changedRows) {
+          if (v === 0) {
+            // only updating if I say I lost, as at vote win nothing is determined. Update KDR???
+            this.props.voteOnBet(
+              this.props.global.globalData,
+              this.props.bet.id,
+              this.props.bet.wager
+            );
+          }
+        } else {
+          this.setState({ showCancelBetError: true });
+        }
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   async cancelBet() {
@@ -207,13 +236,13 @@ class Bet extends React.Component {
                   {this.props.bet.status === "active"
                     ? "Active Bet! anything I want to see in here? Don't Show expiration date for active bets! Just end date! Make the description field clearer who is on what side"
                     : null}
-                  {this.props.bet.status === "voting" ? (
+                  {this.props.bet.status === "voting" &&
+                  this.state.myVoteResult === null ? (
                     <div>
-                      {/* ONLY RENDER THESE BUTTONS IF I HAVENT ALREADY VOTED ON IT */}
                       <Confirm
                         onConfirm={() => this.vote(1)}
                         value={1}
-                        body="Are you sure you won this bet? If you did not it will hurt your reputation by saying you did"
+                        body="Are you sure you won this wager? If you did not it will hurt your reputation and people may not wager with you. &quot;A single lie destroys a whole reputation of integrity.&quot; - Baltasar Gracian"
                         confirmText="Confirm"
                         title="Won Wager"
                       >
@@ -223,22 +252,29 @@ class Bet extends React.Component {
                       <Confirm
                         onConfirm={() => this.vote(0)}
                         value={1}
-                        body="I lost this bet."
+                        body="By clicking confirm you are confirming that you lost the wager and this wager will immediately be marked as a loss for you and a win for your opponent. Your reputation will not only remain intact, but improve. &quot;Integrity is the essence of everything successful.&quot; - R. Buckminster Fuller"
                         confirmText="Confirm"
                         title="Lost Wager"
                       >
                         <button>I lost</button>
                       </Confirm>
                     </div>
+                  ) : this.props.bet.status === "voting" &&
+                  this.state.myVoteResult !== null ? (
+                    "I voted that I won this wager, waiting on my opponent"
                   ) : null}
                   {this.props.bet.status === "disputed" ? (
-                    <div>This bet is in dispute!!!</div>
+                    <div>
+                      This bet is in dispute!!! Should there just be a button
+                      here to send to a vote???
+                    </div>
                   ) : null}
                   {this.props.bet.status === "canceled" ||
                   this.props.bet.status === "expired" ||
                   this.props.bet.status === "resolved"
                     ? "This bet has been " + this.props.bet.status
                     : null}
+                  Put winner information in here if resolved!
                   {this.props.bet.status === "pending" &&
                   this.state.myVote === "N/A" ? (
                     <Confirm
@@ -273,7 +309,8 @@ function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
       cancelMyBet: cancelMyBet,
-      acceptBet: acceptBet
+      acceptBet: acceptBet,
+      voteOnBet: voteOnBet
     },
     dispatch
   );
