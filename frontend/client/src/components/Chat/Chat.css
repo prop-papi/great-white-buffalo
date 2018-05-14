@@ -1,15 +1,57 @@
-.main-component-nav {
+.container {
+  /* hardcoded height  */
+  height: 96.5vh;
+}
+
+.chat-background {
+  background-color: #788796;
   width: 100%;
-  background-color: red;
-  height: 50px;
-  margin: 0px;
+  height: calc(100% - 36%);
+}
+
+.chat-display {
+  overflow-y: scroll;
+  margin: 0;
+}
+.message-input {
+  width: 100%;
+  background-color: #788796;
+}
+
+.time-stamp {
+  color: darkgrey;
+  text-align: right;
+  font-weight: 500;
+  padding: 0 7px 0 0;
 }
 
 .chat-main-container {
-  padding: 20px 20px;
+  width: 100%;
+  height: inherit;
 }
 
-.chat-main-container span {
-  align-content: right;
-  color: brown;
+.chat-display .col {
+  padding: 0px !important;
+}
+
+.chat-display a {
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.chat-display a:hover {
+  text-decoration: none;
+}
+
+.chat-display .row {
+  height: auto !important;
+  padding: 0 !important;
+}
+
+.chat-display .row:nth-child(odd) {
+  background-color: slategray;
+}
+
+.chat-display .row:nth-child(even) {
+  background-color: lightslategrey;
 }

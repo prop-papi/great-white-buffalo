@@ -5,16 +5,22 @@ const redis = require("redis");
 const redisClient = require("../../redis-server/src/index.js").client;
 const { getListLength, renderRecent50 } = require("../helpers/index.js");
 
-io.on("connection", socket => {
+io.listen(3000, err => {
+  if (err) throw err;
+  console.log("listening on PORT:3000");
+});
+
+// chat namespace
+const chat = io.of("/chat").on("connection", socket => {
   socket.on("user.enter", msg => {
     socket.join(msg.currentLoungeID);
     renderRecent50(msg.currentLoungeID, (err, result) => {
-      io.to(msg.currentLoungeID).emit(`user.enter.${msg.user}`, result);
+      chat.to(msg.currentLoungeID).emit(`user.enter.${msg.user}`, result);
     });
   });
 
   socket.on("message.send", msg => {
-    io.to(msg.currentLoungeID).emit("message.send", msg);
+    chat.to(msg.currentLoungeID).emit("message.send", msg);
     redisClient.lpush(msg.currentLoungeID, JSON.stringify(msg));
     getListLength(msg.currentLoungeID, (err, result) => {
       if (result > 50) {
@@ -39,7 +45,54 @@ io.on("connection", socket => {
   });
 });
 
-io.listen(3000, err => {
-  if (err) throw err;
-  console.log("listening on PORT:3000");
+// notification namespace
+const notification = io.of("/notification").on("connection", socket => {
+  // disconnect
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+
+  // error handling
+  socket.on("error", err => {
+    console.log("received error: ", err);
+  });
+});
+
+// bet namespace
+const bets = io.of("/bets").on("connection", socket => {
+  // disconnect
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+
+  // error handling
+  socket.on("error", err => {
+    console.log("received error: ", err);
+  });
+});
+
+// active users namespace
+const activeUsers = io.of("/activeUsers").on("connection", socket => {
+  // disconnect
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+
+  // error handling
+  socket.on("error", err => {
+    console.log("received error: ", err);
+  });
+});
+
+// friend status namespace
+const friendOnline = io.of("/friendOnline").on("connection", socket => {
+  // disconnect
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+
+  // error handling
+  socket.on("error", err => {
+    console.log("received error: ", err);
+  });
 });
