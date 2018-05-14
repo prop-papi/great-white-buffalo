@@ -54,7 +54,7 @@ a:hover {
 }
 
 .right {
-  padding: 25px;
+  padding: 10px;
 }
 
 .dropdown-content {
@@ -108,4 +108,14 @@ a:hover {
 
 .win-ratio {
   font-family: fantasy;
+}
+
+.nav-component:hover {
+  color: #fff;
+  opacity: 0.5;
+  transform: scale(1.1);
+}
+
+.nav-component {
+  transition: transform 0.2s;
 }

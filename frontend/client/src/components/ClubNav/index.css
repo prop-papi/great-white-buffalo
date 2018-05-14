@@ -31,3 +31,7 @@
 .nav-image:hover {
   transform: scale(1.2);
 }
+
+.drowdown-menu-item {
+  padding: 8px;
+}

@@ -25,6 +25,29 @@ class GlobalNavBar extends Component {
 
     this.showMenu = this.showMenu.bind(this);
     this.showNotificationList = this.showNotificationList.bind(this);
+    this.handleNavItemCollapse = this.handleNavItemCollapse.bind(this);
+  }
+
+  componentWillMount() {
+    document.addEventListener("mousedown", this.handleNavItemCollapse, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener(
+      "mousedown",
+      this.handleNavItemCollapse,
+      false
+    );
+  }
+
+  handleNavItemCollapse(e) {
+    e.preventDefault();
+    if (!this.node.contains(e.target)) {
+      this.setState({
+        showNotifications: false,
+        showMenu: false
+      });
+    }
   }
 
   showMenu() {
@@ -73,12 +96,12 @@ class GlobalNavBar extends Component {
         <li className="li notify-icon">
           <div className="notifications-wrapper">
             <i
-              className="fa fa-exclamation-circle"
-              style={{ fontSize: "30px" }}
+              className="fa fa-exclamation-circle nav-component"
+              style={{ fontSize: "20px" }}
               onClick={this.showNotificationList}
             />
             {this.state.showNotifications ? (
-              <div className="notifications">
+              <div className="notifications" ref={node => (this.node = node)}>
                 {this.props.global.globalData.notifications.map(n => {
                   if (n.type === 0) {
                     return <NotificationMessage key={n.id} data={n} />;
@@ -95,14 +118,22 @@ class GlobalNavBar extends Component {
         <li className="li right">
           <Glyphicon
             glyph="align-justify"
-            className="menu-dropdown"
+            className="menu-dropdown nav-component"
             onClick={this.showMenu}
           />
           {this.state.showMenu ? (
-            <div className="dropdown-content">
-              <a href="#">Profile</a>
-              <a href="#">Leaderboards</a>
-              <a href="#" onClick={() => this.logout()}>
+            <div className="dropdown-content" ref={node => (this.node = node)}>
+              <a href="#" className="drowdown-menu-item">
+                Profile
+              </a>
+              <a href="#" className="drowdown-menu-item">
+                Leaderboards
+              </a>
+              <a
+                href="#"
+                className="drowdown-menu-item"
+                onClick={() => this.logout()}
+              >
                 Logout
               </a>
             </div>
