@@ -4,5 +4,27 @@
 }
 
 .nav-button {
+  border-width: 2px;
   border-radius: 20px;
+  background-color: transparent !important;
+  color: rgb(174, 176, 178);
+  border-color: rgb(66, 70, 76);
+}
+
+.nav-button:hover {
+  color: rgb(174, 176, 178) !important;
+}
+
+.nav-button:focus {
+  color: white !important;
+  border-color: rgb(115, 139, 215);
+  background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.nav-button:active {
+  background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
 }

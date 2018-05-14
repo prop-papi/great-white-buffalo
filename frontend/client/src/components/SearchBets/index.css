@@ -3,7 +3,8 @@
   max-height: 69vh;
   border-radius: 4px;
   width: 100%;
-  background-color: #788796 !important;
+  color: rgb(194, 196, 198);
+  background-color: rgb(54, 57, 62) !important;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 10px;
@@ -15,33 +16,38 @@
 }
 
 .panel-body {
-  background-color: #788796;
+  background-color: rgb(54, 57, 62);
 }
 
 .panel-title {
-  background-color: #788796;
+  background-color: rgb(54, 57, 62);
 }
 
 .panel-heading {
-  background-color: #788796;
+  background-color: rgb(54, 57, 62);
 }
 
 .panel-group {
-  background-color: #788796;
+  background-color: rgb(54, 57, 62);
 }
 
 .panel {
-  background-color: #788796;
+  background-color: rgb(54, 57, 62);
 }
 
 .panel-default {
-  background-color: #788796 !important;
+  background-color: rgb(54, 57, 62) !important;
 }
 
 .panel-default > .panel-heading {
-  background-color: #788796 !important;
+  background-color: rgb(54, 57, 62) !important;
+}
+
+.nav-tabs > li > a {
+  color: rgb(194, 196, 198) !important;
 }
 
 .nav-tabs > li.active > a {
-  background-color: #788796 !important;
+  background-color: rgb(54, 57, 62) !important;
+  color: rgb(194, 196, 198) !important;
 }

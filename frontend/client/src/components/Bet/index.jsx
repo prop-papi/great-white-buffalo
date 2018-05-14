@@ -150,7 +150,9 @@ class Bet extends React.Component {
                 <div className="col-md-9" id="betInfo">
                   {this.props.bet.description}
                 </div>
-                <div className="col-md-3">{this.props.bet.wager} token(s)</div>
+                <div className="col-md-3" id="betInfo">
+                  {this.props.bet.wager} token(s)
+                </div>
               </div>
             </Panel.Title>
           </Panel.Heading>

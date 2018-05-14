@@ -35,9 +35,11 @@ a:hover {
 
 .notify-icon {
   padding: 15px;
+  color: rgb(174, 176, 178);
 }
 
 .nav-bar {
+  height: 7vh;
   background-color: rgb(90, 105, 120);
   border: none;
 }
@@ -75,10 +77,6 @@ a:hover {
   top: 8px;
 }
 
-.nav-bar {
-  height: 7vh;
-}
-
 .container {
   height: 7vh !important;
 }
@@ -93,6 +91,10 @@ a:hover {
   border-radius: 5px;
   right: 40%;
   max-height: 290px;
+}
+
+.menu-dropdown {
+  color: rgb(174, 176, 178);
 }
 
 .notifications-wrapper {
