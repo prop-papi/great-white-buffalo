@@ -57,7 +57,15 @@ class Bet extends React.Component {
     this.vote = this.vote.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {}
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      myVoteResult: newProps.bet.is_my_bet
+        ? Number(localStorage.id) === newProps.bet.creator
+          ? newProps.bet.creator_vote
+          : newProps.bet.challenger_vote
+        : "N/A"
+    });
+  }
 
   handleCancelBetError() {
     this.setState({
@@ -99,14 +107,14 @@ class Bet extends React.Component {
       // redux stuff here!
       if (data.status === 200) {
         if (data.data.changedRows) {
-          if (v === 0) {
-            // only updating if I say I lost, as at vote win nothing is determined. Update KDR???
-            this.props.voteOnBet(
-              this.props.global.globalData,
-              this.props.bet.id,
-              this.props.bet.wager
-            );
-          }
+          // only updating if I say I lost, as at vote win nothing is determined. Update KDR???
+          this.props.voteOnBet(
+            this.props.global.globalData,
+            this.props.bet.id,
+            this.props.bet.wager,
+            v,
+            this.state.myVote
+          );
         } else {
           this.setState({ showCancelBetError: true });
         }
