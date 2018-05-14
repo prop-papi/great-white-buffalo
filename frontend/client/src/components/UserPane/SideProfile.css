@@ -1,8 +1,8 @@
 .side-profile {
+  color: rgb(194, 195, 197);
   text-align: center;
   padding-top: 20px;
   font-size: 25px;
-  font-weight: bold;
 }
 
 .profile-img {
@@ -16,6 +16,9 @@
 
 .side-profile .add-friend {
   border-radius: 20px;
+  border-color: rgb(115, 139, 215) !important;
+  background-color: rgb(115, 139, 215) !important;
+  color: white;
 }
 
 .userpane-row {
