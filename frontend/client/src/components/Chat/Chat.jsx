@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import moment from "moment";
 import io from "socket.io-client";
+import axios from "axios";
 
 // custom css
 import "./Chat.css";
@@ -48,14 +49,21 @@ class Chat extends Component {
 
   handleEnterKeyPress(e) {
     if (e.key === "Enter") {
-      socket.emit("message.send", {
+      const payload = {
         text: this.state.text,
         user: localStorage.username,
         currentLoungeID: this.props.currentLounge.currentLounge.id,
         createdAt: new Date()
-      });
+      };
+      socket.emit("message.send", payload);
       this.setState({ text: "" });
     }
+    // insertNewMessage(
+    //   localStorage.username,
+    //   this.props.currentLounge.currentLounge.id,
+    //   this.state.text,
+    //   null
+    // );
   }
 
   isTyping(user) {
@@ -84,6 +92,7 @@ class Chat extends Component {
 
     socket.on(`user.enter.${localStorage.username}`, msg => {
       this.setState({ recent50Messages: msg.reverse() });
+      this.scrollToBottom();
     });
 
     socket.on("message.send", msg => {
@@ -99,7 +108,6 @@ class Chat extends Component {
       setTimeout(() => {
         this.setState({ isTyping: false });
       }, 1500);
-      this.scrollToBottom();
     });
   }
 
