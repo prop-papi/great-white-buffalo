@@ -32,8 +32,14 @@ class SearchBets extends React.Component {
       myCurrentBets: [],
       myReviewBets: [],
       myHistoricalBets: [],
+      myCanceledBets: [],
+      myExpiredBets: [],
+      myResolvedBets: [],
       openBets: [],
-      openBetsName: `All Open Bets in ${props.local.localData.club.name}`
+      openBetsName:
+        props.local.localData.club.name === "Global"
+          ? "All Open Wagers Globally"
+          : `All Open Bets in ${props.local.localData.club.name}`
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -49,8 +55,11 @@ class SearchBets extends React.Component {
   componentWillReceiveProps(newProps) {
     var tempMyOpen = [];
     var tempMyCurrent = [];
-    var tempMyReview = []; // change this and expires at to cron job or mysql event every 30 min or hour???!!!!
+    var tempMyReview = [];
     var tempMyHistorical = [];
+    var tempMyCanceled = [];
+    var tempMyExpired = [];
+    var tempMyResolved = [];
     var tempOpen = [];
     newProps.global.globalData.bets.forEach(b => {
       if (b.is_my_bet) {
@@ -60,7 +69,14 @@ class SearchBets extends React.Component {
           tempMyCurrent.push(b);
         } else if (b.status === "voting" || b.status === "disputed") {
           tempMyReview.push(b);
-        } else {
+        } else if (b.status === "canceled") {
+          tempMyCanceled.push(b);
+          tempMyHistorical.push(b);
+        } else if (b.status === "expired") {
+          tempMyExpired.push(b);
+          tempMyHistorical.push(b);
+        } else if (b.status === "resolved") {
+          tempMyResolved.push(b);
           tempMyHistorical.push(b);
         }
       } else if (
@@ -76,8 +92,14 @@ class SearchBets extends React.Component {
       myCurrentBets: tempMyCurrent,
       myReviewBets: tempMyReview,
       myHistoricalBets: tempMyHistorical,
+      myCanceledBets: tempMyCanceled,
+      myExpiredBets: tempMyExpired,
+      myResolvedBets: tempMyResolved,
       openBets: tempOpen,
-      openBetsName: `All Open Bets in ${newProps.local.localData.club.name}`
+      openBetsName:
+        newProps.local.localData.club.name === "Global"
+          ? "All Open Wagers Globally"
+          : `All Open Bets in ${newProps.local.localData.club.name}`
     });
   }
 
@@ -133,8 +155,7 @@ class SearchBets extends React.Component {
             <Tab
               eventKey={5}
               title={
-                "All Open Wagers in " +
-                this.props.local.localData.club.name +
+                this.state.openBetsName +
                 " (" +
                 this.state.openBets.length +
                 ")"

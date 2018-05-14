@@ -104,3 +104,29 @@ export const acceptBet = (globalData, betId, wager, myId) => dispatch => {
   };
   setGlobalData(g, dispatch);
 };
+
+export const voteOnBet = (globalData, betId, wager) => dispatch => {
+  // possibly add more in here later. KDR / wins / losses????
+  const newBets = globalData.bets.map((bet, index) => {
+    if (bet.id !== betId) {
+      return bet;
+    } else {
+      return {
+        ...bet,
+        status: "resolved"
+      };
+    }
+  });
+  const newBalances = [
+    {
+      available_balance: globalData.balances[0].available_balance,
+      escrow_balance: globalData.balances[0].escrow_balance - wager
+    }
+  ];
+  const g = {
+    ...globalData,
+    bets: newBets,
+    balances: newBalances
+  };
+  setGlobalData(g, dispatch);
+};
