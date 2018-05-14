@@ -269,12 +269,15 @@ class Bet extends React.Component {
                       here to send to a vote???
                     </div>
                   ) : null}
-                  {this.props.bet.status === "canceled" ||
-                  this.props.bet.status === "expired" ||
-                  this.props.bet.status === "resolved"
-                    ? "This bet has been " + this.props.bet.status
+                  {this.props.bet.status === "canceled"
+                    ? "You canceled this wager"
                     : null}
-                  Put winner information in here if resolved!
+                  {this.props.bet.status === "expired"
+                    ? "This wager expired with no takers"
+                    : null}
+                  {this.props.bet.status === "resolved"
+                    ? "Put bet result here!!!"
+                    : null}
                   {this.props.bet.status === "pending" &&
                   this.state.myVote === "N/A" ? (
                     <Confirm
