@@ -6,7 +6,7 @@ const betsdb = require("../../db/models/bets/index.js");
 
 router.post("/create", async function(req, res) {
   try {
-    const newUser = await betsdb.insertNewBet(
+    const newBet = await betsdb.insertNewBet(
       req.body.club,
       req.body.wager,
       req.body.odds,
@@ -15,7 +15,7 @@ router.post("/create", async function(req, res) {
       req.body.formattedEndsAt,
       req.body.user
     );
-    res.send(newUser);
+    res.send(newBet[0]);
   } catch (err) {
     console.log(err);
     res.status(401).send();

@@ -155,3 +155,11 @@ export const voteOnBet = (
   };
   setGlobalData(g, dispatch);
 };
+
+export const addBet = (globalData, newBet) => dispatch => {
+  const g = {
+    ...globalData,
+    bets: [...globalData.bets, newBet]
+  };
+  setGlobalData(g, dispatch);
+};

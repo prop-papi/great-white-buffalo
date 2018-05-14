@@ -28,6 +28,8 @@ import {
   Alert
 } from "react-bootstrap";
 
+const socket = io("http://localhost:3000/bets");
+
 class Bet extends React.Component {
   // *******Need to get reputation of both parties to display on bet, and in the future filter who can bet on my items based on their repuation*****
   constructor(props) {

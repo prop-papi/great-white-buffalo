@@ -18,11 +18,20 @@ const insertNewBet = async (
     ${SqlString.escape(expiresAt)},
     ${SqlString.escape(endsAt)},
     ${SqlString.escape(Number(user))}
-  )`;
+  );`;
   try {
     let data = await mysqldb.query(query);
-    console.log("Successfully added bet - data - ", data);
-    return data;
+    const insertedQuery = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
+    LEFT JOIN Users u1 on u1.id = creator
+    LEFT JOIN Users u2 on u2.id = challenger
+    INNER JOIN Clubs on Clubs.id = Bets.club
+    WHERE Bets.id=${data.insertId};`;
+    try {
+      return await mysqldb.query(insertedQuery);
+    } catch (err) {
+      console.log("error", err);
+      return err;
+    }
   } catch (err) {
     console.log("error", err);
     throw new Error(err);
