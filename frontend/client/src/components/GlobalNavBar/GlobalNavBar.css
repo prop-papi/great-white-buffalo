@@ -23,10 +23,6 @@ a {
   color: black !important;
   background-color: transparent !important;
 }
-a:hover {
-  background-color: transparent !important;
-  color: lightgray !important;
-}
 
 .logo {
   height: 45px;
@@ -54,7 +50,7 @@ a:hover {
 }
 
 .right {
-  padding: 25px;
+  padding: 10px;
 }
 
 .dropdown-content {
@@ -90,7 +86,7 @@ a:hover {
   z-index: 1;
   border-radius: 5px;
   right: 40%;
-  max-height: 290px;
+  max-height: 400px;
 }
 
 .menu-dropdown {
@@ -108,4 +104,25 @@ a:hover {
 
 .win-ratio {
   font-family: fantasy;
+}
+
+.nav-component:hover {
+  color: #fff;
+  opacity: 0.5;
+  transform: scale(1.1);
+}
+
+.nav-component {
+  transition: transform 0.2s;
+}
+
+.dropdown-menu-item {
+  padding: 8px;
+  text-align: left;
+  padding-left: 15px;
+}
+
+.dropdown-menu-item:hover {
+  background-color: lightgray !important;
+  border-radius: 4px;
 }

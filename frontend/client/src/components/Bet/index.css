@@ -36,3 +36,8 @@
   align-items: center;
   justify-content: center;
 }
+
+.opponent-name:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

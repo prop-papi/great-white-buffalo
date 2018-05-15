@@ -11,8 +11,10 @@
   border-color: rgb(66, 70, 76);
 }
 
-.nav-button:hover {
-  color: rgb(174, 176, 178) !important;
+.main-nav-button {
+  color: rgb(174, 176, 178);
+  width: 33%;
+  text-align: center;
 }
 
 .nav-button:focus {
@@ -27,4 +29,48 @@
   background-color: rgb(115, 139, 215) !important;
   outline: none !important;
   box-shadow: none;
+}
+
+.main-navbar {
+  background-color: transparent !important;
+  margin-top: 20px;
+  border: 0px solid transparent !important;
+}
+
+.nav-main {
+  width: 100%;
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.nav-button-text {
+  color: white !important;
+  font-size: 20px;
+}
+
+.nav-button-text-active {
+  text-decoration: none !important;
+  color: rgb(115, 139, 215) !important;
+  font-size: 20px;
+}
+
+.nav-button-text:hover {
+  text-decoration: none !important;
+  color: rgb(115, 139, 215) !important;
+}
+
+.nav-button-text:focus {
+  text-decoration: none;
+}
+
+.main-nav-button-active {
+  color: rgb(174, 176, 178);
+  width: 33%;
+  text-align: center;
+  border-bottom: solid rgb(115, 139, 215);
+}
+
+.main-component-wrapper {
+  height: 100%;
 }
