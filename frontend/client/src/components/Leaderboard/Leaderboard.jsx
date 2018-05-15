@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-// import { FormControl, Grid, Row, Col } from "react-bootstrap";
+import { FormControl, Grid, Row, Col } from "react-bootstrap";
 
 // custom css (if needed)
 // import "./Leaderboard.css"
