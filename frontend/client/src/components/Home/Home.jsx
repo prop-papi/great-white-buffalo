@@ -15,6 +15,7 @@ import {
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
+import ESportVid from "../ESport/ESportVid";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import io from "socket.io-client";
@@ -113,6 +114,7 @@ class Home extends Component {
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
               >
                 <MainNavBar betSocket={betSocket} />
+                <br />
               </Col>
               <Col
                 xs={2}
