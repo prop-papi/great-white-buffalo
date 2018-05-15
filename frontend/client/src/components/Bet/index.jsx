@@ -10,7 +10,6 @@ import {
   voteOnBet,
   updateUserPaneData
 } from "../../actions";
-
 import "./index.css";
 import {
   ButtonToolbar,
