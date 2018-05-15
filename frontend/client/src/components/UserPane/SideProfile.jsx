@@ -40,7 +40,7 @@ class SideProfile extends Component {
       }
     });
     this.setState({ myBets }, () => {
-      console.log(this.state.myBets);
+      // console.log(this.state.myBets);
     });
   }
 

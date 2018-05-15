@@ -4,7 +4,13 @@ import { bindActionCreators } from "redux";
 import axios from "axios";
 import moment from "moment";
 import Confirm from "react-confirm-bootstrap";
-import { cancelMyBet, acceptBet, voteOnBet } from "../../actions";
+import {
+  cancelMyBet,
+  acceptBet,
+  voteOnBet,
+  updateUserPaneData
+} from "../../actions";
+
 import "./index.css";
 import {
   ButtonToolbar,
@@ -47,6 +53,7 @@ class Bet extends React.Component {
     this.acceptBet = this.acceptBet.bind(this);
     this.handleCancelBetError = this.handleCancelBetError.bind(this);
     this.handleAcceptBetError = this.handleAcceptBetError.bind(this);
+    this.displaySideProfile = this.displaySideProfile.bind(this);
     this.vote = this.vote.bind(this);
   }
 
@@ -62,6 +69,24 @@ class Bet extends React.Component {
     this.setState({
       showAcceptBetError: false
     });
+  }
+
+  displaySideProfile(target) {
+    let params = {
+      username: target.currentTarget.innerHTML
+    };
+    axios
+      .get("http://localhost:1337/api/userpane/selected", { params })
+      .then(response => {
+        //this.setState({ selectedUser: response.data[0] });
+        let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
+        newUserPane.didSelectUser = true;
+        newUserPane.selectedUser = response.data[0];
+        this.props.updateUserPaneData(newUserPane);
+      })
+      .catch(err => {
+        console.log("Error: ", err);
+      });
   }
 
   async vote(v) {
@@ -194,7 +219,10 @@ class Bet extends React.Component {
                   {"My "}
                   {this.state.myVote === "N/A" ? "potential " : ""}
                   {"opponent: "}
-                  <span className="opponent-name">
+                  <span
+                    className="opponent-name"
+                    onClick={this.displaySideProfile}
+                  >
                     {this.state.myVote === "creator"
                       ? this.props.bet.challenger_name
                       : this.props.bet.creator_name}
@@ -307,7 +335,8 @@ function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
     global: state.global,
-    local: state.local
+    local: state.local,
+    userPane: state.userPane
   };
 }
 
@@ -316,7 +345,8 @@ function bindActionsToDispatch(dispatch) {
     {
       cancelMyBet: cancelMyBet,
       acceptBet: acceptBet,
-      voteOnBet: voteOnBet
+      voteOnBet: voteOnBet,
+      updateUserPaneData: updateUserPaneData
     },
     dispatch
   );

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Row } from "react-bootstrap";
 import { connect } from "react-redux";
-import { setUserPaneData } from "../../actions/index";
+import { bindActionCreators } from "redux";
+import { updateUserPaneData } from "../../actions/index";
 import SideProfile from "./SideProfile";
 import axios from "axios";
 
@@ -76,7 +77,7 @@ class UserPane extends Component {
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
         newUserPane.didSelectUser = true;
         newUserPane.selectedUser = response.data[0];
-        this.props.setUserPaneData(newUserPane);
+        this.props.updateUserPaneData(newUserPane);
       })
       .catch(err => {
         console.log("Error: ", err);
@@ -115,17 +116,21 @@ class UserPane extends Component {
   }
 }
 
-const mapStateToProps = state => {
+function mapStateToProps(state) {
+  // specifies the slice of state this compnent wants and provides it
   return {
     local: state.local.localData,
     userPane: state.userPane
   };
-};
+}
 
-const mapDispatchToProps = dispatch => ({
-  setUserPaneData: userPaneData => {
-    dispatch(setUserPaneData(userPaneData, dispatch));
-  }
-});
+function bindActionsToDispatch(dispatch) {
+  return bindActionCreators(
+    {
+      updateUserPaneData: updateUserPaneData
+    },
+    dispatch
+  );
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserPane);
+export default connect(mapStateToProps, bindActionsToDispatch)(UserPane);
