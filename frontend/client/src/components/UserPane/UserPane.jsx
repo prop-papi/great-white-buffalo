@@ -11,7 +11,8 @@ class UserPane extends Component {
     super();
     this.state = {
       users: [],
-      friends: []
+      friends: [],
+      pendingFriends: []
     };
   }
 
@@ -51,13 +52,21 @@ class UserPane extends Component {
       .get("http://localhost:1337/api/userpane/friends", { params })
       .then(response => {
         let friends = [];
+        let pendingFriends = [];
         response.data.forEach(val => {
-          val.user1 === localStorage.username
-            ? friends.push({ username: val.user2 })
-            : friends.push({ username: val.user1 });
+          if (val.status === 1) {
+            val.user1 === localStorage.username
+              ? friends.push({ username: val.user2 })
+              : friends.push({ username: val.user1 });
+          } else {
+            val.user1 === localStorage.username
+              ? pendingFriends.push({ username: val.user2 })
+              : pendingFriends.push({ username: val.user1 });
+          }
         });
         this.setState({
-          friends
+          friends,
+          pendingFriends
         });
       })
       .catch(err => {
@@ -108,6 +117,7 @@ class UserPane extends Component {
         <div>
           <SideProfile
             friends={this.state.friends}
+            pendingFriends={this.state.pendingFriends}
             fetchFriends={this.fetchAllFriends.bind(this)}
           />
         </div>

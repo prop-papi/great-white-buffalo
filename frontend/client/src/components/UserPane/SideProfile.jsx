@@ -6,27 +6,42 @@ import "./SideProfile.css";
 import Bet from "../Bet";
 
 class SideProfile extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      isFriend: null,
+      isFriend: "",
       myBets: []
     };
   }
 
-  componentDidMount() {
-    this.checkIfFriend();
+  async componentDidMount() {
+    await this.checkIfFriend();
     this.findMyBets();
   }
 
-  checkIfFriend() {
+  async checkIfFriend() {
     let username = this.props.userPane.selectedUser.username;
-    for (let i = 0; i < this.props.friends.length; i++) {
-      if (this.props.friends[i].username === username) {
-        this.setState({ isFriend: true });
-        break;
-      } else {
-        this.setState({ isFriend: false });
+    let found = false;
+
+    await (() => {
+      this.props.pendingFriends.forEach(
+        function(el) {
+          if (el.username === username) {
+            this.setState({ isFriend: "pending" });
+            found = true;
+          }
+        }.bind(this)
+      );
+    }).bind(this)();
+
+    if (!found) {
+      for (let i = 0; i < this.props.friends.length; i++) {
+        if (this.props.friends[i].username === username) {
+          this.setState({ isFriend: "true" });
+          break;
+        } else {
+          this.setState({ isFriend: "false" });
+        }
       }
     }
   }
@@ -45,13 +60,9 @@ class SideProfile extends Component {
   }
 
   handleFriend() {
-    let user_1;
-    let user_2;
-    if (localStorage.id < this.props.userPane.selectedUser.id) {
-      user_1 = localStorage.id;
-      user_2 = this.props.userPane.selectedUser.id;
-    }
-    if (this.state.isFriend) {
+    let user_1 = localStorage.id;
+    let user_2 = this.props.userPane.selectedUser.id;
+    if (this.state.isFriend === "true") {
       let body = {
         user_1,
         user_2
@@ -85,7 +96,14 @@ class SideProfile extends Component {
   }
 
   render() {
-    let friendText = this.state.isFriend === true ? "Unfriend" : "Add Friend";
+    let friendText = "";
+    if (this.state.isFriend === "true") {
+      friendText = "Unfriend";
+    } else if (this.state.isFriend === "false") {
+      friendText = "Add Friend";
+    } else {
+      friendText = "Pending Response";
+    }
     return (
       <div>
         <div className="side-profile">
@@ -111,15 +129,23 @@ class SideProfile extends Component {
               Losses
             </Row>
             <br />
-            <Row>
-              <Button
-                className="add-friend"
-                onClick={() => this.handleFriend()}
-              >
-                {friendText}
-              </Button>
-            </Row>
+            {this.props.userPane.selectedUser.username !==
+            localStorage.username ? (
+              <Row>
+                {this.state.isFriend === "pending" ? (
+                  <span className="pending-message">{friendText}</span>
+                ) : (
+                  <Button
+                    className="add-friend"
+                    onClick={() => this.handleFriend()}
+                  >
+                    {friendText}
+                  </Button>
+                )}
+              </Row>
+            ) : null}
           </div>
+          <br />
           <Row>
             {this.state.myBets.length === 0
               ? "This user has no open bets :("

@@ -103,14 +103,25 @@ class GlobalNavBar extends Component {
             />
             {this.state.showNotifications ? (
               <div className="notifications" ref={node => (this.node = node)}>
-                {!this.props.global.globalData.notifications.length ? (
+                {!this.props.notifications.notificationsData.length ? (
                   <EmptyNotifications />
                 ) : null}
-                {this.props.global.globalData.notifications.map(n => {
-                  if (n.type === 0) {
+                {this.props.notifications.notificationsData.map(n => {
+                  if (
+                    n.type === 0 ||
+                    n.type === 0.1 ||
+                    n.type === 0.2 ||
+                    n.type === 0.3
+                  ) {
                     return <NotificationMessage key={n.id} data={n} />;
                   } else if (n.type === 2) {
-                    return <FriendRequest key={n.id} data={n} />;
+                    return (
+                      <FriendRequest
+                        key={n.id}
+                        data={n}
+                        click={this.handleFriendRequestClick}
+                      />
+                    );
                   } else if (n.type === 1) {
                     return <BetResolveInput key={n.id} data={n} />;
                   }
@@ -152,7 +163,8 @@ function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
     //globalData: state.globalData,
-    global: state.global
+    global: state.global,
+    notifications: state.notificationsData
   };
 }
 
