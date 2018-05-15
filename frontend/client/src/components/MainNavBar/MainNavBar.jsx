@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Grid, Col, Row, Button, Navbar, Nav, NavItem } from "react-bootstrap";
 import SearchBets from "../SearchBets/index.jsx";
 import Chat from "../Chat/Chat.jsx";
+import ESportVid from "../ESport/ESportVid";
+import { connect } from "react-redux";
 import "./MainNavBar.css";
 
 class MainNavBar extends Component {
@@ -14,7 +16,8 @@ class MainNavBar extends Component {
       showVideo: false,
       betsActive: true,
       chatActive: false,
-      videoActive: false
+      videoActive: false,
+      gamesList: ["Fortnite", "Overwatch", "Rocket League", "PUBG"]
     };
 
     this.showBetsComponent = this.showBetsComponent.bind(this);
@@ -121,9 +124,19 @@ class MainNavBar extends Component {
           <SearchBets betSocket={this.props.betSocket} />
         ) : null}
         {this.state.showChat ? <Chat /> : null}
+        {this.state.showVideo &&
+        this.state.gamesList.includes(this.props.local.club.name) ? (
+          <ESportVid />
+        ) : null}
       </div>
     );
   }
 }
 
-export default MainNavBar;
+const mapStateToProps = state => {
+  return {
+    local: state.local.localData
+  };
+};
+
+export default connect(mapStateToProps)(MainNavBar);
