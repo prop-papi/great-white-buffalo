@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+//import io from "socket.io-client";
 import { bindActionCreators } from "redux";
-import { updateBalances } from "../../actions";
+import { updateBalances, addBet } from "../../actions";
 import DatePicker from "react-16-bootstrap-date-picker";
 import TimePicker from "react-bootstrap-time-picker";
 import moment from "moment";
@@ -23,6 +24,8 @@ import {
 } from "react-bootstrap";
 
 // add confirmation dialogue w/ bet details!!!
+
+//const socket = io("http://localhost:3000/bets");
 
 class CreateBet extends React.Component {
   constructor(props) {
@@ -174,6 +177,7 @@ class CreateBet extends React.Component {
           body
         );
         if (data.status === 200) {
+          const newBet = data.data;
           this.setState({
             endDate: new Date(
               moment()
@@ -206,7 +210,14 @@ class CreateBet extends React.Component {
             Number(wager),
             true
           );
-          // add bet to bets array in redux?
+          this.props.addBet(this.props.global.globalData, newBet);
+          const payload = {
+            bet: JSON.parse(JSON.stringify(newBet)),
+            action: "create"
+          };
+          payload.bet.is_my_bet = 0;
+          console.log("payload", payload);
+          this.props.betSocket.emit("bet", payload);
         }
       } catch (err) {
         this.setState({ showBetFailAlert: true });
@@ -404,7 +415,8 @@ function bindActionsToDispatch(dispatch) {
   // this.props.global.globalData.balances[0].available_balance and escrow_balance
   return bindActionCreators(
     {
-      updateBalances: updateBalances
+      updateBalances: updateBalances,
+      addBet: addBet
     },
     dispatch
   );

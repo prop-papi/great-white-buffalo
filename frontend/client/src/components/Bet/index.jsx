@@ -10,7 +10,6 @@ import {
   voteOnBet,
   updateUserPaneData
 } from "../../actions";
-
 import "./index.css";
 import {
   ButtonToolbar,
@@ -27,6 +26,8 @@ import {
   ControlLabel,
   Alert
 } from "react-bootstrap";
+
+//const socket = io("http://localhost:3000/bets");
 
 class Bet extends React.Component {
   // *******Need to get reputation of both parties to display on bet, and in the future filter who can bet on my items based on their repuation*****
@@ -57,7 +58,15 @@ class Bet extends React.Component {
     this.vote = this.vote.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {}
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      myVoteResult: newProps.bet.is_my_bet
+        ? Number(localStorage.id) === newProps.bet.creator
+          ? newProps.bet.creator_vote
+          : newProps.bet.challenger_vote
+        : "N/A"
+    });
+  }
 
   handleCancelBetError() {
     this.setState({
@@ -99,14 +108,24 @@ class Bet extends React.Component {
       // redux stuff here!
       if (data.status === 200) {
         if (data.data.changedRows) {
-          if (v === 0) {
-            // only updating if I say I lost, as at vote win nothing is determined. Update KDR???
-            this.props.voteOnBet(
-              this.props.global.globalData,
-              this.props.bet.id,
-              this.props.bet.wager
-            );
-          }
+          // only updating if I say I lost, as at vote win nothing is determined. Update KDR???
+          this.props.voteOnBet(
+            this.props.global.globalData,
+            this.props.bet,
+            this.props.bet.wager,
+            v,
+            this.state.myVote,
+            localStorage.id,
+            localStorage.id
+          );
+          const payload = {
+            bet: JSON.parse(JSON.stringify(this.props.bet)),
+            action: "vote",
+            voterId: Number(localStorage.id),
+            vote: v,
+            myVote: this.state.myVote
+          };
+          this.props.betSocket.emit("bet", payload);
         } else {
           this.setState({ showCancelBetError: true });
         }
@@ -125,9 +144,15 @@ class Bet extends React.Component {
         if (data.data.changedRows) {
           this.props.cancelMyBet(
             this.props.global.globalData,
-            this.props.bet.id,
+            this.props.bet,
             this.props.bet.wager
           );
+          const payload = {
+            bet: JSON.parse(JSON.stringify(this.props.bet)),
+            action: "cancel"
+          };
+          payload.bet.is_my_bet = 0;
+          this.props.betSocket.emit("bet", payload);
         } else {
           this.setState({ showCancelBetError: true });
         }
@@ -147,10 +172,17 @@ class Bet extends React.Component {
         if (data.data.changedRows) {
           this.props.acceptBet(
             this.props.global.globalData,
-            this.props.bet.id,
+            this.props.bet,
             this.props.bet.wager,
+            localStorage.id,
             localStorage.id
           );
+          const payload = {
+            bet: JSON.parse(JSON.stringify(this.props.bet)),
+            action: "accept",
+            acceptorId: Number(localStorage.id)
+          };
+          this.props.betSocket.emit("bet", payload);
           this.setState({ myVote: "challenger" });
         } else {
           this.setState({ showAcceptBetError: true });
@@ -233,21 +265,21 @@ class Bet extends React.Component {
                   {"Odds: " + this.props.bet.odds} <br />
                   {"Bet expiration: " +
                     moment(new Date(this.props.bet.expires))
-                      .subtract("minutes", this.state.timeZoneOffset)
+                      .subtract(this.state.timeZoneOffset, "minutes")
                       .format("MMMM Do YYYY, h:mm a") +
                     " (" +
                     moment(new Date(this.props.bet.expires))
-                      .subtract("minutes", this.state.timeZoneOffset)
+                      .subtract(this.state.timeZoneOffset, "minutes")
                       .fromNow() +
                     ")"}
                   <br />
                   {"Bet end: " +
                     moment(new Date(this.props.bet.end_at))
-                      .subtract("minutes", this.state.timeZoneOffset)
+                      .subtract(this.state.timeZoneOffset, "minutes")
                       .format("MMMM Do YYYY, h:mm a") +
                     " (" +
                     moment(new Date(this.props.bet.end_at))
-                      .subtract("minutes", this.state.timeZoneOffset)
+                      .subtract(this.state.timeZoneOffset, "minutes")
                       .fromNow() +
                     ")"}
                 </div>

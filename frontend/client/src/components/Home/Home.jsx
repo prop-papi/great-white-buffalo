@@ -5,15 +5,24 @@ import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
 import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
-import { fetchHomeData } from "../../actions";
+import {
+  fetchHomeData,
+  addBet,
+  cancelMyBet,
+  acceptBet,
+  voteOnBet
+} from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import io from "socket.io-client";
 import axios from "axios";
 import "./Home.css";
 import UserPane from "../UserPane/UserPane";
+
+const betSocket = io("http://localhost:3000/bets");
 
 class Home extends Component {
   constructor() {
@@ -21,11 +30,46 @@ class Home extends Component {
   }
   async componentDidMount() {
     // set app state here
-    await this.props.fetchHomeData(
-      localStorage.getItem("id"),
-      localStorage.getItem("default_club")
-    );
+    await this.props.fetchHomeData(localStorage.id, localStorage.default_club);
+
+    betSocket.emit("user.enter", {
+      user: localStorage.username,
+      clubList: this.props.global.globalData.clubs
+    });
+
+    betSocket.on("bet.create", newBet => {
+      console.log("bet created why");
+      this.props.addBet(this.props.global.globalData, newBet);
+    });
+
+    betSocket.on("bet.cancel", newBet => {
+      this.props.cancelMyBet(this.props.global.globalData, newBet, 0);
+    });
+
+    betSocket.on("bet.accept", (newBet, acceptorId) => {
+      this.props.acceptBet(
+        this.props.global.globalData,
+        newBet,
+        0,
+        "" + acceptorId,
+        localStorage.id
+      );
+    });
+
+    betSocket.on("bet.vote", (newBet, voterId, vote, whoAmI) => {
+      this.props.voteOnBet(
+        this.props.global.globalData,
+        newBet,
+        newBet.wager,
+        vote,
+        whoAmI, // is the voter the challenger or creator
+        voterId,
+        localStorage.id
+      );
+    });
   }
+
+  betCreate(bet) {}
 
   render() {
     if (
@@ -68,7 +112,7 @@ class Home extends Component {
                 md={7}
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
               >
-                <MainNavBar />
+                <MainNavBar betSocket={betSocket} />
               </Col>
               <Col
                 xs={2}
@@ -103,7 +147,11 @@ function mapStateToProps(state) {
 function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
-      fetchHomeData: fetchHomeData
+      fetchHomeData: fetchHomeData,
+      addBet: addBet,
+      cancelMyBet: cancelMyBet,
+      acceptBet: acceptBet,
+      voteOnBet: voteOnBet
     },
     dispatch
   );
