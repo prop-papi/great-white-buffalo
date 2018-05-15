@@ -68,22 +68,25 @@ class Chat extends Component {
   }
 
   handleEnterKeyPress(e) {
+    const payload = {
+      text: this.state.text,
+      user: localStorage.username,
+      currentLoungeID: this.props.currentLounge.currentLounge.id,
+      createdAt: new Date()
+    };
+
     if (e.key === "Enter") {
-      const payload = {
-        text: this.state.text,
-        user: localStorage.username,
-        currentLoungeID: this.props.currentLounge.currentLounge.id,
-        createdAt: new Date()
-      };
       socket.emit("message.send", payload);
       this.setState({ text: "" });
+      axios
+        .post("/message", payload)
+        .then(response => {
+          console.log("Server response: ", response);
+        })
+        .catch(error => {
+          console.log("Server error: ", error);
+        });
     }
-    // insertNewMessage(
-    //   localStorage.username,
-    //   this.props.currentLounge.currentLounge.id,
-    //   this.state.text,
-    //   null
-    // );
   }
 
   isTyping(user) {
@@ -121,12 +124,17 @@ class Chat extends Component {
     });
 
     socket.on("message.typing", msg => {
-      this.setState({
-        isTyping: true,
-        currentUserTyping: msg.user
-      });
+      if (!this.currentUserTyping) {
+        this.setState({
+          isTyping: true,
+          currentUserTyping: msg.user
+        });
+      }
       setTimeout(() => {
-        this.setState({ isTyping: false });
+        this.setState({
+          isTyping: false,
+          currentUserTyping: null
+        });
       }, 1500);
     });
   }
@@ -195,9 +203,8 @@ class Chat extends Component {
               this.props.currentLounge.currentLounge.name
             }`}
             // could also dynamically render "Lounge" vs a "Direct Message"
-            // for example:
-            // Message to LOUNGE_NAME
-            // Message to @USER (Direct Message)
+            // Chatting in  LOUNGE_NAME
+            // Chatting with  @USER (Direct Message)
             onChange={this.handleChange}
             onKeyPress={this.handleEnterKeyPress}
           />
@@ -209,8 +216,6 @@ class Chat extends Component {
 
 function mapStateToProps(state) {
   return {
-    // message: state.message,
-    // data: state.data,
     global: state.global,
     local: state.local,
     currentLounge: state.currentLounge,
