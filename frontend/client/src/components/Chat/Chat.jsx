@@ -113,7 +113,11 @@ class Chat extends Component {
 
   render() {
     return (
+<<<<<<< HEAD
       <div className="chat-background">
+=======
+      <div>
+>>>>>>> Fixed main navbar and component rendereing
         <div className="chat-main-container">
           <Grid className="chat-display">
             {this.state.recent50Messages.map((message, i) => {

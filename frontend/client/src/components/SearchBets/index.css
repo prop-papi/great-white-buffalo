@@ -1,6 +1,5 @@
 .searchResults {
-  height: auto;
-  max-height: 69vh;
+  height: 80vh;
   border-radius: 4px;
   width: 100%;
   color: rgb(194, 196, 198);
@@ -13,6 +12,10 @@
   overflow-x: hidden;
   white-space: nowrap;
   overflow-wrap: break-word;
+}
+
+.searchBox {
+  height: 80vh;
 }
 
 .panel-body {

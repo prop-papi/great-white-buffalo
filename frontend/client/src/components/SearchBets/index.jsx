@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { updateBalances } from "../../actions";
 import Bet from "../Bet/index.jsx";
+import CreateBet from "../CreateBet/index";
 import "./index.css";
 import {
   ButtonToolbar,
@@ -38,8 +39,8 @@ class SearchBets extends React.Component {
       openBets: [],
       openBetsName:
         props.local.localData.club.name === "Global"
-          ? "All Open Wagers Globally"
-          : `All Open Bets in ${props.local.localData.club.name}`
+          ? "Open Wagers Globally"
+          : `Open Bets in ${props.local.localData.club.name}`
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,7 +51,56 @@ class SearchBets extends React.Component {
     ];
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    let tempMyOpen = [];
+    let tempMyCurrent = [];
+    let tempMyReview = [];
+    let tempMyHistorical = [];
+    let tempMyCanceled = [];
+    let tempMyExpired = [];
+    let tempMyResolved = [];
+    let tempOpen = [];
+    this.props.global.globalData.bets.forEach(b => {
+      if (b.is_my_bet) {
+        if (b.status === "pending") {
+          tempMyOpen.push(b);
+        } else if (b.status === "active") {
+          tempMyCurrent.push(b);
+        } else if (b.status === "voting" || b.status === "disputed") {
+          tempMyReview.push(b);
+        } else if (b.status === "canceled") {
+          tempMyCanceled.push(b);
+          tempMyHistorical.push(b);
+        } else if (b.status === "expired") {
+          tempMyExpired.push(b);
+          tempMyHistorical.push(b);
+        } else if (b.status === "resolved") {
+          tempMyResolved.push(b);
+          tempMyHistorical.push(b);
+        }
+      } else if (
+        b.status === "pending" &&
+        (this.props.local.localData.club.name === "Global" ||
+          this.props.local.localData.club.id === b.club)
+      ) {
+        tempOpen.push(b);
+      }
+    });
+    this.setState({
+      myOpenBets: tempMyOpen,
+      myCurrentBets: tempMyCurrent,
+      myReviewBets: tempMyReview,
+      myHistoricalBets: tempMyHistorical,
+      myCanceledBets: tempMyCanceled,
+      myExpiredBets: tempMyExpired,
+      myResolvedBets: tempMyResolved,
+      openBets: tempOpen,
+      openBetsName:
+        this.props.local.localData.club.name === "Global"
+          ? "Open Wagers Globally"
+          : `Open Bets in ${this.props.local.localData.club.name}`
+    });
+  }
 
   componentWillReceiveProps(newProps) {
     var tempMyOpen = [];
@@ -98,8 +148,8 @@ class SearchBets extends React.Component {
       openBets: tempOpen,
       openBetsName:
         newProps.local.localData.club.name === "Global"
-          ? "All Open Wagers Globally"
-          : `All Open Bets in ${newProps.local.localData.club.name}`
+          ? "Open Wagers Globally"
+          : `Open Bets in ${newProps.local.localData.club.name}`
     });
   }
 
@@ -121,7 +171,6 @@ class SearchBets extends React.Component {
           onChange={this.handleChange}
         />
         <input type="submit" value="Submit" onClick={this.handleSubmit} /> */}
-        <br /> <br />
         <div className="searchResults">
           <Tabs defaultActiveKey={5} id="betTabs">
             <Tab
@@ -162,6 +211,10 @@ class SearchBets extends React.Component {
               }
             >
               {this.state.openBets.map(b => <Bet key={b.id} bet={b} />)}
+            </Tab>
+            <Tab eventKey={6} title="Create Bet">
+              <br />
+              <CreateBet />
             </Tab>
           </Tabs>
 

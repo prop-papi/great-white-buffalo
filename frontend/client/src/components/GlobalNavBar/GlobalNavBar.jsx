@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import { connect } from "react-redux";
 import NotificationMessage from "./../Notifications/NotificationMessage.jsx";
+import EmptyNotifications from "./../Notifications/EmptyNotifications.jsx";
 import FriendRequest from "./../Notifications/FriendRequest.jsx";
 import BetResolveMessage from "./../Notifications/BetResolveMessage.jsx";
 import BetResolveInput from "./../Notifications/BetResolveInput.jsx";
@@ -41,12 +42,13 @@ class GlobalNavBar extends Component {
   }
 
   handleNavItemCollapse(e) {
-    e.preventDefault();
-    if (!this.node.contains(e.target)) {
-      this.setState({
-        showNotifications: false,
-        showMenu: false
-      });
+    if (this.node !== undefined && this.node !== null) {
+      if (!this.node.contains(e.target)) {
+        this.setState({
+          showNotifications: false,
+          showMenu: false
+        });
+      }
     }
   }
 
@@ -55,9 +57,8 @@ class GlobalNavBar extends Component {
     this.setState({ showMenu: !this.state.showMenu, showNotifications: false });
   }
 
-  showNotificationList() {
-    // change state here
-    this.setState({
+  async showNotificationList() {
+    await this.setState({
       showNotifications: !this.state.showNotifications,
       showMenu: false
     });
@@ -102,6 +103,9 @@ class GlobalNavBar extends Component {
             />
             {this.state.showNotifications ? (
               <div className="notifications" ref={node => (this.node = node)}>
+                {!this.props.global.globalData.notifications.length ? (
+                  <EmptyNotifications />
+                ) : null}
                 {this.props.global.globalData.notifications.map(n => {
                   if (n.type === 0) {
                     return <NotificationMessage key={n.id} data={n} />;
@@ -123,15 +127,15 @@ class GlobalNavBar extends Component {
           />
           {this.state.showMenu ? (
             <div className="dropdown-content" ref={node => (this.node = node)}>
-              <a href="#" className="drowdown-menu-item">
+              <a href="#" className="dropdown-menu-item">
                 Profile
               </a>
-              <a href="#" className="drowdown-menu-item">
+              <a href="#" className="dropdown-menu-item">
                 Leaderboards
               </a>
               <a
                 href="#"
-                className="drowdown-menu-item"
+                className="dropdown-menu-item"
                 onClick={() => this.logout()}
               >
                 Logout

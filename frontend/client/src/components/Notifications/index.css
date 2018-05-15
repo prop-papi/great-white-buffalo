@@ -14,6 +14,7 @@
 .notification-message {
   font-size: 12px;
   margin: 10px 10px 10px 10px;
+  color: black;
 }
 
 .notifications-list:hover {
@@ -28,6 +29,7 @@
 .notification-message-request {
   font-size: 12px;
   margin: 10px;
+  color: black;
 }
 
 .li-message {
@@ -37,6 +39,7 @@
 .bet-resolve-message {
   font-size: 12px;
   margin: 10px 10px 10px 10px;
+  color: black;
 }
 
 .bet-resolve-button-top {
@@ -47,4 +50,10 @@
 .bet-resolve-button-bottom {
   font-size: 12px;
   margin: 10px;
+}
+
+.empty-notification-message {
+  font-size: 20px;
+  margin: 10px 10px 10px 10px;
+  color: black;
 }

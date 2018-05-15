@@ -127,7 +127,6 @@ class CreateBet extends React.Component {
   }
 
   selectClub(e) {
-    console.log(e);
     this.setState({ club: e });
   }
 

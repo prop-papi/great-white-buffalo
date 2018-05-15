@@ -71,7 +71,6 @@ class Bet extends React.Component {
         myId: Number(localStorage.id),
         vote: v
       });
-      console.log(data);
       // redux stuff here!
       if (data.status === 200) {
         if (data.data.changedRows) {
@@ -195,9 +194,11 @@ class Bet extends React.Component {
                   {"My "}
                   {this.state.myVote === "N/A" ? "potential " : ""}
                   {"opponent: "}
-                  {this.state.myVote === "creator"
-                    ? this.props.bet.challenger_name
-                    : this.props.bet.creator_name}
+                  <span className="opponent-name">
+                    {this.state.myVote === "creator"
+                      ? this.props.bet.challenger_name
+                      : this.props.bet.creator_name}
+                  </span>
                   <br />
                   {"Club: " + this.props.bet.club_name}
                   <br /> <br />

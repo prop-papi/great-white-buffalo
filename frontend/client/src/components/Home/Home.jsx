@@ -69,8 +69,6 @@ class Home extends Component {
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
               >
                 <MainNavBar />
-                <br />
-                <SearchBets />
               </Col>
               <Col
                 xs={2}
