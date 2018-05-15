@@ -265,21 +265,21 @@ class Bet extends React.Component {
                   {"Odds: " + this.props.bet.odds} <br />
                   {"Bet expiration: " +
                     moment(new Date(this.props.bet.expires))
-                      .subtract("minutes", this.state.timeZoneOffset)
+                      .subtract(this.state.timeZoneOffset, "minutes")
                       .format("MMMM Do YYYY, h:mm a") +
                     " (" +
                     moment(new Date(this.props.bet.expires))
-                      .subtract("minutes", this.state.timeZoneOffset)
+                      .subtract(this.state.timeZoneOffset, "minutes")
                       .fromNow() +
                     ")"}
                   <br />
                   {"Bet end: " +
                     moment(new Date(this.props.bet.end_at))
-                      .subtract("minutes", this.state.timeZoneOffset)
+                      .subtract(this.state.timeZoneOffset, "minutes")
                       .format("MMMM Do YYYY, h:mm a") +
                     " (" +
                     moment(new Date(this.props.bet.end_at))
-                      .subtract("minutes", this.state.timeZoneOffset)
+                      .subtract(this.state.timeZoneOffset, "minutes")
                       .fromNow() +
                     ")"}
                 </div>
