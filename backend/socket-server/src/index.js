@@ -60,6 +60,18 @@ const notification = io.of("/notification").on("connection", socket => {
 
 // bet namespace
 const bets = io.of("/bets").on("connection", socket => {
+  socket.on("user.enter", payload => {
+    payload.clubList.forEach(c => {
+      socket.join(c.id);
+    });
+  });
+
+  socket.on("bet", bet => {
+    if (bet.action === "create") {
+      socket.broadcast.to(bet.club).emit("bet.create", bet);
+    }
+  });
+
   // disconnect
   socket.on("disconnect", () => {
     console.log("user disconnected");

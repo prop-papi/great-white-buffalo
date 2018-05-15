@@ -211,7 +211,11 @@ class CreateBet extends React.Component {
             true
           );
           this.props.addBet(this.props.global.globalData, newBet);
-          // emit socket of bet
+          const payload = {
+            bet: newBet,
+            action: "create"
+          };
+          socket.emit("bet", payload);
         }
       } catch (err) {
         this.setState({ showBetFailAlert: true });

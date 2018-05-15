@@ -5,15 +5,18 @@ import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
 import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
-import { fetchHomeData } from "../../actions";
+import { fetchHomeData, addBet } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import io from "socket.io-client";
 import axios from "axios";
 import "./Home.css";
 import UserPane from "../UserPane/UserPane";
+
+const betSocket = io("http://localhost:3000/bets");
 
 class Home extends Component {
   constructor() {
@@ -25,7 +28,19 @@ class Home extends Component {
       localStorage.getItem("id"),
       localStorage.getItem("default_club")
     );
+
+    betSocket.emit("user.enter", {
+      user: localStorage.username,
+      clubList: this.props.global.globalData.clubs
+    });
+
+    betSocket.on("bet.create", bet => {
+      console.log(bet);
+      //this.props.addBet(this.props.global.globalData, newBet);
+    });
   }
+
+  betCreate(bet) {}
 
   render() {
     if (
@@ -103,7 +118,8 @@ function mapStateToProps(state) {
 function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
-      fetchHomeData: fetchHomeData
+      fetchHomeData: fetchHomeData,
+      addBet: addBet
     },
     dispatch
   );
