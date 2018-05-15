@@ -12,6 +12,10 @@ export const setUserPaneData = (userPaneData, dispatch) => {
   return dispatch({ type: "USER_PANE_DATA", userPaneData });
 };
 
+export const updateUserPaneData = userPaneData => dispatch => {
+  dispatch({ type: "USER_PANE_DATA", userPaneData });
+};
+
 export const fetchHomeData = (id, club) => async dispatch => {
   // utilize some kind of loading screen
   const globalData = await axios.get(`http://localhost:1337/api/users/${id}`);

@@ -6,12 +6,14 @@
 .chat-background {
   background-color: #788796;
   width: 100%;
-  height: calc(100% - 36%);
+  height: 70vh;
 }
 
 .chat-display {
   overflow-y: scroll;
   margin: 0;
+  height: 100% !important;
+  position: relative;
 }
 .message-input {
   width: 100%;
@@ -27,7 +29,7 @@
 
 .chat-main-container {
   width: 100%;
-  height: inherit;
+  height: 100%;
 }
 
 .chat-display .col {
@@ -54,4 +56,16 @@
 
 .chat-display .row:nth-child(even) {
   background-color: lightslategrey;
+}
+
+.col-lg-1 {
+  width: 15% !important;
+}
+
+.col-lg-11 {
+  width: 85% !important;
+}
+
+.message-username:hover {
+  cursor: pointer;
 }
