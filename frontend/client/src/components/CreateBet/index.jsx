@@ -216,7 +216,7 @@ class CreateBet extends React.Component {
             action: "create"
           };
           payload.bet.is_my_bet = 0;
-          console.log(payload);
+          console.log("payload", payload);
           this.props.betSocket.emit("bet", payload);
         }
       } catch (err) {

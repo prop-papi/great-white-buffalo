@@ -30,10 +30,7 @@ class Home extends Component {
   }
   async componentDidMount() {
     // set app state here
-    await this.props.fetchHomeData(
-      localStorage.getItem("id"),
-      localStorage.getItem("default_club")
-    );
+    await this.props.fetchHomeData(localStorage.id, localStorage.default_club);
 
     betSocket.emit("user.enter", {
       user: localStorage.username,
@@ -153,7 +150,8 @@ function bindActionsToDispatch(dispatch) {
       fetchHomeData: fetchHomeData,
       addBet: addBet,
       cancelMyBet: cancelMyBet,
-      acceptBet: acceptBet
+      acceptBet: acceptBet,
+      voteOnBet: voteOnBet
     },
     dispatch
   );
