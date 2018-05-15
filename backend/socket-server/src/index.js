@@ -13,25 +13,29 @@ io.listen(3000, err => {
 // chat namespace
 const chat = io.of("/chat").on("connection", socket => {
   socket.on("user.enter", msg => {
-    socket.join(msg.currentLoungeID);
-    renderRecent50(msg.currentLoungeID, (err, result) => {
-      chat.to(msg.currentLoungeID).emit(`user.enter.${msg.user}`, result);
+    socket.join(`lounge:${msg.currentLoungeID}`);
+    renderRecent50(`lounge:${msg.currentLoungeID}`, (err, result) => {
+      chat
+        .to(`lounge:${msg.currentLoungeID}`)
+        .emit(`user.enter.${msg.user}`, result);
     });
   });
 
   socket.on("message.send", msg => {
-    chat.to(msg.currentLoungeID).emit("message.send", msg);
-    redisClient.lpush(msg.currentLoungeID, JSON.stringify(msg));
-    getListLength(msg.currentLoungeID, (err, result) => {
+    chat.to(`lounge:${msg.currentLoungeID}`).emit("message.send", msg);
+    redisClient.lpush(`lounge:${msg.currentLoungeID}`, JSON.stringify(msg));
+    getListLength(`lounge:${msg.currentLoungeID}`, (err, result) => {
       if (result > 50) {
-        redisClient.rpop(msg.currentLoungeID);
+        redisClient.rpop(`lounge:${msg.currentLoungeID}`);
       }
     });
   });
 
   // on user typing ...
   socket.on("message.typing", msg => {
-    socket.broadcast.to(msg.currentLoungeID).emit("message.typing", msg);
+    socket.broadcast
+      .to(`lounge:${msg.currentLoungeID}`)
+      .emit("message.typing", msg);
   });
 
   // disconnect
