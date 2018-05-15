@@ -5,7 +5,13 @@ import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
 import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
-import { fetchHomeData, addBet } from "../../actions";
+import {
+  fetchHomeData,
+  addBet,
+  cancelMyBet,
+  acceptBet,
+  voteOnBet
+} from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
@@ -34,9 +40,35 @@ class Home extends Component {
       clubList: this.props.global.globalData.clubs
     });
 
-    betSocket.on("bet.create", bet => {
-      console.log(bet);
-      //this.props.addBet(this.props.global.globalData, newBet);
+    betSocket.on("bet.create", newBet => {
+      console.log("bet created why");
+      this.props.addBet(this.props.global.globalData, newBet);
+    });
+
+    betSocket.on("bet.cancel", newBet => {
+      this.props.cancelMyBet(this.props.global.globalData, newBet, 0);
+    });
+
+    betSocket.on("bet.accept", (newBet, acceptorId) => {
+      this.props.acceptBet(
+        this.props.global.globalData,
+        newBet,
+        0,
+        "" + acceptorId,
+        localStorage.id
+      );
+    });
+
+    betSocket.on("bet.vote", (newBet, voterId, vote, whoAmI) => {
+      this.props.voteOnBet(
+        this.props.global.globalData,
+        newBet,
+        newBet.wager,
+        vote,
+        whoAmI, // is the voter the challenger or creator
+        voterId,
+        localStorage.id
+      );
     });
   }
 
@@ -83,7 +115,7 @@ class Home extends Component {
                 md={7}
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
               >
-                <MainNavBar />
+                <MainNavBar betSocket={betSocket} />
               </Col>
               <Col
                 xs={2}
@@ -119,7 +151,9 @@ function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
       fetchHomeData: fetchHomeData,
-      addBet: addBet
+      addBet: addBet,
+      cancelMyBet: cancelMyBet,
+      acceptBet: acceptBet
     },
     dispatch
   );

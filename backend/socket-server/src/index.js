@@ -66,9 +66,26 @@ const bets = io.of("/bets").on("connection", socket => {
     });
   });
 
-  socket.on("bet", bet => {
-    if (bet.action === "create") {
-      socket.broadcast.to(bet.club).emit("bet.create", bet);
+  socket.on("bet", packet => {
+    console.log(packet);
+    if (packet.action === "create") {
+      socket.broadcast.to(packet.bet.club).emit("bet.create", packet.bet);
+    } else if (packet.action === "cancel") {
+      socket.broadcast.to(packet.bet.club).emit("bet.cancel", packet.bet);
+    } else if (packet.action === "accept") {
+      socket.broadcast
+        .to(packet.bet.club)
+        .emit("bet.accept", packet.bet, packet.acceptorId);
+    } else if (packet.action === "vote") {
+      socket.broadcast
+        .to(packet.bet.club)
+        .emit(
+          "bet.vote",
+          packet.bet,
+          packet.voterId,
+          packet.vote,
+          packet.myVote
+        );
     }
   });
 

@@ -117,7 +117,9 @@ class MainNavBar extends Component {
             </a>
           </div>{" "}
         </nav>
-        {this.state.showBets ? <SearchBets /> : null}
+        {this.state.showBets ? (
+          <SearchBets betSocket={this.props.betSocket} />
+        ) : null}
         {this.state.showChat ? <Chat /> : null}
       </div>
     );

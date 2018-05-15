@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import io from "socket.io-client";
+//import io from "socket.io-client";
 import { bindActionCreators } from "redux";
 import { updateBalances, addBet } from "../../actions";
 import DatePicker from "react-16-bootstrap-date-picker";
@@ -25,7 +25,7 @@ import {
 
 // add confirmation dialogue w/ bet details!!!
 
-const socket = io("http://localhost:3000/bets");
+//const socket = io("http://localhost:3000/bets");
 
 class CreateBet extends React.Component {
   constructor(props) {
@@ -212,10 +212,12 @@ class CreateBet extends React.Component {
           );
           this.props.addBet(this.props.global.globalData, newBet);
           const payload = {
-            bet: newBet,
+            bet: JSON.parse(JSON.stringify(newBet)),
             action: "create"
           };
-          socket.emit("bet", payload);
+          payload.bet.is_my_bet = 0;
+          console.log(payload);
+          this.props.betSocket.emit("bet", payload);
         }
       } catch (err) {
         this.setState({ showBetFailAlert: true });

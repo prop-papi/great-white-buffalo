@@ -28,7 +28,7 @@ import {
   Alert
 } from "react-bootstrap";
 
-const socket = io("http://localhost:3000/bets");
+//const socket = io("http://localhost:3000/bets");
 
 class Bet extends React.Component {
   // *******Need to get reputation of both parties to display on bet, and in the future filter who can bet on my items based on their repuation*****
@@ -112,11 +112,21 @@ class Bet extends React.Component {
           // only updating if I say I lost, as at vote win nothing is determined. Update KDR???
           this.props.voteOnBet(
             this.props.global.globalData,
-            this.props.bet.id,
+            this.props.bet,
             this.props.bet.wager,
             v,
-            this.state.myVote
+            this.state.myVote,
+            localStorage.id,
+            localStorage.id
           );
+          const payload = {
+            bet: JSON.parse(JSON.stringify(this.props.bet)),
+            action: "vote",
+            voterId: Number(localStorage.id),
+            vote: v,
+            myVote: this.state.myVote
+          };
+          this.props.betSocket.emit("bet", payload);
         } else {
           this.setState({ showCancelBetError: true });
         }
@@ -135,9 +145,15 @@ class Bet extends React.Component {
         if (data.data.changedRows) {
           this.props.cancelMyBet(
             this.props.global.globalData,
-            this.props.bet.id,
+            this.props.bet,
             this.props.bet.wager
           );
+          const payload = {
+            bet: JSON.parse(JSON.stringify(this.props.bet)),
+            action: "cancel"
+          };
+          payload.bet.is_my_bet = 0;
+          this.props.betSocket.emit("bet", payload);
         } else {
           this.setState({ showCancelBetError: true });
         }
@@ -157,10 +173,17 @@ class Bet extends React.Component {
         if (data.data.changedRows) {
           this.props.acceptBet(
             this.props.global.globalData,
-            this.props.bet.id,
+            this.props.bet,
             this.props.bet.wager,
+            localStorage.id,
             localStorage.id
           );
+          const payload = {
+            bet: JSON.parse(JSON.stringify(this.props.bet)),
+            action: "accept",
+            acceptorId: Number(localStorage.id)
+          };
+          this.props.betSocket.emit("bet", payload);
           this.setState({ myVote: "challenger" });
         } else {
           this.setState({ showAcceptBetError: true });

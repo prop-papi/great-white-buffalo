@@ -57,13 +57,13 @@ export const updateBalances = (
   setGlobalData(g, dispatch);
 };
 
-export const cancelMyBet = (globalData, betId, wager) => dispatch => {
-  const newBets = globalData.bets.map((bet, index) => {
-    if (bet.id !== betId) {
-      return bet;
+export const cancelMyBet = (globalData, bet, wager) => dispatch => {
+  const newBets = globalData.bets.map((b, index) => {
+    if (b.id !== bet.id) {
+      return b;
     } else {
       return {
-        ...bet,
+        ...b,
         status: "canceled"
       };
     }
@@ -82,17 +82,41 @@ export const cancelMyBet = (globalData, betId, wager) => dispatch => {
   setGlobalData(g, dispatch);
 };
 
-export const acceptBet = (globalData, betId, wager, myId) => dispatch => {
-  const newBets = globalData.bets.map((bet, index) => {
-    if (bet.id !== betId) {
-      return bet;
+export const acceptBet = (
+  globalData,
+  bet,
+  wager,
+  acceptorId,
+  myId
+) => dispatch => {
+  const newBets = globalData.bets.map((b, index) => {
+    if (b.id !== bet.id) {
+      return b;
     } else {
-      return {
-        ...bet,
-        challenger: myId,
-        is_my_bet: 1,
-        status: "active"
-      };
+      if (acceptorId === myId) {
+        return {
+          ...b,
+          challenger: myId,
+          is_my_bet: 1,
+          status: "active"
+        };
+      } else {
+        if (Number(b.creator) === Number(myId)) {
+          return {
+            ...b,
+            challenger: acceptorId,
+            is_my_bet: 1,
+            status: "active"
+          };
+        } else {
+          return {
+            ...b,
+            challenger: acceptorId,
+            is_my_bet: 0,
+            status: "active"
+          };
+        }
+      }
     }
   });
   const newBalances = [
@@ -111,43 +135,68 @@ export const acceptBet = (globalData, betId, wager, myId) => dispatch => {
 
 export const voteOnBet = (
   globalData,
-  betId,
+  bet,
   wager,
   vote,
-  whoAmI
+  whoAmI, // myVote
+  voterId,
+  myId
 ) => dispatch => {
-  // possibly add more in here later. KDR / wins / losses????
-  const newBets = globalData.bets.map((bet, index) => {
-    if (bet.id !== betId) {
-      return bet;
+  // *** possibly add more in here later. KDR / wins / losses???? ***
+  const newBets = globalData.bets.map((b, index) => {
+    if (b.id !== bet.id) {
+      return b;
     } else {
-      if (vote === 0) {
-        return {
-          ...bet,
-          status: "resolved"
-        };
-      } else {
-        console.log("this is who i am ", whoAmI);
-        if (whoAmI === "creator") {
+      if (voterId === myId) {
+        if (vote === 0) {
           return {
-            ...bet,
-            creator_vote: 1
+            ...b,
+            status: "resolved"
           };
-        } else if (whoAmI === "challenger") {
-          return {
-            ...bet,
-            challenger_vote: 1
-          };
+        } else {
+          console.log("this is who i am ", whoAmI);
+          if (whoAmI === "creator") {
+            return {
+              ...b,
+              creator_vote: 1
+            };
+          } else if (whoAmI === "challenger") {
+            return {
+              ...b,
+              challenger_vote: 1
+            };
+          }
         }
+      } else if (
+        Number(myId) === Number(b.creator) ||
+        Number(myId) === Number(b.challenger)
+      ) {
+        // this is my bet and the other party has voted on it
+        if (vote === 0) {
+          // this means I won the bet and need to update quite a bit of stuff....win numbers, win ratio, coins, etc. right now just coins being updated
+          return {
+            ...b,
+            result: Number(myId),
+            status: "resolved"
+          };
+        } else {
+          // they voted that they won, check and see if i voted and handle accordingly
+        }
+      } else {
+        // this is not my bet and I don't care what happened as I'll never see this
+        return b;
       }
     }
   });
-  const newBalances = [
-    {
-      available_balance: globalData.balances[0].available_balance,
-      escrow_balance: globalData.balances[0].escrow_balance - wager
-    }
-  ];
+  const newBalances =
+    voterId === myId
+      ? [
+          {
+            available_balance: globalData.balances[0].available_balance,
+            escrow_balance: globalData.balances[0].escrow_balance - wager
+          }
+        ]
+      : "newBalancesforSomeone elses vote go here";
   const g = {
     ...globalData,
     bets: newBets,
