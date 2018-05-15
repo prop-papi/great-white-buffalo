@@ -168,7 +168,14 @@ let makeSportRequest = async (sport, date, loungeDate, club, backupDate) => {
       let loungeName = visitingTeam + " @ " + homeTeam + " - " + loungeDate;
       let checkLoungeExist = await loungedb.checkLoungeExist(loungeName);
       if (!checkLoungeExist.length) {
-        let insert = await loungedb.insertLounge(club, loungeName, gameTime);
+        let insert = await loungedb.insertLounge(
+          club,
+          loungeName,
+          gameTime,
+          "public",
+          1,
+          null
+        );
         console.log("New Lounge " + loungeName + " Added.");
       }
     });

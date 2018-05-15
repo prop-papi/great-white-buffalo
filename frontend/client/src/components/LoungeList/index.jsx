@@ -1,13 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import axios from "axios";
 import { bindActionCreators } from "redux";
 import { updateCurrentLounge } from "../../actions/loungeActions.js";
+import { addLounge } from "../../actions/index.js";
 
 import {
   ListGroup,
   ListGroupItem,
   ListGroupItemProps,
-  Image
+  Image,
+  Modal,
+  MenuItem,
+  ButtonToolbar,
+  DropdownButton,
+  Button
 } from "react-bootstrap";
 
 import "./index.css";
@@ -16,12 +23,80 @@ class LoungeList extends Component {
   constructor() {
     super();
 
+    this.state = {
+      show: false,
+      security: "Public",
+      loungeName: "",
+      videoLink: ""
+    };
+
     this.handleLoungeClick = this.handleLoungeClick.bind(this);
+    this.createNewLounge = this.createNewLounge.bind(this);
+    this.handleShow = this.handleShow.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.selectSecurity = this.selectSecurity.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async handleLoungeClick(lounge) {
     await this.props.updateCurrentLounge(lounge);
     // display lounge data
+  }
+
+  async createNewLounge() {
+    // do work here
+    const body = {
+      club: this.props.local.localData.club.id,
+      name: this.state.loungeName,
+      time: null,
+      security: this.state.security.toLowerCase(),
+      adminId: localStorage.id,
+      videoLink: this.state.videoLink
+    };
+    try {
+      const data = await axios.post(
+        `http://localhost:1337/api/lounges/insertlounge`,
+        body
+      );
+      if (data.status === 200) {
+        const newLounge = data.data;
+        console.log(newLounge);
+        this.props.addLounge(this.props.local.localData, newLounge);
+        if (newLounge.security === "public") {
+          const payload = {
+            lounge: newLounge,
+            action: "newLounge"
+          };
+          console.log("payload", payload);
+          this.props.betSocket.emit("bet", payload);
+        }
+        this.setState({ show: false, loungeName: "", videoLink: "" });
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  selectSecurity(e) {
+    if (e === 1) {
+      this.setState({ security: "Public" });
+    } else if (e === 2) {
+      this.setState({ security: "Private" });
+    }
+  }
+
+  handleShow() {
+    this.setState({ show: true });
+  }
+
+  handleCancel() {
+    this.setState({ show: false });
+    // this and the button shouldn't be neccesary...figure out modal issue, link below, just didn't want to get stuck on it
+    // https://github.com/react-bootstrap/react-bootstrap/issues/2812
+  }
+
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
 
   // async componentDidMount() {
@@ -43,7 +118,7 @@ class LoungeList extends Component {
               <ListGroupItem
                 className="lounge-item"
                 key={lounge.id}
-                onClick={() => this.handleLoungeClick(lounge)}
+                onClick={() => this.handleShow}
                 selected
               >
                 <span className="lounge-name">
@@ -52,7 +127,69 @@ class LoungeList extends Component {
               </ListGroupItem>
             );
           })}
+          <ListGroupItem
+            className="lounge-item"
+            onClick={this.handleShow}
+            selected
+          >
+            <span className="lounge-name">
+              <i className="fa">&#x2b; </i> New Lounge
+            </span>
+          </ListGroupItem>
         </ListGroup>
+
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              Create a Lounge in {this.props.local.localData.club.name}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Lounge name:{" "}
+            <input
+              type="text"
+              name="loungeName"
+              style={{ width: 100 }}
+              value={this.state.loungeName}
+              onChange={this.handleChange}
+            />{" "}
+            <br />
+            Video Link:{" "}
+            <input
+              type="text"
+              name="videoLink"
+              style={{ width: 100 }}
+              value={this.state.videoLink}
+              onChange={this.handleChange}
+            />{" "}
+            <br />
+            <ButtonToolbar className="testing" id="securityButton">
+              <DropdownButton title={this.state.security} id={1}>
+                <MenuItem
+                  className="menu"
+                  onSelect={this.selectSecurity}
+                  key={1}
+                  eventKey={1}
+                >
+                  Public
+                </MenuItem>
+                <MenuItem
+                  className="menu"
+                  onSelect={this.selectSecurity}
+                  key={2}
+                  eventKey={2}
+                >
+                  Private
+                </MenuItem>
+              </DropdownButton>
+            </ButtonToolbar>
+            <br /> <br />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.handleCancel}>Cancel</Button>
+            <Button onClick={this.createNewLounge}>Create Lounge</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -68,7 +205,8 @@ function mapStateToProps(state) {
 function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
-      updateCurrentLounge: updateCurrentLounge
+      updateCurrentLounge: updateCurrentLounge,
+      addLounge: addLounge
     },
     dispatch
   );

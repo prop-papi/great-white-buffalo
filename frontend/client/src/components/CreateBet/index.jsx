@@ -325,9 +325,11 @@ class CreateBet extends React.Component {
             {this.props.global.globalData.balances[0].available_balance}
             <br /> <br />
             <span>
-              {this.state.clubs[this.state.club]}{" "}
               <ButtonToolbar className="testing">
-                <DropdownButton title="Clubs" id={1}>
+                <DropdownButton
+                  title={this.state.clubs[this.state.club]}
+                  id={1}
+                >
                   {Object.keys(this.state.clubs).map(c => (
                     <MenuItem
                       className="menu"

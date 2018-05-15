@@ -49,6 +49,14 @@ export const updateNotifications = id => async dispatch => {
   setNotifications(notifications.data.notifications, dispatch);
 };
 
+export const addLounge = (localData, newLounge) => async dispatch => {
+  const l = {
+    ...localData,
+    lounges: [...localData.lounges, newLounge]
+  };
+  setLocalData(l, dispatch);
+};
+
 export const updateBalances = (
   globalData,
   wager,
