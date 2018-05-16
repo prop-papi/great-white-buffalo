@@ -1,6 +1,7 @@
 const mysql = require("promise-mysql");
 const mongoose = require("mongoose");
 const _ = require("underscore");
+const MySQLEvents = require("mysql-events");
 
 // connect mysql db config
 const mysqldb = mysql.createPool({
@@ -8,6 +9,17 @@ const mysqldb = mysql.createPool({
   user: process.env.AWS_USER,
   password: process.env.AWS_PASSWORD,
   database: process.env.AWS_DATABASE
+});
+
+const dsn = {
+  host: process.env.AWS_HOST,
+  user: process.env.AWS_USER,
+  password: process.env.AWS_PASSWORD
+};
+const mysqlListener = MySQLEvents(dsn);
+
+mysqlListener.on("binlog", function() {
+  console.log("here");
 });
 
 const mongoConnectString = `mongodb://${process.env.MONGO_USERNAME}:${

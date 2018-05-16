@@ -147,6 +147,7 @@ class Home extends Component {
                 sm={1}
                 md={1}
                 style={{ backgroundColor: "rgb(37,39,44)", height: "93vh" }}
+                className="club-column"
               >
                 <ClubNav betSocket={betSocket} />
               </Col>
@@ -163,6 +164,7 @@ class Home extends Component {
                 sm={7}
                 md={7}
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
+                className="main-column"
               >
                 <MainNavBar />
                 <br />

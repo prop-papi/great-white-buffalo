@@ -77,6 +77,8 @@
     "webpack-cli": "^2.1.2"
   },
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   }
 }
