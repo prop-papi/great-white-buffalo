@@ -5,6 +5,9 @@ import { bindActionCreators } from "redux";
 import { updateUserPaneData } from "../../actions/index";
 import SideProfile from "./SideProfile";
 import axios from "axios";
+import io from "socket.io-client";
+
+const socket = io("http://localhost:3000/activeUsers");
 
 class UserPane extends Component {
   constructor() {
@@ -17,6 +20,7 @@ class UserPane extends Component {
   }
 
   componentDidMount() {
+    //socket.emit("user.enter", {this.props.local.club.id})
     this.fetchAllClubUsers(this.props.local.club.id);
     this.fetchAllFriends(localStorage.id);
   }
@@ -40,7 +44,7 @@ class UserPane extends Component {
         });
       })
       .catch(err => {
-        console.log("Error fetch all users", err);
+        console.log(err);
       });
   }
 

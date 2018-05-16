@@ -25,6 +25,7 @@ import "./Home.css";
 import UserPane from "../UserPane/UserPane";
 
 const betSocket = io("http://localhost:3000/bets");
+const activeUserSocket = io("http://localhost:3000/activeUsers");
 
 class Home extends Component {
   constructor() {
@@ -73,6 +74,17 @@ class Home extends Component {
         localStorage.id
       );
     });
+
+    activeUserSocket.emit("user.enter", {
+      username: localStorage.username,
+      id: localStorage.id,
+      online: "online"
+    });
+
+    activeUserSocket.on("user.enter", usersOnline => {
+      console.log("fafafafafaf", usersOnline);
+    });
+    //console.log(io.sockets.clients("/activeUsers"));
   }
 
   betCreate(bet) {}

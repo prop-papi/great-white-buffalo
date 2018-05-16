@@ -10,6 +10,8 @@ io.listen(3000, err => {
   console.log("listening on PORT:3000");
 });
 
+const usersOnline = {};
+
 // chat namespace
 const chat = io.of("/chat").on("connection", socket => {
   socket.on("user.enter", msg => {
@@ -111,8 +113,16 @@ const bets = io.of("/bets").on("connection", socket => {
 
 // active users namespace
 const activeUsers = io.of("/activeUsers").on("connection", socket => {
+  socket.on("user.enter", user => {
+    socket.join(user.online);
+    usersOnline[socket.id] = { id: user.id, username: user.username };
+    activeUsers.to("online").emit("user.enter", usersOnline);
+    // activeUsers.in("online").clients((err, clients) => {
+    //   console.log("JOINED THE USER ONLINE", clients);
+    // });
+  });
   // disconnect
-  socket.on("disconnect", () => {
+  socket.on("disconnect", socket => {
     console.log("user disconnected");
   });
 
