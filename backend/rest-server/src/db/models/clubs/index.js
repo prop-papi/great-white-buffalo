@@ -1,4 +1,5 @@
 const mysqldb = require("../../index.js").mysqldb;
+const SqlString = require("sqlstring");
 
 const selectUsersClubs = async user => {
   const query = `select club from UsersClubs WHERE user=${user};`;
@@ -50,8 +51,31 @@ const selectDefaultClub = async id => {
   }
 };
 
+const insertClub = async (name, security, logo, adminId) => {
+  const query = `insert into Clubs (name, security, logo, admin_id) values (${SqlString.escape(
+    name
+  )}, '${security}', '${logo}', '${adminId}');`;
+  try {
+    let data = await mysqldb.query(query);
+    const insertedQuery = `SELECT * FROM Clubs WHERE Clubs.id=${
+      data.insertId
+    };`;
+    try {
+      console.log(data);
+      return await mysqldb.query(insertedQuery);
+    } catch (err) {
+      console.log("error", err);
+      return err;
+    }
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.selectUsersClubs = selectUsersClubs;
 module.exports.selectAllClubsData = selectAllClubsData;
 module.exports.selectSingleClubData = selectSingleClubData;
 module.exports.selectGlobalClub = selectGlobalClub;
 module.exports.selectDefaultClub = selectDefaultClub;
+module.exports.insertClub = insertClub;

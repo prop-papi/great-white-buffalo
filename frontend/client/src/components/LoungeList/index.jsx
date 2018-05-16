@@ -91,8 +91,6 @@ class LoungeList extends Component {
 
   handleCancel() {
     this.setState({ show: false });
-    // this and the button shouldn't be neccesary...figure out modal issue, link below, just didn't want to get stuck on it
-    // https://github.com/react-bootstrap/react-bootstrap/issues/2812
   }
 
   handleChange(e) {
@@ -133,12 +131,12 @@ class LoungeList extends Component {
             selected
           >
             <span className="lounge-name">
-              <i className="fa">&#x2b; </i> New Lounge
+              <i className="fa">&#x2b; </i> Join or Create a Lounge
             </span>
           </ListGroupItem>
         </ListGroup>
 
-        <Modal show={this.state.show} onHide={this.handleClose}>
+        <Modal show={this.state.show} onHide={this.handleCancel}>
           <Modal.Header closeButton>
             <Modal.Title>
               Create a Lounge in {this.props.local.localData.club.name}
@@ -186,7 +184,6 @@ class LoungeList extends Component {
             <br /> <br />
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.handleCancel}>Cancel</Button>
             <Button onClick={this.createNewLounge}>Create Lounge</Button>
           </Modal.Footer>
         </Modal>

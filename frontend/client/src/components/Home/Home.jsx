@@ -102,7 +102,7 @@ class Home extends Component {
                 md={1}
                 style={{ backgroundColor: "rgb(37,39,44)", height: "93vh" }}
               >
-                <ClubNav />
+                <ClubNav betSocket={betSocket} />
               </Col>
               <Col
                 xs={2}

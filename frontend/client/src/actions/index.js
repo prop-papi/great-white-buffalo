@@ -308,3 +308,11 @@ export const addBet = (globalData, newBet) => dispatch => {
   };
   setGlobalData(g, dispatch);
 };
+
+export const addClub = (globalData, newClub) => dispatch => {
+  const g = {
+    ...globalData,
+    clubs: [...globalData.clubs, newClub]
+  };
+  setGlobalData(g, dispatch);
+};
