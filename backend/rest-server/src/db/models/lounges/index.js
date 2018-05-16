@@ -21,10 +21,21 @@ const checkLoungeExist = async name => {
   }
 };
 
-const insertLounge = async (club, name, time) => {
-  const query = `insert into Lounges (club, name, type, security, end_time) values ('${club}', '${name}', 'text', 'public', '${time}');`;
+const insertLounge = async (club, name, time, security, adminId, videoLink) => {
+  const query = `insert into Lounges (club, name, type, security, end_time, admin_id, video_link) values ('${club}', ${SqlString.escape(
+    name
+  )}, 'text', '${security}', '${time}', '${adminId}', '${videoLink}');`;
   try {
-    return await mysqldb.query(query);
+    let data = await mysqldb.query(query);
+    const insertedQuery = `SELECT * FROM Lounges WHERE Lounges.id=${
+      data.insertId
+    };`;
+    try {
+      return await mysqldb.query(insertedQuery);
+    } catch (err) {
+      console.log("error", err);
+      return err;
+    }
   } catch (err) {
     console.log("error", err);
     return err;

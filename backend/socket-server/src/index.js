@@ -86,6 +86,11 @@ const bets = io.of("/bets").on("connection", socket => {
           packet.vote,
           packet.myVote
         );
+    } else if (packet.action === "newLounge") {
+      console.log("lounge was heard");
+      socket.broadcast
+        .to(packet.lounge.club)
+        .emit("lounge.create", packet.lounge);
     }
   });
 

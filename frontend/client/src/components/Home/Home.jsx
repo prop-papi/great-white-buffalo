@@ -10,7 +10,8 @@ import {
   addBet,
   cancelMyBet,
   acceptBet,
-  voteOnBet
+  voteOnBet,
+  addLounge
 } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
@@ -39,8 +40,12 @@ class Home extends Component {
     });
 
     betSocket.on("bet.create", newBet => {
-      console.log("bet created why");
       this.props.addBet(this.props.global.globalData, newBet);
+    });
+
+    betSocket.on("lounge.create", newLounge => {
+      console.log("i heard a new lounge ", newLounge);
+      this.props.addLounge(this.props.local.localData, newLounge);
     });
 
     betSocket.on("bet.cancel", newBet => {
@@ -97,7 +102,7 @@ class Home extends Component {
                 md={1}
                 style={{ backgroundColor: "rgb(37,39,44)", height: "93vh" }}
               >
-                <ClubNav />
+                <ClubNav betSocket={betSocket} />
               </Col>
               <Col
                 xs={2}
@@ -105,7 +110,7 @@ class Home extends Component {
                 md={2}
                 style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
               >
-                <LoungeList />
+                <LoungeList betSocket={betSocket} />
               </Col>
               <Col
                 xs={7}
@@ -153,7 +158,8 @@ function bindActionsToDispatch(dispatch) {
       addBet: addBet,
       cancelMyBet: cancelMyBet,
       acceptBet: acceptBet,
-      voteOnBet: voteOnBet
+      voteOnBet: voteOnBet,
+      addLounge: addLounge
     },
     dispatch
   );

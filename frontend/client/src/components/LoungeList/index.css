@@ -30,3 +30,8 @@
 .lounge-icon {
   font-size: 20px;
 }
+
+#securityButton {
+  right: 5%;
+  position: absolute;
+}
