@@ -30,6 +30,9 @@ const activeUserSocket = io("http://localhost:3000/activeUsers");
 class Home extends Component {
   constructor() {
     super();
+    this.state = {
+      usersOnline: {}
+    };
   }
   async componentDidMount() {
     // set app state here
@@ -82,7 +85,8 @@ class Home extends Component {
     });
 
     activeUserSocket.on("user.enter", usersOnline => {
-      console.log("fafafafafaf", usersOnline);
+      console.log(usersOnline);
+      this.setState({ usersOnline });
     });
     //console.log(io.sockets.clients("/activeUsers"));
   }
@@ -140,7 +144,7 @@ class Home extends Component {
                 style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
               >
                 <UsersNav />
-                <UserPane />
+                <UserPane usersOnline={this.state.usersOnline} />
               </Col>
             </Row>
           </Grid>

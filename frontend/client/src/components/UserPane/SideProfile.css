@@ -30,3 +30,10 @@
 .pending-message {
   color: rgb(115, 139, 215);
 }
+
+.userpane-status {
+  color: rgb(174, 176, 178);
+  padding-top: 10px;
+  text-align: center;
+  font-size: 15px;
+}

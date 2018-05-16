@@ -115,7 +115,7 @@ const bets = io.of("/bets").on("connection", socket => {
 const activeUsers = io.of("/activeUsers").on("connection", socket => {
   socket.on("user.enter", user => {
     socket.join(user.online);
-    usersOnline[socket.id] = { id: user.id, username: user.username };
+    usersOnline[user.username] = { id: user.id, socket_id: socket.id };
     activeUsers.to("online").emit("user.enter", usersOnline);
     // activeUsers.in("online").clients((err, clients) => {
     //   console.log("JOINED THE USER ONLINE", clients);
@@ -123,7 +123,11 @@ const activeUsers = io.of("/activeUsers").on("connection", socket => {
   });
   // disconnect
   socket.on("disconnect", socket => {
-    console.log("user disconnected");
+    for (val in usersOnline) {
+      if (val.socket_id === socket.id) {
+        delete usersOnline[val];
+      }
+    }
   });
 
   // error handling

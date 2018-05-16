@@ -20,7 +20,6 @@ class UserPane extends Component {
   }
 
   componentDidMount() {
-    //socket.emit("user.enter", {this.props.local.club.id})
     this.fetchAllClubUsers(this.props.local.club.id);
     this.fetchAllFriends(localStorage.id);
   }
@@ -39,9 +38,11 @@ class UserPane extends Component {
     axios
       .get("http://localhost:1337/api/userpane/allUsers", { params })
       .then(response => {
-        this.setState({
-          users: response.data
+        let users = [];
+        response.data.forEach(user => {
+          users.push(user.username);
         });
+        this.setState({ users });
       })
       .catch(err => {
         console.log(err);
@@ -60,18 +61,19 @@ class UserPane extends Component {
         response.data.forEach(val => {
           if (val.status === 1) {
             val.user1 === localStorage.username
-              ? friends.push({ username: val.user2 })
-              : friends.push({ username: val.user1 });
+              ? friends.push(val.user2)
+              : friends.push(val.user1);
           } else {
             val.user1 === localStorage.username
-              ? pendingFriends.push({ username: val.user2 })
-              : pendingFriends.push({ username: val.user1 });
+              ? pendingFriends.push(val.user2)
+              : pendingFriends.push(val.user1);
           }
         });
         this.setState({
           friends,
           pendingFriends
         });
+        this.setState({ friends });
       })
       .catch(err => {
         console.log("Error fetching friends", err);
@@ -97,20 +99,44 @@ class UserPane extends Component {
       });
   }
 
+  handleOnlineUsers(users) {
+    let offline = [];
+    let online = [];
+    users.forEach(user => {
+      !this.props.usersOnline[user] ? offline.push(user) : online.push(user);
+    });
+    //this.setState({ offline, online });
+    return { offline, online };
+  }
+
   render() {
     let { showUsers, didSelectUser } = this.props.userPane.userPaneData;
     if (didSelectUser === false) {
       let usersToLoad = showUsers ? this.state.users : this.state.friends;
+      let { offline, online } = this.handleOnlineUsers(usersToLoad);
       return (
         <div>
-          {usersToLoad.map((user, key) => {
+          <Row className="userpane-status">Online</Row>
+          {online.map((user, key) => {
             return (
               <Row
                 key={key}
-                onClick={() => this.handleSelectedUser(user.username)}
+                onClick={() => this.handleSelectedUser(user)}
                 className="userpane-row"
               >
-                {user.username}
+                {user}
+              </Row>
+            );
+          })}
+          <Row className="userpane-status">Offline</Row>
+          {offline.map((user, key) => {
+            return (
+              <Row
+                key={key}
+                onClick={() => this.handleSelectedUser(user)}
+                className="userpane-row"
+              >
+                {user}
               </Row>
             );
           })}
