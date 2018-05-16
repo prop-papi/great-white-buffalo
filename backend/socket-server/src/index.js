@@ -117,9 +117,6 @@ const activeUsers = io.of("/activeUsers").on("connection", socket => {
     socket.join(user.online);
     usersOnline[user.username] = { id: user.id, socket_id: socket.id };
     activeUsers.to("online").emit("user.enter", usersOnline);
-    // activeUsers.in("online").clients((err, clients) => {
-    //   console.log("JOINED THE USER ONLINE", clients);
-    // });
   });
   // disconnect
   socket.on("disconnect", socket => {
@@ -128,6 +125,7 @@ const activeUsers = io.of("/activeUsers").on("connection", socket => {
         delete usersOnline[val];
       }
     }
+    console.log("Usersonline: ", usersOnline);
   });
 
   // error handling

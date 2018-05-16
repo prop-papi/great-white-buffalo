@@ -85,10 +85,8 @@ class Home extends Component {
     });
 
     activeUserSocket.on("user.enter", usersOnline => {
-      console.log(usersOnline);
       this.setState({ usersOnline });
     });
-    //console.log(io.sockets.clients("/activeUsers"));
   }
 
   betCreate(bet) {}
