@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Table } from "react-bootstrap";
+import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import axios from "axios";
 
 // custom css (if needed)
@@ -27,32 +27,27 @@ class Leaderboard extends Component {
   sortBySelector() {
     let { sortBy, wins } = this.state;
 
-    return sortBy ? (
-      this.state[sortBy].map((entry, i) => (
-        <tr key={i}>
-          <td>{i + 1}</td>
-          <td>{entry.username}</td>
-          <td>{entry.reputation}</td>
-          <td>{entry.wins} </td>
-          <td>{entry.losses}</td>
-          <td>{entry.totalBets}</td>
-          <td>
-            {parseFloat(Math.trunc(entry.win_ratio * 10000) / 100).toFixed(2)}%
-          </td>
-          <td>{entry.available_balance}</td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td>{1}</td>
-        <td>{"Great White Buff"}</td>
-        <td>{100} </td>
-        <td>{0}</td>
-        <td>{0}</td>
-        <td>{0}</td>
-        <td>{"100%"}</td>
-        <td>{"infinite"}</td>
+    return this.state[sortBy].map((entry, i) => (
+      <tr key={i}>
+        <td>{i + 1}</td>
+        <td>{entry.username}</td>
+        <td>{entry.reputation}</td>
+        <td>{entry.wins} </td>
+        <td>{entry.losses}</td>
+        <td>{entry.totalBets}</td>
+        <td>
+          {parseFloat(Math.round(entry.win_ratio * 10000) / 100).toFixed(2)}%
+        </td>
+        <td>{entry.available_balance}</td>
       </tr>
+    ));
+  }
+
+  tooltip(columnName) {
+    return (
+      <Tooltip id="tooltip">
+        <strong>Click HERE</strong> to sort by <strong>{columnName}</strong>
+      </Tooltip>
     );
   }
 
@@ -78,9 +73,6 @@ class Leaderboard extends Component {
       .catch(err => {
         console.log("Server error: ", err);
       });
-    // setTimeout(() => {
-    //   this.setState({ sortBy: "wins" });
-    // }, 2000);
   }
 
   render() {
@@ -92,17 +84,36 @@ class Leaderboard extends Component {
               <th>#</th>
               <th>Username</th>
               <th>Reputation</th>
-              <th onClick={() => this.onClickHandler("wins")}>Wins</th>
-              <th onClick={() => this.onClickHandler("losses")}>Losses</th>
-              <th onClick={() => this.onClickHandler("totalBets")}>
-                Total Bets
-              </th>
-              <th onClick={() => this.onClickHandler("winPercentage")}>
-                Win Percentage
-              </th>
-              <th onClick={() => this.onClickHandler("availableBalance")}>
-                Tokens
-              </th>
+              <OverlayTrigger placement="top" overlay={this.tooltip("Wins")}>
+                <th onClick={() => this.onClickHandler("wins")}>Wins</th>
+              </OverlayTrigger>
+              <OverlayTrigger placement="top" overlay={this.tooltip("Losses")}>
+                <th onClick={() => this.onClickHandler("losses")}>Losses</th>
+              </OverlayTrigger>
+              <OverlayTrigger
+                placement="top"
+                overlay={this.tooltip("Total Bets")}
+              >
+                <th onClick={() => this.onClickHandler("totalBets")}>
+                  Total Bets
+                </th>
+              </OverlayTrigger>
+              <OverlayTrigger
+                placement="top"
+                overlay={this.tooltip("Win Percentage")}
+              >
+                <th onClick={() => this.onClickHandler("winPercentage")}>
+                  Win Percentage
+                </th>
+              </OverlayTrigger>
+              <OverlayTrigger
+                placement="top"
+                overlay={this.tooltip("Token Count")}
+              >
+                <th onClick={() => this.onClickHandler("availableBalance")}>
+                  Tokens
+                </th>
+              </OverlayTrigger>
             </tr>
           </thead>
           <tbody>{this.sortBySelector()}</tbody>
