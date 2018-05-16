@@ -163,11 +163,21 @@ class Bet extends React.Component {
   }
 
   async acceptBet() {
+    let body = {
+      owner: this.props.bet.creator,
+      partner: localStorage.id,
+      bet: this.props.bet.id
+    };
     try {
       const data = await axios.post(`http://localhost:1337/api/bets/accept`, {
         betId: this.props.bet.id,
         myId: localStorage.id
       });
+      // trigger socket notification here as well
+      await axios.post(
+        `http://localhost:1337/api/notifications/betAccepted`,
+        body
+      );
       if (data.status === 200) {
         if (data.data.changedRows) {
           this.props.acceptBet(

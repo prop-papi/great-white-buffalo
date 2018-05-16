@@ -27,11 +27,11 @@ const selectAllUsersInClub = async (clubID, currUser) => {
 };
 
 const getFriends = async user => {
-  const query = `SELECT u1.username AS user1, u2.username AS user2 FROM Friends
+  const query = `SELECT u1.username AS user1, u2.username AS user2, Friends.status FROM Friends
   inner join Users u1 on u1.id = user_1
   inner join Users u2 on u2.id = user_2
   WHERE (Friends.user_1 = ? OR Friends.user_2 = ?)
-  AND Friends.status = 1;`;
+  AND Friends.status in (0, 1);`;
 
   try {
     return await mysqldb.query(query, [user, user]);
@@ -43,7 +43,7 @@ const getFriends = async user => {
 
 const addFriend = async (user_1, user_2, action_user) => {
   const query = `INSERT INTO Friends (user_1, user_2, Friends.status, action_user)
-  VALUES (?, ?, 1, ?);`;
+  VALUES (?, ?, 0, ?);`;
   try {
     return await mysqldb.query(query, [user_1, user_2, action_user]);
   } catch (err) {
@@ -99,6 +99,16 @@ const updateDefaultClub = async (user, club) => {
   }
 };
 
+const updateFriendship = async (user1, user2, status) => {
+  const query = `UPDATE Friends SET status=${status} WHERE (user_1=${user1} AND user_2=${user2}) OR (user_1=${user2} AND user_2=${user1});`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.selectUser = selectUser;
 module.exports.getBalance = getBalance;
 module.exports.updateDefaultClub = updateDefaultClub;
@@ -107,3 +117,4 @@ module.exports.getFriends = getFriends;
 module.exports.toggleBlockFriends = toggleBlockFriends;
 module.exports.addFriend = addFriend;
 module.exports.removeFriend = removeFriend;
+module.exports.updateFriendship = updateFriendship;

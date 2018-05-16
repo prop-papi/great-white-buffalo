@@ -21,22 +21,18 @@ router.get("/:id", async function(req, res) {
     });
     // grab all data for each club in array and assign to global object
     let clubsData = await clubsdb.selectAllClubsData(myClubs);
-    globalData["clubs"] = JSON.parse(JSON.stringify(clubsData));
+    globalData["clubs"] = clubsData;
     let betsData = await betsdb.selectAllBetsFromClubsList(
       myClubs,
       req.params.id
     );
-    globalData["bets"] = JSON.parse(JSON.stringify(betsData));
+    globalData["bets"] = betsData;
     let balances = await usersdb.getBalance(req.params.id);
-    globalData["balances"] = JSON.parse(JSON.stringify(balances));
+    globalData["balances"] = balances;
     let globalClub = await clubsdb.selectGlobalClub();
-    globalData["globalClub"] = JSON.parse(JSON.stringify(globalClub));
+    globalData["globalClub"] = globalClub;
     let defaultClub = await clubsdb.selectDefaultClub(req.params.id);
-    globalData["defaultClub"] = JSON.parse(JSON.stringify(defaultClub));
-    let notifications = await notificationsdb.selectUsersNotifications(
-      req.params.id
-    );
-    globalData["notifications"] = JSON.parse(JSON.stringify(notifications));
+    globalData["defaultClub"] = defaultClub;
 
     // send response back to client
     res.json(globalData);
@@ -54,9 +50,9 @@ router.get("/local/:club", async function(req, res) {
   try {
     // grab all day for local object
     let defaultClub = await clubsdb.selectSingleClubData(req.params.club);
-    localData["club"] = JSON.parse(JSON.stringify(defaultClub[0]));
+    localData["club"] = defaultClub[0];
     let lounges = await loungesdb.selectAllLoungesInClub(req.params.club);
-    localData["lounges"] = JSON.parse(JSON.stringify(lounges));
+    localData["lounges"] = lounges;
 
     // send response back to client
     res.json(localData);

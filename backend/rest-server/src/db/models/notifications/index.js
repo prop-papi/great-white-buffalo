@@ -5,8 +5,8 @@ const selectUsersNotifications = async user => {
     from Notifications
     inner join Users on Users.id=Notifications.partner_id
     inner join Bets on Bets.id=Notifications.bet_id
-    where Notifications.owner_id='${user}'
-    order by Notifications.created_at desc;;`;
+    where Notifications.owner_id='${user}' and Notifications.viewed=0
+    order by Notifications.created_at desc;`;
   try {
     return await mysqldb.query(query);
   } catch (err) {
@@ -15,4 +15,48 @@ const selectUsersNotifications = async user => {
   }
 };
 
+const sendFriendRequestNotification = async (user, partner) => {
+  const query = `INSERT INTO Notifications (owner_id, partner_id, type) VALUES ('${user}', '${partner}', 2);`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const friendRequestResponseNotification = async (user, partner, type) => {
+  const query = `INSERT INTO Notifications (owner_id, partner_id, type) VALUES ('${user}', '${partner}', '${type}');`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const notificationViewed = async id => {
+  const query = `UPDATE Notifications SET viewed=1 WHERE id=${id}`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const insertBetNotification = async (owner, partner, bet) => {
+  const query = `INSERT INTO Notifications (owner_id, partner_id, type, bet_id) VALUES ('${owner}', '${partner}', 3, '${bet}');`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+module.exports.sendFriendRequestNotification = sendFriendRequestNotification;
 module.exports.selectUsersNotifications = selectUsersNotifications;
+module.exports.friendRequestResponseNotification = friendRequestResponseNotification;
+module.exports.notificationViewed = notificationViewed;
+module.exports.insertBetNotification = insertBetNotification;

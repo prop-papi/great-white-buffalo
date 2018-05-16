@@ -26,3 +26,7 @@
   padding-top: 10px;
   padding-left: 10px;
 }
+
+.pending-message {
+  color: rgb(115, 139, 215);
+}

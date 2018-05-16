@@ -3,6 +3,7 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 
 const usersdb = require("../../db/models/users/index.js");
+const notificationsdb = require("../../db/models/notifications/index.js");
 
 router.get("/selected", async (req, res) => {
   const username = req.query.username;
@@ -45,6 +46,7 @@ router.post("/addFriend", async (req, res) => {
   const { user_1, user_2, action_user } = req.body;
   try {
     await usersdb.addFriend(user_1, user_2, action_user);
+    await notificationsdb.sendFriendRequestNotification(user_2, user_1);
     res.status(201).send();
   } catch (err) {
     console.log("err ", err);

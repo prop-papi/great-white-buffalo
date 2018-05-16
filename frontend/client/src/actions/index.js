@@ -12,6 +12,10 @@ export const setUserPaneData = (userPaneData, dispatch) => {
   return dispatch({ type: "USER_PANE_DATA", userPaneData });
 };
 
+export const setNotifications = (notificationsData, dispatch) => {
+  dispatch({ type: "NOTIFICATIONS_DATA", notificationsData });
+};
+
 export const updateUserPaneData = userPaneData => dispatch => {
   dispatch({ type: "USER_PANE_DATA", userPaneData });
 };
@@ -22,8 +26,12 @@ export const fetchHomeData = (id, club) => async dispatch => {
   const localData = await axios.get(
     `http://localhost:1337/api/users/local/${club}`
   );
+  const notifications = await axios.get(
+    `http://localhost:1337/api/notifications/${id}`
+  );
   setGlobalData(globalData.data, dispatch);
   setLocalData(localData.data, dispatch);
+  setNotifications(notifications.data.notifications, dispatch);
   setUserPaneData({ showUsers: true, didSelectUser: false }, dispatch);
 };
 
@@ -32,6 +40,13 @@ export const updateLocalData = club => async dispatch => {
     `http://localhost:1337/api/users/local/${club}`
   );
   setLocalData(localData.data, dispatch);
+};
+
+export const updateNotifications = id => async dispatch => {
+  const notifications = await axios.get(
+    `http://localhost:1337/api/notifications/${id}`
+  );
+  setNotifications(notifications.data.notifications, dispatch);
 };
 
 export const updateBalances = (
