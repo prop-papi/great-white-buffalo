@@ -6,6 +6,7 @@ const notificationsRouter = require("./../components/notifications/");
 const usersRouter = require("../components/users/");
 const loungesRouter = require("../components/lounges");
 const messageRouter = require("../components/chat/");
+const leaderboardRouter = require("../components/leaderboard/");
 const userPaneRouter = require("../components/users-pane/");
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router
   .use("/notifications", notificationsRouter)
   .use("/lounges", loungesRouter)
   .use("/message", messageRouter)
+  .use("/leaderboard", leaderboardRouter)
   .use("/userpane", userPaneRouter);
 
 module.exports = router;

@@ -1,22 +1,112 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { FormControl, Grid, Row, Col } from "react-bootstrap";
+import { Table } from "react-bootstrap";
+import axios from "axios";
 
 // custom css (if needed)
-// import "./Leaderboard.css"
+import "./Leaderboard.css";
 
 class Leaderboard extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.sortBySelector = this.sortBySelector.bind(this);
+    this.onClickHandler = this.onClickHandler.bind(this);
+
+    this.state = {
+      wins: [],
+      losses: [],
+      totalBets: [],
+      winPercentage: [],
+      availableBalance: [],
+      sortBy: "wins"
+    };
+  }
+
+  sortBySelector() {
+    let { sortBy, wins } = this.state;
+
+    return sortBy ? (
+      this.state[sortBy].map((entry, i) => (
+        <tr key={i}>
+          <td>{i + 1}</td>
+          <td>{entry.username}</td>
+          <td>{entry.reputation}</td>
+          <td>{entry.wins} </td>
+          <td>{entry.losses}</td>
+          <td>{entry.totalBets}</td>
+          <td>
+            {parseFloat(Math.trunc(entry.win_ratio * 10000) / 100).toFixed(2)}%
+          </td>
+          <td>{entry.available_balance}</td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td>{1}</td>
+        <td>{"Great White Buff"}</td>
+        <td>{100} </td>
+        <td>{0}</td>
+        <td>{0}</td>
+        <td>{0}</td>
+        <td>{"100%"}</td>
+        <td>{"infinite"}</td>
+      </tr>
+    );
+  }
+
+  onClickHandler(sortByValue) {
+    this.setState({
+      sortBy: sortByValue
+    });
+  }
+
+  componentDidMount() {
+    axios
+      .get("http://localhost:1337/api/leaderboard/")
+      .then(res => {
+        console.log("res: ", res);
+        this.setState({
+          wins: res.data.wins,
+          losses: res.data.losses,
+          totalBets: res.data.totalBets,
+          winPercentage: res.data.win_ratio,
+          availableBalance: res.data.available_balance
+        });
+      })
+      .catch(err => {
+        console.log("Server error: ", err);
+      });
+    // setTimeout(() => {
+    //   this.setState({ sortBy: "wins" });
+    // }, 2000);
   }
 
   render() {
     return (
-      <div>
-        <div>hello</div>
+      <div className="leaderboard-container">
+        <Table striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Username</th>
+              <th>Reputation</th>
+              <th onClick={() => this.onClickHandler("wins")}>Wins</th>
+              <th onClick={() => this.onClickHandler("losses")}>Losses</th>
+              <th onClick={() => this.onClickHandler("totalBets")}>
+                Total Bets
+              </th>
+              <th onClick={() => this.onClickHandler("winPercentage")}>
+                Win Percentage
+              </th>
+              <th onClick={() => this.onClickHandler("availableBalance")}>
+                Tokens
+              </th>
+            </tr>
+          </thead>
+          <tbody>{this.sortBySelector()}</tbody>
+        </Table>
       </div>
     );
   }

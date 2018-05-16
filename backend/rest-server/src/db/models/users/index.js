@@ -109,6 +109,20 @@ const updateFriendship = async (user1, user2, status) => {
   }
 };
 
+const getTop100UsersBy = async columnName => {
+  const query = `
+    SELECT username, wins, totalBets - wins AS losses, totalBets, win_ratio, reputation, available_balance
+    FROM Users
+    ORDER BY ${columnName} DESC
+    LIMIT 100`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.selectUser = selectUser;
 module.exports.getBalance = getBalance;
 module.exports.updateDefaultClub = updateDefaultClub;
@@ -118,3 +132,4 @@ module.exports.toggleBlockFriends = toggleBlockFriends;
 module.exports.addFriend = addFriend;
 module.exports.removeFriend = removeFriend;
 module.exports.updateFriendship = updateFriendship;
+module.exports.getTop100UsersBy = getTop100UsersBy;
