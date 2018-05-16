@@ -57,3 +57,7 @@
   margin: 10px 10px 10px 10px;
   color: black;
 }
+
+.user-in-message:hover {
+  cursor: pointer;
+}

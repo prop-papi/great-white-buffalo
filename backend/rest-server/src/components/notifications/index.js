@@ -57,4 +57,20 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/betAccepted", async (req, res) => {
+  // set notification sent to viewed
+  try {
+    await notificationsdb.insertBetNotification(
+      req.body.owner,
+      req.body.partner,
+      req.body.bet
+    );
+    res.status(200).send();
+  } catch (err) {
+    console.log("error", err);
+    res.status(500).send("Database error.");
+    return err;
+  }
+});
+
 module.exports = router;

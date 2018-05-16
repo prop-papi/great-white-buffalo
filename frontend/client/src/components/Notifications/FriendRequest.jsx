@@ -17,11 +17,30 @@ class FriendRequest extends Component {
 
     this.acceptFriendRequest = this.acceptFriendRequest.bind(this);
     this.declineFriendRequest = this.declineFriendRequest.bind(this);
+    this.displaySideProfile = this.displaySideProfile.bind(this);
+  }
+
+  displaySideProfile(target) {
+    let params = {
+      username: target.currentTarget.innerHTML
+    };
+    this.props.close();
+    axios
+      .get("http://localhost:1337/api/userpane/selected", { params })
+      .then(response => {
+        //this.setState({ selectedUser: response.data[0] });
+        let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
+        newUserPane.didSelectUser = true;
+        newUserPane.selectedUser = response.data[0];
+        this.props.updateUserPaneData(newUserPane);
+        this.props.close();
+      })
+      .catch(err => {
+        console.log("Error: ", err);
+      });
   }
 
   async acceptFriendRequest() {
-    // update notifications table to viewed = 1, trigger a new notification, update friends table
-    // update accepted
     let body = {
       user1: this.props.data.owner_id,
       user2: this.props.data.partner_id,
@@ -30,6 +49,7 @@ class FriendRequest extends Component {
     };
     this.setState({ accepted: true, inputRecieved: true });
     try {
+      // trigger socket notification here
       const data = await axios.post(
         `http://localhost:1337/api/notifications/friendRequestResponse`,
         body
@@ -50,6 +70,7 @@ class FriendRequest extends Component {
     };
     this.setState({ inputRecieved: true });
     try {
+      // trigger socket notification here
       const data = await axios.post(
         `http://localhost:1337/api/notifications/friendRequestResponse`,
         body
@@ -74,7 +95,15 @@ class FriendRequest extends Component {
             </li>
             <li className="li li-message">
               <p className="notification-message-request">
-                {this.props.data.partner_username} wants to be your friend.
+                <strong>
+                  <span
+                    className="user-in-message"
+                    onClick={this.displaySideProfile}
+                  >
+                    {this.props.data.partner_username}
+                  </span>
+                </strong>{" "}
+                wants to be your friend.
               </p>
             </li>
             <li className="button-list-item">
@@ -113,13 +142,29 @@ class FriendRequest extends Component {
               <p className="notification-message">
                 {this.state.accepted ? (
                   <span>
-                    You accepted {this.props.data.partner_username}'s friend
-                    request!
+                    You accepted{" "}
+                    <strong>
+                      <span
+                        className="user-in-message"
+                        onClick={this.displaySideProfile}
+                      >
+                        {this.props.data.partner_username}
+                      </span>'s
+                    </strong>{" "}
+                    friend request!
                   </span>
                 ) : (
                   <span>
-                    You declined {this.props.data.partner_username}'s friend
-                    request..
+                    You declined{" "}
+                    <strong>
+                      <span
+                        className="user-in-message"
+                        onClick={this.displaySideProfile}
+                      >
+                        {this.props.data.partner_username}
+                      </span>'s
+                    </strong>{" "}
+                    friend request..
                   </span>
                 )}
               </p>
@@ -134,14 +179,15 @@ class FriendRequest extends Component {
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
-    // global: state.global
+    userPane: state.userPane
   };
 }
 
 function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
-      updateNotifications: updateNotifications
+      updateNotifications: updateNotifications,
+      updateUserPaneData: updateUserPaneData
     },
     dispatch
   );

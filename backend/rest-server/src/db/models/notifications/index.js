@@ -45,7 +45,18 @@ const notificationViewed = async id => {
   }
 };
 
+const insertBetNotification = async (owner, partner, bet) => {
+  const query = `INSERT INTO Notifications (owner_id, partner_id, type, bet_id) VALUES ('${owner}', '${partner}', 3, '${bet}');`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.sendFriendRequestNotification = sendFriendRequestNotification;
 module.exports.selectUsersNotifications = selectUsersNotifications;
 module.exports.friendRequestResponseNotification = friendRequestResponseNotification;
 module.exports.notificationViewed = notificationViewed;
+module.exports.insertBetNotification = insertBetNotification;

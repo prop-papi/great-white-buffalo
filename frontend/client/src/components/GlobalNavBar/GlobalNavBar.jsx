@@ -13,6 +13,8 @@ import NotificationMessage from "./../Notifications/NotificationMessage.jsx";
 import EmptyNotifications from "./../Notifications/EmptyNotifications.jsx";
 import FriendRequest from "./../Notifications/FriendRequest.jsx";
 import BetResolveMessage from "./../Notifications/BetResolveMessage.jsx";
+import BetResultsMessage from "./../Notifications/BetResultsMessage.jsx";
+import BetAcceptMessage from "./../Notifications/BetAcceptMessage.jsx";
 import BetResolveInput from "./../Notifications/BetResolveInput.jsx";
 
 class GlobalNavBar extends Component {
@@ -27,6 +29,7 @@ class GlobalNavBar extends Component {
     this.showMenu = this.showMenu.bind(this);
     this.showNotificationList = this.showNotificationList.bind(this);
     this.handleNavItemCollapse = this.handleNavItemCollapse.bind(this);
+    this.closeNotifications = this.closeNotifications.bind(this);
   }
 
   componentWillMount() {
@@ -39,6 +42,10 @@ class GlobalNavBar extends Component {
       this.handleNavItemCollapse,
       false
     );
+  }
+
+  closeNotifications() {
+    this.setState({ showNotifications: false });
   }
 
   handleNavItemCollapse(e) {
@@ -113,17 +120,45 @@ class GlobalNavBar extends Component {
                     n.type === 0.2 ||
                     n.type === 0.3
                   ) {
-                    return <NotificationMessage key={n.id} data={n} />;
+                    return (
+                      <NotificationMessage
+                        key={n.id}
+                        data={n}
+                        close={this.closeNotifications}
+                      />
+                    );
                   } else if (n.type === 2) {
                     return (
                       <FriendRequest
                         key={n.id}
                         data={n}
-                        click={this.handleFriendRequestClick}
+                        close={this.closeNotifications}
                       />
                     );
                   } else if (n.type === 1) {
-                    return <BetResolveInput key={n.id} data={n} />;
+                    return (
+                      <BetResolveMessage
+                        key={n.id}
+                        data={n}
+                        close={this.closeNotifications}
+                      />
+                    );
+                  } else if (n.type === 3) {
+                    return (
+                      <BetAcceptMessage
+                        key={n.id}
+                        data={n}
+                        close={this.closeNotifications}
+                      />
+                    );
+                  } else if (n.type === 4 || n.type === 4.1) {
+                    return (
+                      <BetResultsMessage
+                        key={n.id}
+                        data={n}
+                        close={this.closeNotifications}
+                      />
+                    );
                   }
                 })}
               </div>

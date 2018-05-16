@@ -6,10 +6,9 @@ import { updateUserPaneData } from "../../actions";
 import axios from "axios";
 import "./index.css";
 
-class BetResolveMessage extends Component {
+class BetAcceptMessage extends Component {
   constructor(props) {
     super(props);
-
     this.displaySideProfile = this.displaySideProfile.bind(this);
   }
 
@@ -45,8 +44,9 @@ class BetResolveMessage extends Component {
             />
           </li>
           <li className="li li-message">
-            <p className="bet-resolve-message">
-              Your bet: <strong>{this.props.data.description}</strong> with{" "}
+            <p className="notification-message">
+              Your bet: <strong>{this.props.data.description}</strong> was
+              accepted by{" "}
               <strong>
                 <span
                   className="user-in-message"
@@ -54,9 +54,7 @@ class BetResolveMessage extends Component {
                 >
                   {this.props.data.partner_username}
                 </span>
-              </strong>{" "}
-              is completed and ready to be resolved! Review your bet to give us
-              the outcome.
+              </strong>
             </p>
           </li>
         </ul>
@@ -82,5 +80,5 @@ function bindActionsToDispatch(dispatch) {
 }
 
 export default connect(mapStateToProps, bindActionsToDispatch)(
-  BetResolveMessage
+  BetAcceptMessage
 );

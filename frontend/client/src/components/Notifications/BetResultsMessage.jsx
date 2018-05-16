@@ -6,7 +6,7 @@ import { updateUserPaneData } from "../../actions";
 import axios from "axios";
 import "./index.css";
 
-class NotificationMessage extends Component {
+class BetResultseMessage extends Component {
   constructor(props) {
     super(props);
 
@@ -26,6 +26,7 @@ class NotificationMessage extends Component {
         newUserPane.didSelectUser = true;
         newUserPane.selectedUser = response.data[0];
         this.props.updateUserPaneData(newUserPane);
+        this.props.close();
       })
       .catch(err => {
         console.log("Error: ", err);
@@ -33,7 +34,7 @@ class NotificationMessage extends Component {
   }
 
   render() {
-    if (this.props.data.type === 0) {
+    if (this.props.data.type === 4) {
       return (
         <div className="notification-wrapper">
           <ul className="horizontal-list notifications-list" role="navigation">
@@ -45,7 +46,9 @@ class NotificationMessage extends Component {
               />
             </li>
             <li className="li li-message">
-              <p className="notification-message">
+              <p className="bet-resolve-message">
+                Results for bet: <strong>{this.props.data.description}</strong>{" "}
+                with{" "}
                 <strong>
                   <span
                     className="user-in-message"
@@ -54,13 +57,13 @@ class NotificationMessage extends Component {
                     {this.props.data.partner_username}
                   </span>
                 </strong>{" "}
-                accepted your friend request!
+                are in - you WON, congrats!!!
               </p>
             </li>
           </ul>
         </div>
       );
-    } else if (this.props.data.type === 0.1) {
+    } else if (this.props.data.type === 4.1) {
       return (
         <div className="notification-wrapper">
           <ul className="horizontal-list notifications-list" role="navigation">
@@ -72,35 +75,9 @@ class NotificationMessage extends Component {
               />
             </li>
             <li className="li li-message">
-              <p className="notification-message">
-                You accepted{" "}
-                <strong>
-                  <span
-                    className="user-in-message"
-                    onClick={this.displaySideProfile}
-                  >
-                    {this.props.data.partner_username}
-                  </span>'s
-                </strong>{" "}
-                friend request!
-              </p>
-            </li>
-          </ul>
-        </div>
-      );
-    } else if (this.props.data.type === 0.2) {
-      return (
-        <div className="notification-wrapper">
-          <ul className="horizontal-list notifications-list" role="navigation">
-            <li className="logo li">
-              <Image
-                className="notification-logo"
-                src={this.props.data.partner_picture}
-                rounded
-              />
-            </li>
-            <li className="li li-message">
-              <p className="notification-message">
+              <p className="bet-resolve-message">
+                Results for bet: <strong>{this.props.data.description}</strong>{" "}
+                with{" "}
                 <strong>
                   <span
                     className="user-in-message"
@@ -109,35 +86,7 @@ class NotificationMessage extends Component {
                     {this.props.data.partner_username}
                   </span>
                 </strong>{" "}
-                declined your friend request...
-              </p>
-            </li>
-          </ul>
-        </div>
-      );
-    } else {
-      return (
-        <div className="notification-wrapper">
-          <ul className="horizontal-list notifications-list" role="navigation">
-            <li className="logo li">
-              <Image
-                className="notification-logo"
-                src={this.props.data.partner_picture}
-                rounded
-              />
-            </li>
-            <li className="li li-message">
-              <p className="notification-message">
-                You declined{" "}
-                <strong>
-                  <span
-                    className="user-in-message"
-                    onClick={this.displaySideProfile}
-                  >
-                    {this.props.data.partner_username}
-                  </span>'s
-                </strong>{" "}
-                friend request..
+                are in - you LOST, better luck next time...
               </p>
             </li>
           </ul>
@@ -164,5 +113,5 @@ function bindActionsToDispatch(dispatch) {
 }
 
 export default connect(mapStateToProps, bindActionsToDispatch)(
-  NotificationMessage
+  BetResultseMessage
 );
