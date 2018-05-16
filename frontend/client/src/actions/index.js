@@ -42,6 +42,14 @@ export const updateLocalData = club => async dispatch => {
   setLocalData(localData.data, dispatch);
 };
 
+export const setMainComponent = (localData, component) => dispatch => {
+  const l = {
+    ...localData,
+    currentMainComponent: component
+  };
+  setLocalData(l, dispatch);
+};
+
 export const updateNotifications = id => async dispatch => {
   const notifications = await axios.get(
     `http://localhost:1337/api/notifications/${id}`

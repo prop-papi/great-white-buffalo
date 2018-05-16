@@ -7,6 +7,7 @@ import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
 import {
   fetchHomeData,
+  setMainComponent,
   addBet,
   cancelMyBet,
   acceptBet,
@@ -17,6 +18,7 @@ import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
 import ESportVid from "../ESport/ESportVid";
+import Chat from "../Chat/Chat.jsx";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import io from "socket.io-client";
@@ -28,47 +30,73 @@ const betSocket = io("http://localhost:3000/bets");
 const activeUserSocket = io("http://localhost:3000/activeUsers");
 
 class Home extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    this.mainComponentRender = this.mainComponentRender.bind(this);
+
     this.state = {
       usersOnline: {}
     };
   }
+
+  mainComponentRender(componentName) {
+    console.log("in the function");
+    if (componentName === "bets") {
+      return <SearchBets betSocket={this.props.betSocket} />;
+    } else if (componentName === "chat") {
+      return <Chat />;
+    } else if (componentName === "video") {
+      return <EsportVid />;
+    } else {
+      return <Loading />;
+    }
+  }
+
   async componentDidMount() {
     // set app state here
-    await this.props.fetchHomeData(localStorage.id, localStorage.default_club);
+    const {
+      global,
+      local,
+      fetchHomeData,
+      setMainComponent,
+      addBet,
+      addLounge,
+      cancelMyBet,
+      acceptBet,
+      voteOnBet
+    } = this.props;
+
+    await fetchHomeData(localStorage.id, localStorage.default_club);
+
+    console.log("local: ", local);
+    console.log("global: ", global);
 
     betSocket.emit("user.enter", {
       user: localStorage.username,
-      clubList: this.props.global.globalData.clubs
+      clubList: global.globalData.clubs
     });
 
     betSocket.on("bet.create", newBet => {
-      this.props.addBet(this.props.global.globalData, newBet);
+      addBet(global.globalData, newBet);
     });
 
     betSocket.on("lounge.create", newLounge => {
       console.log("i heard a new lounge ", newLounge);
-      this.props.addLounge(this.props.local.localData, newLounge);
+      addLounge(local.localData, newLounge);
     });
 
     betSocket.on("bet.cancel", newBet => {
-      this.props.cancelMyBet(this.props.global.globalData, newBet, 0);
+      cancelMyBet(global.globalData, newBet, 0);
     });
 
     betSocket.on("bet.accept", (newBet, acceptorId) => {
-      this.props.acceptBet(
-        this.props.global.globalData,
-        newBet,
-        0,
-        "" + acceptorId,
-        localStorage.id
-      );
+      acceptBet(global.globalData, newBet, 0, "" + acceptorId, localStorage.id);
     });
 
     betSocket.on("bet.vote", (newBet, voterId, vote, whoAmI) => {
-      this.props.voteOnBet(
-        this.props.global.globalData,
+      voteOnBet(
+        global.globalData,
         newBet,
         newBet.wager,
         vote,
@@ -132,8 +160,11 @@ class Home extends Component {
                 md={7}
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
               >
-                <MainNavBar betSocket={betSocket} />
+                <MainNavBar />
                 <br />
+                {this.mainComponentRender(
+                  this.props.local.localData.currentMainComponent
+                )}
               </Col>
               <Col
                 xs={2}
@@ -173,7 +204,8 @@ function bindActionsToDispatch(dispatch) {
       cancelMyBet: cancelMyBet,
       acceptBet: acceptBet,
       voteOnBet: voteOnBet,
-      addLounge: addLounge
+      addLounge: addLounge,
+      setMainComponent: setMainComponent
     },
     dispatch
   );
