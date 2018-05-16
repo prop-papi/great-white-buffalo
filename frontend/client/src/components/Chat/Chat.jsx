@@ -78,14 +78,14 @@ class Chat extends Component {
     if (e.key === "Enter") {
       socket.emit("message.send", payload);
       this.setState({ text: "" });
-      axios
-        .post("/message", payload)
-        .then(response => {
-          console.log("Server response: ", response);
-        })
-        .catch(error => {
-          console.log("Server error: ", error);
-        });
+      // axios
+      //   .post("/message", payload)
+      //   .then(response => {
+      //     console.log("Server response: ", response);
+      //   })
+      //   .catch(error => {
+      //     console.log("Server error: ", error);
+      //   });
     }
   }
 
