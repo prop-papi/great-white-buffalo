@@ -29,6 +29,7 @@ import UserPane from "../UserPane/UserPane";
 
 const betSocket = io("http://localhost:3000/bets");
 const activeUserSocket = io("http://localhost:3000/activeUsers");
+const notificationsSocket = io("http://localhost:3000/notifications");
 
 class Home extends Component {
   constructor(props) {
@@ -138,7 +139,10 @@ class Home extends Component {
                 align="center"
                 style={{ backgroundColor: "rgb(37,39,44)", height: "7vh" }}
               >
-                <GlobalNavBar history={this.props.history} />
+                <GlobalNavBar
+                  history={this.props.history}
+                  notificationsSocket={notificationsSocket}
+                />
               </Col>
             </Row>
             <Row>
@@ -166,7 +170,10 @@ class Home extends Component {
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
                 className="main-column"
               >
-                <MainNavBar />
+                <MainNavBar
+                  betSocket={betSocket}
+                  notificationsSocket={notificationsSocket}
+                />
                 <br />
                 {this.mainComponentRender(
                   this.props.local.localData.currentMainComponent

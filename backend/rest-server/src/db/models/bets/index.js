@@ -111,6 +111,46 @@ const voteWin = async (betId, updateField, checkField) => {
   }
 };
 
+const getActiveBets = async () => {
+  const query = `SELECT id, status, end_at, creator, challenger FROM Bets WHERE status='active';`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const getPendingBets = async () => {
+  const query = `SELECT id, status, end_at, creator FROM Bets WHERE status='pending';`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const updateToVotingBets = async ids => {
+  const query = `UPDATE Bets SET status='voting' WHERE id in (${[...ids]});`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const updateToExpiredBets = async ids => {
+  const query = `UPDATE Bets SET status='expired' WHERE id in (${[...ids]});`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.insertNewBet = insertNewBet;
 module.exports.selectAllBetsFromClubsList = selectAllBetsFromClubsList;
 module.exports.selectAllBetsFromClub = selectAllBetsFromClub;
@@ -118,3 +158,7 @@ module.exports.cancelBet = cancelBet;
 module.exports.acceptBet = acceptBet;
 module.exports.voteLoss = voteLoss;
 module.exports.voteWin = voteWin;
+module.exports.getActiveBets = getActiveBets;
+module.exports.getPendingBets = getPendingBets;
+module.exports.updateToVotingBets = updateToVotingBets;
+module.exports.updateToExpiredBets = updateToExpiredBets;

@@ -1,9 +1,13 @@
+require("dotenv").config();
 const app = require("express")();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
+const _ = require("underscore");
 const redis = require("redis");
 const redisClient = require("../../redis-server/src/index.js").client;
+const schedule = require("node-schedule");
 const { getListLength, renderRecent50 } = require("../helpers/index.js");
+const cronUtils = require("../helpers/cronUtils");
 
 io.listen(3000, err => {
   if (err) throw err;
@@ -52,7 +56,7 @@ const chat = io.of("/chat").on("connection", socket => {
 });
 
 // notification namespace
-const notification = io.of("/notification").on("connection", socket => {
+const notification = io.of("/notifications").on("connection", socket => {
   // disconnect
   socket.on("disconnect", () => {
     console.log("user disconnected");
@@ -146,3 +150,15 @@ const friendOnline = io.of("/friendOnline").on("connection", socket => {
     console.log("received error: ", err);
   });
 });
+
+let cron1 = schedule.scheduleJob("30 * * * *", async function() {
+  cronUtils.updateActiveBetsAndEmit();
+  cronUtils.updatePendingBetsAndEmit();
+});
+
+let cron2 = schedule.scheduleJob("0 * * * *", async function() {
+  cronUtils.updateActiveBetsAndEmit();
+  cronUtils.updatePendingBetsAndEmit();
+});
+
+module.exports.io = io;
