@@ -47,7 +47,7 @@ class Home extends Component {
     } else if (componentName === "chat") {
       return <Chat />;
     } else if (componentName === "video") {
-      return <EsportVid />;
+      return <ESportVid />;
     } else {
       return <Loading />;
     }

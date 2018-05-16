@@ -200,7 +200,8 @@ class Chat extends Component {
             type="text"
             value={this.state.text}
             placeholder={`Chatting in ${
-              this.props.currentLounge.currentLounge.name
+              "hello"
+              // this.props.currentLounge.currentLounge.name
             }`}
             // could also dynamically render "Lounge" vs a "Direct Message"
             // Chatting in  LOUNGE_NAME
