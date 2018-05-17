@@ -327,7 +327,7 @@ class CreateBet extends React.Component {
             <span>
               <ButtonToolbar className="testing">
                 <DropdownButton
-                  title={this.state.clubs[this.state.club]}
+                  title={this.state.clubs[this.state.club] + " "}
                   id={1}
                 >
                   {Object.keys(this.state.clubs).map(c => (

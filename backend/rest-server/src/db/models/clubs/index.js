@@ -73,9 +73,42 @@ const insertClub = async (name, security, logo, adminId) => {
   }
 };
 
+const selectAllJoinableClubsForUser = async user => {
+  const query = `SELECT c.id, c.name, c.security, c.is_archived, c.logo, c.admin_id FROM Clubs c LEFT JOIN UsersClubs uc ON c.id = uc.club AND uc.user = ${user} WHERE uc.club IS NULL;`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const insertIntoUsersClubs = async data => {
+  const query = `INSERT INTO UsersClubs (club, user) VALUES ?;`;
+  try {
+    return await mysqldb.query(query, [data]);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
+const removeFromUsersClubs = async data => {
+  const query = `DELETE FROM UsersClubs WHERE (club, user) IN (?);`;
+  try {
+    return await mysqldb.query(query, [data]);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.selectUsersClubs = selectUsersClubs;
 module.exports.selectAllClubsData = selectAllClubsData;
 module.exports.selectSingleClubData = selectSingleClubData;
 module.exports.selectGlobalClub = selectGlobalClub;
 module.exports.selectDefaultClub = selectDefaultClub;
 module.exports.insertClub = insertClub;
+module.exports.selectAllJoinableClubsForUser = selectAllJoinableClubsForUser;
+module.exports.insertIntoUsersClubs = insertIntoUsersClubs;
+module.exports.removeFromUsersClubs = removeFromUsersClubs;

@@ -13,7 +13,6 @@ router.get("/selected", async (req, res) => {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Database error.");
-    return err;
   }
 });
 
@@ -25,7 +24,6 @@ router.get("/allUsers", async (req, res) => {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Database error.");
-    return err;
   }
 });
 
@@ -38,7 +36,6 @@ router.get("/friends", async (req, res) => {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Database error.");
-    return err;
   }
 });
 

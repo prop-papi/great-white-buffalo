@@ -39,7 +39,6 @@ router.get("/:id", async function(req, res) {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Database error.");
-    return err;
   }
 });
 
@@ -61,7 +60,6 @@ router.get("/local/:club", async function(req, res) {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Database error.");
-    return err;
   }
 });
 
