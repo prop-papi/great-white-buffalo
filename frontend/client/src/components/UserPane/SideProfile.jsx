@@ -18,7 +18,8 @@ class SideProfile extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.userPane.selectedUser.username === localStorage.username) {
       return {
-        isMe: true
+        isMe: true,
+        myBets: []
       };
     } else {
       return {
@@ -34,7 +35,7 @@ class SideProfile extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (this.state.isMe !== prevState.isMe) {
+    if (this.state.isMe === false && this.state.isMe !== prevState.isMe) {
       await this.findMyBets();
     }
   }
@@ -112,7 +113,6 @@ class SideProfile extends Component {
   }
 
   render() {
-    console.log("render");
     let friendText = "";
     if (this.state.isFriend === "true") {
       friendText = "Unfriend";
