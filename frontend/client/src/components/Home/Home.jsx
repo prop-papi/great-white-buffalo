@@ -47,21 +47,19 @@ class Home extends Component {
   }
 
   mainComponentRender(componentName) {
-    if (componentName === "bets") {
-      return (
-        <SearchBets
-          betSocket={betSocket}
-          notificationsSocket={notificationsSocket}
-        />
-      );
-    } else if (componentName === "chat") {
+    if (componentName === "chat") {
       return <Chat />;
     } else if (componentName === "video") {
       return <ESportVid />;
     } else if (componentName === "leaderboard") {
       return <Leaderboard />;
     } else {
-      return <Loading />;
+      return (
+        <SearchBets
+          betSocket={betSocket}
+          notificationsSocket={notificationsSocket}
+        />
+      );
     }
   }
 
@@ -287,7 +285,6 @@ function bindActionsToDispatch(dispatch) {
       acceptBet: acceptBet,
       voteOnBet: voteOnBet,
       addLounge: addLounge,
-      setMainComponent: setMainComponent,
       updateNotifications: updateNotifications
     },
     dispatch
