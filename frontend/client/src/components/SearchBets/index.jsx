@@ -178,7 +178,12 @@ class SearchBets extends React.Component {
               title={"Open (" + this.state.myOpenBets.length + ")"}
             >
               {this.state.myOpenBets.map(b => (
-                <Bet key={b.id} bet={b} betSocket={this.props.betSocket} />
+                <Bet
+                  key={b.id}
+                  bet={b}
+                  betSocket={this.props.betSocket}
+                  notificationsSocket={this.props.notificationsSocket}
+                />
               ))}
             </Tab>
             <Tab
@@ -186,7 +191,12 @@ class SearchBets extends React.Component {
               title={"Active (" + this.state.myCurrentBets.length + ")"}
             >
               {this.state.myCurrentBets.map(b => (
-                <Bet key={b.id} bet={b} betSocket={this.props.betSocket} />
+                <Bet
+                  key={b.id}
+                  bet={b}
+                  betSocket={this.props.betSocket}
+                  notificationsSocket={this.props.notificationsSocket}
+                />
               ))}
             </Tab>
             <Tab
@@ -194,7 +204,12 @@ class SearchBets extends React.Component {
               title={"Review (" + this.state.myReviewBets.length + ")"}
             >
               {this.state.myReviewBets.map(b => (
-                <Bet key={b.id} bet={b} betSocket={this.props.betSocket} />
+                <Bet
+                  key={b.id}
+                  bet={b}
+                  betSocket={this.props.betSocket}
+                  notificationsSocket={this.props.notificationsSocket}
+                />
               ))}
             </Tab>
             <Tab
@@ -206,7 +221,12 @@ class SearchBets extends React.Component {
                 resolved!!!
               </h3>
               {this.state.myHistoricalBets.map(b => (
-                <Bet key={b.id} bet={b} betSocket={this.props.betSocket} />
+                <Bet
+                  key={b.id}
+                  bet={b}
+                  betSocket={this.props.betSocket}
+                  notificationsSocket={this.props.notificationsSocket}
+                />
               ))}
             </Tab>
             <Tab
@@ -219,12 +239,20 @@ class SearchBets extends React.Component {
               }
             >
               {this.state.openBets.map(b => (
-                <Bet key={b.id} bet={b} betSocket={this.props.betSocket} />
+                <Bet
+                  key={b.id}
+                  bet={b}
+                  betSocket={this.props.betSocket}
+                  notificationsSocket={this.props.notificationsSocket}
+                />
               ))}
             </Tab>
             <Tab eventKey={6} title="Create Bet">
               <br />
-              <CreateBet betSocket={this.props.betSocket} />
+              <CreateBet
+                betSocket={this.props.betSocket}
+                notificationsSocket={this.props.notificationsSocket}
+              />
             </Tab>
           </Tabs>
 

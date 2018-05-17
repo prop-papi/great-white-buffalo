@@ -5,6 +5,8 @@ import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
 import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   fetchHomeData,
   setMainComponent,
@@ -12,7 +14,8 @@ import {
   cancelMyBet,
   acceptBet,
   voteOnBet,
-  addLounge
+  addLounge,
+  updateNotifications
 } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
@@ -29,6 +32,7 @@ import UserPane from "../UserPane/UserPane";
 
 const betSocket = io("http://localhost:3000/bets");
 const activeUserSocket = io("http://localhost:3000/activeUsers");
+const notificationsSocket = io("http://localhost:3000/notifications");
 
 class Home extends Component {
   constructor(props) {
@@ -39,12 +43,18 @@ class Home extends Component {
     this.state = {
       usersOnline: {}
     };
+
+    this.createNotification = this.createNotification.bind(this);
   }
 
   mainComponentRender(componentName) {
-    console.log("in the function");
     if (componentName === "bets") {
-      return <SearchBets betSocket={this.props.betSocket} />;
+      return (
+        <SearchBets
+          betSocket={betSocket}
+          notificationsSocket={notificationsSocket}
+        />
+      );
     } else if (componentName === "chat") {
       return <Chat />;
     } else if (componentName === "video") {
@@ -80,7 +90,6 @@ class Home extends Component {
     });
 
     betSocket.on("lounge.create", newLounge => {
-      console.log("i heard a new lounge ", newLounge);
       addLounge(this.props.local.localData, newLounge);
     });
 
@@ -119,6 +128,65 @@ class Home extends Component {
     activeUserSocket.on("user.enter", usersOnline => {
       this.setState({ usersOnline });
     });
+
+    notificationsSocket.on(`newFriend-${localStorage.username}`, async user => {
+      await this.props.updateNotifications(localStorage.id);
+      // render some pop-up that tells you there's a new notification
+      this.createNotification(`${user} accepted your friend request!`);
+    });
+
+    notificationsSocket.on(
+      `noNewFriends-${localStorage.username}`,
+      async user => {
+        await this.props.updateNotifications(localStorage.id);
+        // render some pop-up that tells you there's a new notification
+        this.createNotification(`${user} declined your friend request :(`);
+      }
+    );
+
+    notificationsSocket.on(
+      `betAccepted-${localStorage.username}`,
+      async payload => {
+        await this.props.updateNotifications(localStorage.id);
+        // render some pop-up that tells you there's a new notification
+        this.createNotification(
+          `${payload.user} accepted your wager: ${payload.bet} in Club ${
+            payload.club
+          }!`
+        );
+      }
+    );
+
+    notificationsSocket.on(
+      `betVoting-${localStorage.username}`,
+      async (payload, bet) => {
+        await this.props.updateNotifications(localStorage.id);
+        // FOR DEREK - the bet parameter contains the entire bet object here, i'm using the payload
+        // render some pop-up that tells you there's a new notification
+        this.createNotification(
+          `Your wager: ${payload.bet} in ${payload.club} with ${
+            payload.challenger
+          } is finished! Submit the results in the Reviews tab.`
+        );
+      }
+    );
+
+    notificationsSocket.on(`betWon-${localStorage.username}`, async payload => {
+      await this.props.updateNotifications(localStorage.id);
+      // render some pop-up that tells you there's a new notification
+      this.createNotification(
+        `Congrats! You won your bet: ${payload.bet} against ${payload.loser}.`
+      );
+    });
+  }
+
+  createNotification(message) {
+    toast(message, {
+      position: "top-right",
+      autoClose: 6000,
+      hideProgressBar: false,
+      closeOnClick: true
+    });
   }
 
   betCreate(bet) {}
@@ -138,7 +206,10 @@ class Home extends Component {
                 align="center"
                 style={{ backgroundColor: "rgb(37,39,44)", height: "7vh" }}
               >
-                <GlobalNavBar history={this.props.history} />
+                <GlobalNavBar
+                  history={this.props.history}
+                  notificationsSocket={notificationsSocket}
+                />
               </Col>
             </Row>
             <Row>
@@ -147,6 +218,7 @@ class Home extends Component {
                 sm={1}
                 md={1}
                 style={{ backgroundColor: "rgb(37,39,44)", height: "93vh" }}
+                className="club-column"
               >
                 <ClubNav betSocket={betSocket} />
               </Col>
@@ -163,6 +235,7 @@ class Home extends Component {
                 sm={7}
                 md={7}
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
+                className="main-column"
               >
                 <MainNavBar />
                 <br />
@@ -181,6 +254,14 @@ class Home extends Component {
               </Col>
             </Row>
           </Grid>
+          <ToastContainer
+            position="top-right"
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+          />
+          <ToastContainer />
         </div>
       );
     } else {
@@ -209,7 +290,8 @@ function bindActionsToDispatch(dispatch) {
       acceptBet: acceptBet,
       voteOnBet: voteOnBet,
       addLounge: addLounge,
-      setMainComponent: setMainComponent
+      setMainComponent: setMainComponent,
+      updateNotifications: updateNotifications
     },
     dispatch
   );

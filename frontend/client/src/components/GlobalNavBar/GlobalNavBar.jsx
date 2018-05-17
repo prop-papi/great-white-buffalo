@@ -55,7 +55,12 @@ class GlobalNavBar extends Component {
 
   handleNavItemCollapse(e) {
     if (this.node !== undefined && this.node !== null) {
-      if (!this.node.contains(e.target)) {
+      if (
+        !this.node.contains(e.target) &&
+        e.target.className !== "fa fa-exclamation-circle nav-component" &&
+        e.target.className !==
+          "menu-dropdown nav-component glyphicon glyphicon-align-justify"
+      ) {
         this.setState({
           showNotifications: false,
           showMenu: false
@@ -135,6 +140,7 @@ class GlobalNavBar extends Component {
               className="fa fa-exclamation-circle nav-component"
               style={{ fontSize: "20px" }}
               onClick={this.showNotificationList}
+              ref={node => (this.node = node)}
             />
             {this.state.showNotifications ? (
               <div className="notifications" ref={node => (this.node = node)}>
@@ -161,6 +167,7 @@ class GlobalNavBar extends Component {
                         key={n.id}
                         data={n}
                         close={this.closeNotifications}
+                        notificationsSocket={this.props.notificationsSocket}
                       />
                     );
                   } else if (n.type === 1) {

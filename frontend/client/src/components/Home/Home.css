@@ -13,3 +13,21 @@
 .row {
   height: 100%;
 }
+
+.club-column {
+  width: 5.333333% !important;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+
+.main-column {
+  width: 61.333333% !important;
+}
+
+.Toastify__progress-bar--default {
+  background: rgb(115, 139, 215) !important;
+}
+
+.Toastify__toast--default {
+  color: rgb(90, 105, 120) !important;
+}

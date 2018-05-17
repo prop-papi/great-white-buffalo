@@ -3,12 +3,12 @@ import { ListGroupItem, Image, Button } from "react-bootstrap";
 import axios from "axios";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { updateNotifications } from "../../actions";
+import { updateNotifications, updateUserPaneData } from "../../actions";
 import "./index.css";
 
 class FriendRequest extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       inputRecieved: false,
@@ -28,7 +28,6 @@ class FriendRequest extends Component {
     axios
       .get("http://localhost:1337/api/userpane/selected", { params })
       .then(response => {
-        //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
         newUserPane.didSelectUser = true;
         newUserPane.selectedUser = response.data[0];
@@ -54,8 +53,12 @@ class FriendRequest extends Component {
         `http://localhost:1337/api/notifications/friendRequestResponse`,
         body
       );
-      console.log("about to call function");
       this.props.updateNotifications(localStorage.id);
+      const payload = {
+        user: localStorage.username,
+        friend: this.props.data.partner_username
+      };
+      this.props.notificationsSocket.emit("fr-accepted", payload);
     } catch (err) {
       throw new Error(err);
     }
@@ -76,6 +79,11 @@ class FriendRequest extends Component {
         body
       );
       this.props.updateNotifications(localStorage.id);
+      const payload = {
+        user: localStorage.username,
+        friend: this.props.data.partner_username
+      };
+      this.props.notificationsSocket.emit("fr-declined", payload);
     } catch (err) {
       throw new Error(err);
     }
@@ -103,7 +111,7 @@ class FriendRequest extends Component {
                     {this.props.data.partner_username}
                   </span>
                 </strong>{" "}
-                wants to be your friend.
+                wants to be your <span onClick={this.testSocket}>friend</span>.
               </p>
             </li>
             <li className="button-list-item">
