@@ -126,6 +126,8 @@ class Home extends Component {
 
     activeUserSocket.on("user.enter", usersOnline => {
       this.setState({ usersOnline });
+    });
+
     notificationsSocket.on(`newFriend-${localStorage.username}`, async user => {
       await this.props.updateNotifications(localStorage.id);
       // render some pop-up that tells you there's a new notification
