@@ -66,6 +66,10 @@ const notifications = io.of("/notifications").on("connection", socket => {
     notifications.emit(`noNewFriends-${payload.friend}`, payload.user);
   });
 
+  socket.on("new-request", payload => {
+    notifications.emit(`incoming-request-${payload.friend}`, payload.user);
+  });
+
   socket.on("bet-accepted", payload => {
     notifications.emit(`betAccepted-${payload.creator}`, payload);
   });

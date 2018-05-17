@@ -60,12 +60,16 @@ class SideProfile extends Component {
     }).bind(this)();
 
     if (!found) {
-      for (let i = 0; i < this.props.friends.length; i++) {
-        if (this.props.friends[i] === username) {
-          this.setState({ isFriend: "true", friendText: "Unfriend" });
-          break;
-        } else {
-          this.setState({ isFriend: "false", friendText: "Add Friend" });
+      if (!this.props.friends.length) {
+        this.setState({ isFriend: "false", friendText: "Add Friend" });
+      } else {
+        for (let i = 0; i < this.props.friends.length; i++) {
+          if (this.props.friends[i] === username) {
+            this.setState({ isFriend: "true", friendText: "Unfriend" });
+            break;
+          } else {
+            this.setState({ isFriend: "false", friendText: "Add Friend" });
+          }
         }
       }
     }
@@ -94,7 +98,7 @@ class SideProfile extends Component {
         .post("http://localhost:1337/api/userpane/removeFriend", body)
         .then(response => {
           this.props.fetchFriends(localStorage.id);
-          this.setState({ isFriend: "false" });
+          this.setState({ isFriend: "false", friendText: "Add Friend" });
         })
         .catch(err => {
           console.log(err);
@@ -110,6 +114,12 @@ class SideProfile extends Component {
         .then(response => {
           this.props.fetchFriends(localStorage.id);
           this.setState({ isFriend: "pending" });
+          // send notification to other friend here
+          const payload = {
+            user: localStorage.username,
+            friend: this.props.userPane.selectedUser.username
+          };
+          this.props.notificationsSocket.emit("new-request", payload);
         })
         .catch(err => {
           console.log("Err: ", err);

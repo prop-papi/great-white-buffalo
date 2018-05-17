@@ -146,9 +146,11 @@ class UserPane extends Component {
       return (
         <div>
           <SideProfile
+            users={this.state.users}
             friends={this.state.friends}
             pendingFriends={this.state.pendingFriends}
             fetchFriends={this.fetchAllFriends.bind(this)}
+            notificationsSocket={this.props.notificationsSocket}
           />
         </div>
       );
