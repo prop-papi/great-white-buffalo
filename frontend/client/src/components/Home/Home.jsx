@@ -19,6 +19,7 @@ import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
 import ESportVid from "../ESport/ESportVid";
 import Chat from "../Chat/Chat.jsx";
+import Leaderboard from "../Leaderboard/Leaderboard.jsx";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import io from "socket.io-client";
@@ -48,6 +49,8 @@ class Home extends Component {
       return <Chat />;
     } else if (componentName === "video") {
       return <ESportVid />;
+    } else if (componentName === "leaderboard") {
+      return <Leaderboard />;
     } else {
       return <Loading />;
     }
@@ -56,8 +59,6 @@ class Home extends Component {
   async componentDidMount() {
     // set app state here
     const {
-      global,
-      local,
       fetchHomeData,
       setMainComponent,
       addBet,
@@ -69,34 +70,37 @@ class Home extends Component {
 
     await fetchHomeData(localStorage.id, localStorage.default_club);
 
-    console.log("local: ", local);
-    console.log("global: ", global);
-
     betSocket.emit("user.enter", {
       user: localStorage.username,
-      clubList: global.globalData.clubs
+      clubList: this.props.global.globalData.clubs
     });
 
     betSocket.on("bet.create", newBet => {
-      addBet(global.globalData, newBet);
+      addBet(this.props.global.globalData, newBet);
     });
 
     betSocket.on("lounge.create", newLounge => {
       console.log("i heard a new lounge ", newLounge);
-      addLounge(local.localData, newLounge);
+      addLounge(this.props.local.localData, newLounge);
     });
 
     betSocket.on("bet.cancel", newBet => {
-      cancelMyBet(global.globalData, newBet, 0);
+      cancelMyBet(this.props.global.globalData, newBet, 0);
     });
 
     betSocket.on("bet.accept", (newBet, acceptorId) => {
-      acceptBet(global.globalData, newBet, 0, "" + acceptorId, localStorage.id);
+      acceptBet(
+        this.props.global.globalData,
+        newBet,
+        0,
+        "" + acceptorId,
+        localStorage.id
+      );
     });
 
     betSocket.on("bet.vote", (newBet, voterId, vote, whoAmI) => {
       voteOnBet(
-        global.globalData,
+        this.props.global.globalData,
         newBet,
         newBet.wager,
         vote,
