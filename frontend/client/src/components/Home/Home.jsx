@@ -5,6 +5,9 @@ import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
 import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
+import SocketNotification from "../Notifications/SocketNotification.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   fetchHomeData,
   setMainComponent,
@@ -12,7 +15,8 @@ import {
   cancelMyBet,
   acceptBet,
   voteOnBet,
-  addLounge
+  addLounge,
+  updateNotifications
 } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
@@ -26,6 +30,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./Home.css";
 import UserPane from "../UserPane/UserPane";
+import { css } from "glamor";
 
 const betSocket = io("http://localhost:3000/bets");
 const activeUserSocket = io("http://localhost:3000/activeUsers");
@@ -40,6 +45,8 @@ class Home extends Component {
     this.state = {
       usersOnline: {}
     };
+
+    this.createNotification = this.createNotification.bind(this);
   }
 
   mainComponentRender(componentName) {
@@ -119,6 +126,28 @@ class Home extends Component {
 
     activeUserSocket.on("user.enter", usersOnline => {
       this.setState({ usersOnline });
+    notificationsSocket.on(`newFriend-${localStorage.username}`, async user => {
+      await this.props.updateNotifications(localStorage.id);
+      // render some pop-up that tells you there's a new notification
+      this.createNotification(`${user} accepted your friend request!`);
+    });
+
+    notificationsSocket.on(
+      `noNewFriends-${localStorage.username}`,
+      async user => {
+        await this.props.updateNotifications(localStorage.id);
+        // render some pop-up that tells you there's a new notification
+        this.createNotification(`${user} declined your friend request :(`);
+      }
+    );
+  }
+
+  createNotification(message) {
+    toast(message, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true
     });
   }
 
@@ -190,6 +219,14 @@ class Home extends Component {
               </Col>
             </Row>
           </Grid>
+          <ToastContainer
+            position="top-right"
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+          />
+          <ToastContainer />
         </div>
       );
     } else {
@@ -218,7 +255,8 @@ function bindActionsToDispatch(dispatch) {
       acceptBet: acceptBet,
       voteOnBet: voteOnBet,
       addLounge: addLounge,
-      setMainComponent: setMainComponent
+      setMainComponent: setMainComponent,
+      updateNotifications: updateNotifications
     },
     dispatch
   );

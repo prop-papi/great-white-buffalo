@@ -167,6 +167,7 @@ class GlobalNavBar extends Component {
                         key={n.id}
                         data={n}
                         close={this.closeNotifications}
+                        notificationsSocket={this.props.notificationsSocket}
                       />
                     );
                   } else if (n.type === 1) {

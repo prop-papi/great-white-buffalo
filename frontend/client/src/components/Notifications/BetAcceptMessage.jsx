@@ -20,7 +20,6 @@ class BetAcceptMessage extends Component {
     axios
       .get("http://localhost:1337/api/userpane/selected", { params })
       .then(response => {
-        //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
         newUserPane.didSelectUser = true;
         newUserPane.selectedUser = response.data[0];

@@ -1,7 +1,7 @@
 const betsdb = require("../../rest-server/src/db/models/bets/index");
 const moment = require("moment");
 const _ = require("underscore");
-const io = require("../src/index").io;
+const io = require("../src/index").notifications;
 
 let updateActiveBetsAndEmit = async () => {
   let date = new Date();

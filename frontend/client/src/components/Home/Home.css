@@ -23,3 +23,11 @@
 .main-column {
   width: 61.333333% !important;
 }
+
+.Toastify__progress-bar--default {
+  background: rgb(115, 139, 215) !important;
+}
+
+.Toastify__toast--default {
+  color: rgb(90, 105, 120) !important;
+}

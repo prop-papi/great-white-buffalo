@@ -56,7 +56,16 @@ const chat = io.of("/chat").on("connection", socket => {
 });
 
 // notification namespace
-const notification = io.of("/notifications").on("connection", socket => {
+const notifications = io.of("/notifications").on("connection", socket => {
+  socket.on("fr-accepted", payload => {
+    notifications.emit(`newFriend-${payload.friend}`, payload.user);
+  });
+
+  socket.on("fr-declined", payload => {
+    console.log("friend declined!");
+    notifications.emit(`noNewFriends-${payload.friend}`, payload.user);
+  });
+
   // disconnect
   socket.on("disconnect", () => {
     console.log("user disconnected");
@@ -161,4 +170,4 @@ let cron2 = schedule.scheduleJob("0 * * * *", async function() {
   cronUtils.updatePendingBetsAndEmit();
 });
 
-module.exports.io = io;
+module.exports.notifications = notifications;
