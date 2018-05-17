@@ -126,24 +126,23 @@ class Bet extends React.Component {
             myVote: this.state.myVote
           };
           this.props.betSocket.emit("bet", payload);
+          if (v === 0) {
+            let payload2 = {
+              loser: localStorage.username,
+              winner:
+                this.state.myVote === "creator"
+                  ? this.props.bet.challenger_name
+                  : this.props.bet.creator_name,
+              bet: this.props.bet.description
+            };
+            this.props.notificationsSocket.emit("bet-resolved", payload2);
+          }
         } else {
           this.setState({ showCancelBetError: true });
         }
       }
     } catch (err) {
       throw new Error(err);
-    }
-
-    if (v === 0) {
-      let payload2 = {
-        loser: localStorage.username,
-        winner:
-          this.state.myVote === "creator"
-            ? this.props.bet.challenger_name
-            : this.props.bet.creator_name,
-        bet: this.props.bet.description
-      };
-      this.props.notificationsSocket.emit("bet-resolved", payload2);
     }
   }
 

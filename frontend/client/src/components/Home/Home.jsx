@@ -163,7 +163,6 @@ class Home extends Component {
         await this.props.updateNotifications(localStorage.id);
         // FOR DEREK - the bet parameter contains the entire bet object here, i'm using the payload
         // render some pop-up that tells you there's a new notification
-        console.log(bet);
         this.createNotification(
           `Your wager: ${payload.bet} in ${payload.club} with ${
             payload.challenger
