@@ -5,7 +5,6 @@ import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
 import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
-import SocketNotification from "../Notifications/SocketNotification.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -30,7 +29,6 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./Home.css";
 import UserPane from "../UserPane/UserPane";
-import { css } from "glamor";
 
 const betSocket = io("http://localhost:3000/bets");
 const activeUserSocket = io("http://localhost:3000/activeUsers");
