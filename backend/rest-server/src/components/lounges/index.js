@@ -17,7 +17,6 @@ router.post("/insertlounge", async function(req, res) {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Error inserting new Lounge.");
-    return err;
   }
 });
 

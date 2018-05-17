@@ -37,7 +37,6 @@ router.post("/friendRequestResponse", async (req, res) => {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Database error.");
-    return err;
   }
 });
 
@@ -53,7 +52,6 @@ router.get("/:id", async (req, res) => {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Database error.");
-    return err;
   }
 });
 
@@ -69,7 +67,6 @@ router.post("/betAccepted", async (req, res) => {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Database error.");
-    return err;
   }
 });
 

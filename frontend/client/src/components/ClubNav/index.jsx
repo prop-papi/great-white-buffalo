@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { updateLocalData, addClub } from "../../actions";
+import { updateLocalData, addClub, fetchHomeData } from "../../actions";
 import axios from "axios";
 
 import {
@@ -100,27 +100,51 @@ class ClubNav extends Component {
   }
 
   async joinClubs() {
-    console.log("joining clubs");
-    const add = [];
-    for (var key in this.state.availableClubsClickMap) {
-      if (this.state.availableClubsClickMap[key]) {
-        add.push(Number(key));
+    try {
+      const add = [];
+      for (var key in this.state.availableClubsClickMap) {
+        if (this.state.availableClubsClickMap[key]) {
+          add.push([Number(key), Number(localStorage.id)]);
+        }
       }
+      const data = await axios.post(
+        `http://localhost:1337/api/clubs/addUsersClubs`,
+        { add }
+      );
+      if (data.status === 200) {
+        await this.props.fetchHomeData(
+          localStorage.id,
+          localStorage.default_club
+        );
+      }
+      this.setState({ show: false });
+    } catch (err) {
+      throw new Error(err);
     }
-    console.log(add);
-    this.setState({ show: false });
   }
 
   async leaveClubs() {
-    console.log("leaving clubs");
-    const leave = [];
-    for (var key in this.state.leavableClubsClickMap) {
-      if (this.state.leavableClubsClickMap[key]) {
-        leave.push(Number(key));
+    try {
+      const leave = [];
+      for (var key in this.state.leavableClubsClickMap) {
+        if (this.state.leavableClubsClickMap[key]) {
+          leave.push([Number(key), Number(localStorage.id)]);
+        }
       }
+      const data = await axios.post(
+        `http://localhost:1337/api/clubs/removeUsersClubs`,
+        { leave }
+      );
+      if (data.status === 200) {
+        await this.props.fetchHomeData(
+          localStorage.id,
+          localStorage.default_club
+        );
+      }
+      this.setState({ show: false });
+    } catch (err) {
+      throw new Error(err);
     }
-    console.log(leave);
-    this.setState({ show: false });
   }
 
   selectSecurity(e) {
@@ -456,7 +480,8 @@ function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
       updateLocalData: updateLocalData,
-      addClub: addClub
+      addClub: addClub,
+      fetchHomeData: fetchHomeData
     },
     dispatch
   );
