@@ -11,6 +11,7 @@ import {
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setMainComponent } from "../../actions";
+import { updateUserPaneData } from "../../actions/index";
 import NotificationMessage from "./../Notifications/NotificationMessage.jsx";
 import EmptyNotifications from "./../Notifications/EmptyNotifications.jsx";
 import FriendRequest from "./../Notifications/FriendRequest.jsx";
@@ -18,6 +19,7 @@ import BetResolveMessage from "./../Notifications/BetResolveMessage.jsx";
 import BetResultsMessage from "./../Notifications/BetResultsMessage.jsx";
 import BetAcceptMessage from "./../Notifications/BetAcceptMessage.jsx";
 import BetResolveInput from "./../Notifications/BetResolveInput.jsx";
+import axios from "axios";
 
 class GlobalNavBar extends Component {
   constructor(props) {
@@ -88,6 +90,24 @@ class GlobalNavBar extends Component {
   menuSelectHandler(componentName) {
     const { local, setMainComponent } = this.props;
     setMainComponent(local, componentName);
+  }
+
+  handleProfile(username) {
+    let params = {
+      username
+    };
+    axios
+      .get("http://localhost:1337/api/userpane/selected", { params })
+      .then(response => {
+        //this.setState({ selectedUser: response.data[0] });
+        let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
+        newUserPane.didSelectUser = true;
+        newUserPane.selectedUser = response.data[0];
+        this.props.updateUserPaneData(newUserPane);
+      })
+      .catch(err => {
+        console.log("Error: ", err);
+      });
   }
 
   render() {
@@ -181,7 +201,12 @@ class GlobalNavBar extends Component {
           />
           {this.state.showMenu ? (
             <div className="dropdown-content" ref={node => (this.node = node)}>
-              <div className="dropdown-menu-item">Profile</div>
+              <div
+                className="dropdown-menu-item"
+                onClick={() => this.handleProfile(localStorage.username)}
+              >
+                Profile
+              </div>
               <div
                 className="dropdown-menu-item"
                 // onClick={() => this.menuSelectHandler("leaderboard")}
@@ -204,14 +229,16 @@ function mapStateToProps(state) {
   return {
     local: state.local,
     global: state.global,
-    notifications: state.notificationsData
+    notifications: state.notificationsData,
+    userPane: state.userPane
   };
 }
 
 function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
-      setMainComponent: setMainComponent
+      setMainComponent: setMainComponent,
+      updateUserPaneData: updateUserPaneData
     },
     dispatch
   );
