@@ -32,7 +32,8 @@ class ClubNav extends Component {
       logo: "",
       availableClubs: [],
       availableClubsClickMap: {},
-      leavableClubsClickMap: {}
+      leavableClubsClickMap: {},
+      loading: false
     };
 
     this.handleNavItemClick = this.handleNavItemClick.bind(this);
@@ -112,10 +113,12 @@ class ClubNav extends Component {
         { add }
       );
       if (data.status === 200) {
+        this.setState({ loading: true });
         await this.props.fetchHomeData(
           localStorage.id,
           localStorage.default_club
         );
+        this.setState({ loading: false });
       }
       this.setState({ show: false });
     } catch (err) {
@@ -136,10 +139,12 @@ class ClubNav extends Component {
         { leave }
       );
       if (data.status === 200) {
+        this.setState({ loading: true });
         await this.props.fetchHomeData(
           localStorage.id,
           localStorage.default_club
         );
+        this.setState({ loading: false });
       }
       this.setState({ show: false });
     } catch (err) {
@@ -372,36 +377,38 @@ class ClubNav extends Component {
               </Tab>
               <Tab eventKey={2} title="Join" className="joinLeaveClubsPane">
                 <br />
-                {this.state.availableClubs.length
-                  ? this.state.availableClubs.map(club => (
-                      <NavItem
-                        key={club.id}
-                        className="nav-item"
-                        className={
-                          this.state.availableClubsClickMap[club.id]
-                            ? "joinLeaveClubInd-selected"
-                            : "joinLeaveClubInd"
-                        }
-                        onClick={() => this.handleAvailableClick(club)}
-                      >
-                        <div className="club-logo-wrapper">
-                          <OverlayTrigger
-                            placement="right"
-                            overlay={
-                              <Tooltip id="tooltip">{club.name}</Tooltip>
-                            }
-                          >
-                            <Image
-                              src={club.logo}
-                              circle
-                              responsive
-                              className="nav-image"
-                            />
-                          </OverlayTrigger>
-                        </div>{" "}
-                      </NavItem>
-                    ))
-                  : "There are no clubs available to join!"}
+                {this.state.loading
+                  ? "Loading data for new clubs..."
+                  : this.state.availableClubs.length
+                    ? this.state.availableClubs.map(club => (
+                        <NavItem
+                          key={club.id}
+                          className="nav-item"
+                          className={
+                            this.state.availableClubsClickMap[club.id]
+                              ? "joinLeaveClubInd-selected"
+                              : "joinLeaveClubInd"
+                          }
+                          onClick={() => this.handleAvailableClick(club)}
+                        >
+                          <div className="club-logo-wrapper">
+                            <OverlayTrigger
+                              placement="right"
+                              overlay={
+                                <Tooltip id="tooltip">{club.name}</Tooltip>
+                              }
+                            >
+                              <Image
+                                src={club.logo}
+                                circle
+                                responsive
+                                className="nav-image"
+                              />
+                            </OverlayTrigger>
+                          </div>{" "}
+                        </NavItem>
+                      ))
+                    : "There are no clubs available to join!"}
                 <br /> <br />
                 <br />
                 <br />
@@ -415,41 +422,43 @@ class ClubNav extends Component {
               </Tab>
               <Tab eventKey={3} title="Leave" className="joinLeaveClubsPane">
                 <br />
-                {this.props.global.globalData.clubs.map(club => {
-                  if (club.id !== 12) {
-                    return (
-                      <NavItem
-                        key={club.id}
-                        className="nav-item"
-                        className={
-                          this.state.leavableClubsClickMap[club.id]
-                            ? "joinLeaveClubInd-selected"
-                            : "joinLeaveClubInd"
-                        }
-                        onClick={() => this.handleLeaveClick(club)}
-                      >
-                        <div
-                          className="club-logo-wrapper"
-                          className="joinLeaveClubInd"
-                        >
-                          <OverlayTrigger
-                            placement="right"
-                            overlay={
-                              <Tooltip id="tooltip">{club.name}</Tooltip>
+                {this.state.loading
+                  ? "Loading..."
+                  : this.props.global.globalData.clubs.map(club => {
+                      if (club.id !== 12) {
+                        return (
+                          <NavItem
+                            key={club.id}
+                            className="nav-item"
+                            className={
+                              this.state.leavableClubsClickMap[club.id]
+                                ? "joinLeaveClubInd-selected"
+                                : "joinLeaveClubInd"
                             }
+                            onClick={() => this.handleLeaveClick(club)}
                           >
-                            <Image
-                              src={club.logo}
-                              circle
-                              responsive
-                              className="nav-image"
-                            />
-                          </OverlayTrigger>
-                        </div>
-                      </NavItem>
-                    );
-                  }
-                })}
+                            <div
+                              className="club-logo-wrapper"
+                              className="joinLeaveClubInd"
+                            >
+                              <OverlayTrigger
+                                placement="right"
+                                overlay={
+                                  <Tooltip id="tooltip">{club.name}</Tooltip>
+                                }
+                              >
+                                <Image
+                                  src={club.logo}
+                                  circle
+                                  responsive
+                                  className="nav-image"
+                                />
+                              </OverlayTrigger>
+                            </div>
+                          </NavItem>
+                        );
+                      }
+                    })}
                 <br /> <br />
                 <br />
                 <br />
