@@ -18,15 +18,6 @@ class FriendRequest extends Component {
     this.acceptFriendRequest = this.acceptFriendRequest.bind(this);
     this.declineFriendRequest = this.declineFriendRequest.bind(this);
     this.displaySideProfile = this.displaySideProfile.bind(this);
-    this.testSocket = this.testSocket.bind(this);
-  }
-
-  testSocket() {
-    const payload = {
-      user: localStorage.username,
-      friend: this.props.data.partner_username
-    };
-    this.props.notificationsSocket.emit("fr-declined", payload);
   }
 
   displaySideProfile(target) {
@@ -88,6 +79,11 @@ class FriendRequest extends Component {
         body
       );
       this.props.updateNotifications(localStorage.id);
+      const payload = {
+        user: localStorage.username,
+        friend: this.props.data.partner_username
+      };
+      this.props.notificationsSocket.emit("fr-declined", payload);
     } catch (err) {
       throw new Error(err);
     }

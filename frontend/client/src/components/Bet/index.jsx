@@ -133,6 +133,18 @@ class Bet extends React.Component {
     } catch (err) {
       throw new Error(err);
     }
+
+    if (v === 0) {
+      let payload2 = {
+        loser: localStorage.username,
+        winner:
+          this.state.myVote === "creator"
+            ? this.props.bet.challenger_name
+            : this.props.bet.creator_name,
+        bet: this.props.bet.description
+      };
+      this.props.notificationsSocket.emit("bet-resolved", payload2);
+    }
   }
 
   async cancelBet() {
@@ -187,12 +199,21 @@ class Bet extends React.Component {
             localStorage.id,
             localStorage.id
           );
+          // socket emission for bets
           const payload = {
             bet: JSON.parse(JSON.stringify(this.props.bet)),
             action: "accept",
             acceptorId: Number(localStorage.id)
           };
           this.props.betSocket.emit("bet", payload);
+          // socket emission for notificatons
+          const payload2 = {
+            user: localStorage.username,
+            creator: this.props.bet.creator_name,
+            bet: this.props.bet.description,
+            club: this.props.bet.club_name
+          };
+          this.props.notificationsSocket.emit("bet-accepted", payload2);
           this.setState({ myVote: "challenger" });
         } else {
           this.setState({ showAcceptBetError: true });

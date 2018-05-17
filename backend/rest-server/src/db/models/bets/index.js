@@ -112,7 +112,11 @@ const voteWin = async (betId, updateField, checkField) => {
 };
 
 const getActiveBets = async () => {
-  const query = `SELECT id, status, end_at, creator, challenger FROM Bets WHERE status='active';`;
+  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
+  LEFT JOIN Users u1 on u1.id = creator
+  LEFT JOIN Users u2 on u2.id = challenger
+  INNER JOIN Clubs on Clubs.id = Bets.club
+  WHERE Bets.status='active';`;
   try {
     return await mysqldb.query(query);
   } catch (err) {
@@ -122,7 +126,11 @@ const getActiveBets = async () => {
 };
 
 const getPendingBets = async () => {
-  const query = `SELECT id, status, end_at, creator FROM Bets WHERE status='pending';`;
+  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
+  LEFT JOIN Users u1 on u1.id = creator
+  LEFT JOIN Users u2 on u2.id = challenger
+  INNER JOIN Clubs on Clubs.id = Bets.club
+  WHERE Bets.status='pending';`;
   try {
     return await mysqldb.query(query);
   } catch (err) {

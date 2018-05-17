@@ -50,9 +50,13 @@ class Home extends Component {
   }
 
   mainComponentRender(componentName) {
-    console.log("in the function");
     if (componentName === "bets") {
-      return <SearchBets betSocket={this.props.betSocket} />;
+      return (
+        <SearchBets
+          betSocket={betSocket}
+          notificationsSocket={notificationsSocket}
+        />
+      );
     } else if (componentName === "chat") {
       return <Chat />;
     } else if (componentName === "video") {
@@ -88,7 +92,6 @@ class Home extends Component {
     });
 
     betSocket.on("lounge.create", newLounge => {
-      console.log("i heard a new lounge ", newLounge);
       addLounge(this.props.local.localData, newLounge);
     });
 
@@ -142,12 +145,48 @@ class Home extends Component {
         this.createNotification(`${user} declined your friend request :(`);
       }
     );
+
+    notificationsSocket.on(
+      `betAccepted-${localStorage.username}`,
+      async payload => {
+        await this.props.updateNotifications(localStorage.id);
+        // render some pop-up that tells you there's a new notification
+        this.createNotification(
+          `${payload.user} accepted your wager: ${payload.bet} in Club ${
+            payload.club
+          }!`
+        );
+      }
+    );
+
+    notificationsSocket.on(
+      `betVoting-${localStorage.username}`,
+      async (payload, bet) => {
+        await this.props.updateNotifications(localStorage.id);
+        // FOR DEREK - the bet parameter contains the entire bet object here, i'm using the payload
+        // render some pop-up that tells you there's a new notification
+        console.log(bet);
+        this.createNotification(
+          `Your wager: ${payload.bet} in ${payload.club} with ${
+            payload.challenger
+          } is finished! Submit the results in the Reviews tab.`
+        );
+      }
+    );
+
+    notificationsSocket.on(`betWon-${localStorage.username}`, async payload => {
+      await this.props.updateNotifications(localStorage.id);
+      // render some pop-up that tells you there's a new notification
+      this.createNotification(
+        `Congrats! You won your bet: ${payload.bet} against ${payload.loser}.`
+      );
+    });
   }
 
   createNotification(message) {
     toast(message, {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 6000,
       hideProgressBar: false,
       closeOnClick: true
     });
@@ -201,10 +240,7 @@ class Home extends Component {
                 style={{ backgroundColor: "rgb(54,57,62)", height: "93vh" }}
                 className="main-column"
               >
-                <MainNavBar
-                  betSocket={betSocket}
-                  notificationsSocket={notificationsSocket}
-                />
+                <MainNavBar />
                 <br />
                 {this.mainComponentRender(
                   this.props.local.localData.currentMainComponent
