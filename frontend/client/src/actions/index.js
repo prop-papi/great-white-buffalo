@@ -16,6 +16,10 @@ export const setNotifications = (notificationsData, dispatch) => {
   dispatch({ type: "NOTIFICATIONS_DATA", notificationsData });
 };
 
+export const setMainComponent = component => dispatch => {
+  dispatch({ type: "MAIN_COMPONENT_SELECTOR", component });
+};
+
 export const updateUserPaneData = userPaneData => dispatch => {
   dispatch({ type: "USER_PANE_DATA", userPaneData });
 };
@@ -33,6 +37,7 @@ export const fetchHomeData = (id, club) => async dispatch => {
   setLocalData(localData.data, dispatch);
   setNotifications(notifications.data.notifications, dispatch);
   setUserPaneData({ showUsers: true, didSelectUser: false }, dispatch);
+  setMainComponent("bets");
 };
 
 export const updateLocalData = club => async dispatch => {
@@ -40,14 +45,6 @@ export const updateLocalData = club => async dispatch => {
     `http://localhost:1337/api/users/local/${club}`
   );
   setLocalData(localData.data, dispatch);
-};
-
-export const setMainComponent = (localData, component) => dispatch => {
-  const l = {
-    ...localData,
-    currentMainComponent: component
-  };
-  setLocalData(l, dispatch);
 };
 
 export const updateNotifications = id => async dispatch => {

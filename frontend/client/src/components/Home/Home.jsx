@@ -9,7 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   fetchHomeData,
-  setMainComponent,
   addBet,
   cancelMyBet,
   acceptBet,
@@ -48,21 +47,19 @@ class Home extends Component {
   }
 
   mainComponentRender(componentName) {
-    if (componentName === "bets") {
-      return (
-        <SearchBets
-          betSocket={betSocket}
-          notificationsSocket={notificationsSocket}
-        />
-      );
-    } else if (componentName === "chat") {
+    if (componentName === "chat") {
       return <Chat />;
     } else if (componentName === "video") {
       return <ESportVid />;
     } else if (componentName === "leaderboard") {
       return <Leaderboard />;
     } else {
-      return <Loading />;
+      return (
+        <SearchBets
+          betSocket={betSocket}
+          notificationsSocket={notificationsSocket}
+        />
+      );
     }
   }
 
@@ -70,7 +67,6 @@ class Home extends Component {
     // set app state here
     const {
       fetchHomeData,
-      setMainComponent,
       addBet,
       addLounge,
       cancelMyBet,
@@ -239,9 +235,7 @@ class Home extends Component {
               >
                 <MainNavBar />
                 <br />
-                {this.mainComponentRender(
-                  this.props.local.localData.currentMainComponent
-                )}
+                {this.mainComponentRender(this.props.main.component)}
               </Col>
               <Col
                 xs={2}
@@ -277,7 +271,8 @@ function mapStateToProps(state) {
     //globalData: state.globalData,
     local: state.local,
     global: state.global,
-    userPane: state.userPane
+    userPane: state.userPane,
+    main: state.component
   };
 }
 
@@ -290,7 +285,6 @@ function bindActionsToDispatch(dispatch) {
       acceptBet: acceptBet,
       voteOnBet: voteOnBet,
       addLounge: addLounge,
-      setMainComponent: setMainComponent,
       updateNotifications: updateNotifications
     },
     dispatch
