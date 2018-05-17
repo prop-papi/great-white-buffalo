@@ -78,14 +78,14 @@ class Chat extends Component {
     if (e.key === "Enter") {
       socket.emit("message.send", payload);
       this.setState({ text: "" });
-      axios
-        .post("/message", payload)
-        .then(response => {
-          console.log("Server response: ", response);
-        })
-        .catch(error => {
-          console.log("Server error: ", error);
-        });
+      // axios
+      //   .post("/message", payload)
+      //   .then(response => {
+      //     console.log("Server response: ", response);
+      //   })
+      //   .catch(error => {
+      //     console.log("Server error: ", error);
+      //   });
     }
   }
 
@@ -200,7 +200,8 @@ class Chat extends Component {
             type="text"
             value={this.state.text}
             placeholder={`Chatting in ${
-              this.props.currentLounge.currentLounge.name
+              "hello"
+              // this.props.currentLounge.currentLounge.name
             }`}
             // could also dynamically render "Lounge" vs a "Direct Message"
             // Chatting in  LOUNGE_NAME

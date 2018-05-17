@@ -4,6 +4,8 @@ import SearchBets from "../SearchBets/index.jsx";
 import Chat from "../Chat/Chat.jsx";
 import ESportVid from "../ESport/ESportVid";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { fetchHomeData, setMainComponent } from "../../actions";
 import "./MainNavBar.css";
 
 class MainNavBar extends Component {
@@ -11,50 +13,18 @@ class MainNavBar extends Component {
     super();
 
     this.state = {
-      showBets: true,
-      showChat: false,
-      showVideo: false,
-      betsActive: true,
-      chatActive: false,
-      videoActive: false,
+      activeTab: "bets",
       gamesList: ["Fortnite", "Overwatch", "Rocket League", "PUBG"]
     };
 
-    this.showBetsComponent = this.showBetsComponent.bind(this);
-    this.showChatComponent = this.showChatComponent.bind(this);
-    this.showVideoComponent = this.showVideoComponent.bind(this);
+    this.selectTabHandler = this.selectTabHandler.bind(this);
   }
 
-  showBetsComponent() {
+  selectTabHandler(componentName) {
+    // const { local, setMainComponent } = this.props;
+    this.props.setMainComponent(this.props.local, componentName);
     this.setState({
-      showBets: true,
-      betsActive: true,
-      showChat: false,
-      showVideo: false,
-      videoActive: false,
-      chatActive: false
-    });
-  }
-
-  showChatComponent() {
-    this.setState({
-      showBets: false,
-      showChat: true,
-      chatActive: true,
-      showVideo: false,
-      betsActive: false,
-      videoActive: false
-    });
-  }
-
-  showVideoComponent() {
-    this.setState({
-      showBets: false,
-      showChat: false,
-      chatActive: false,
-      showVideo: true,
-      betsActive: false,
-      videoActive: true
+      activeTab: componentName
     });
   }
 
@@ -64,16 +34,16 @@ class MainNavBar extends Component {
         <nav className="nav-main">
           <div
             className={
-              this.state.chatActive
+              this.state.activeTab === "chat"
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
-            onClick={this.showChatComponent}
+            onClick={() => this.selectTabHandler("chat")}
           >
             <a
               href="#"
               className={
-                this.state.chatActive
+                this.state.activeTab === "chat"
                   ? "nav-button-text-active"
                   : "nav-button-text"
               }
@@ -83,16 +53,16 @@ class MainNavBar extends Component {
           </div>{" "}
           <div
             className={
-              this.state.betsActive
+              this.state.activeTab === "bets"
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
-            onClick={this.showBetsComponent}
+            onClick={() => this.selectTabHandler("bets")}
           >
             <a
               href="#"
               className={
-                this.state.betsActive
+                this.state.activeTab === "bets"
                   ? "nav-button-text-active"
                   : "nav-button-text"
               }
@@ -102,16 +72,16 @@ class MainNavBar extends Component {
           </div>{" "}
           <div
             className={
-              this.state.videoActive
+              this.state.activeTab === "video"
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
-            onClick={this.showVideoComponent}
+            onClick={() => this.selectTabHandler("video")}
           >
             <a
               href="#"
               className={
-                this.state.videoActive
+                this.state.activeTab === "video"
                   ? "nav-button-text-active"
                   : "nav-button-text"
               }
@@ -120,14 +90,6 @@ class MainNavBar extends Component {
             </a>
           </div>{" "}
         </nav>
-        {this.state.showBets ? (
-          <SearchBets betSocket={this.props.betSocket} />
-        ) : null}
-        {this.state.showChat ? <Chat /> : null}
-        {this.state.showVideo &&
-        this.state.gamesList.includes(this.props.local.club.name) ? (
-          <ESportVid />
-        ) : null}
       </div>
     );
   }
@@ -139,4 +101,14 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(MainNavBar);
+function bindActionsToDispatch(dispatch) {
+  return bindActionCreators(
+    {
+      fetchHomeData: fetchHomeData,
+      setMainComponent: setMainComponent
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, bindActionsToDispatch)(MainNavBar);

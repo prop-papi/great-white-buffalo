@@ -9,6 +9,8 @@ import {
   CustomMenu
 } from "react-bootstrap";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { setMainComponent } from "../../actions";
 import NotificationMessage from "./../Notifications/NotificationMessage.jsx";
 import EmptyNotifications from "./../Notifications/EmptyNotifications.jsx";
 import FriendRequest from "./../Notifications/FriendRequest.jsx";
@@ -18,8 +20,8 @@ import BetAcceptMessage from "./../Notifications/BetAcceptMessage.jsx";
 import BetResolveInput from "./../Notifications/BetResolveInput.jsx";
 
 class GlobalNavBar extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       showMenu: false,
@@ -30,6 +32,7 @@ class GlobalNavBar extends Component {
     this.showNotificationList = this.showNotificationList.bind(this);
     this.handleNavItemCollapse = this.handleNavItemCollapse.bind(this);
     this.closeNotifications = this.closeNotifications.bind(this);
+    this.menuSelectHandler = this.menuSelectHandler.bind(this);
   }
 
   componentWillMount() {
@@ -80,6 +83,11 @@ class GlobalNavBar extends Component {
     localStorage.removeItem("persist:root");
     document.cookie = "";
     this.props.history.push("/login");
+  }
+
+  menuSelectHandler(componentName) {
+    const { local, setMainComponent } = this.props;
+    setMainComponent(local, componentName);
   }
 
   render() {
@@ -173,19 +181,16 @@ class GlobalNavBar extends Component {
           />
           {this.state.showMenu ? (
             <div className="dropdown-content" ref={node => (this.node = node)}>
-              <a href="#" className="dropdown-menu-item">
-                Profile
-              </a>
-              <a href="#" className="dropdown-menu-item">
-                Leaderboards
-              </a>
-              <a
-                href="#"
+              <div className="dropdown-menu-item">Profile</div>
+              <div
                 className="dropdown-menu-item"
-                onClick={() => this.logout()}
+                // onClick={() => this.menuSelectHandler("leaderboard")}
               >
+                Leaderboards
+              </div>
+              <div className="dropdown-menu-item" onClick={() => this.logout()}>
                 Logout
-              </a>
+              </div>
             </div>
           ) : null}
         </li>
@@ -197,10 +202,19 @@ class GlobalNavBar extends Component {
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
-    //globalData: state.globalData,
+    local: state.local,
     global: state.global,
     notifications: state.notificationsData
   };
 }
 
-export default connect(mapStateToProps)(GlobalNavBar);
+function bindActionsToDispatch(dispatch) {
+  return bindActionCreators(
+    {
+      setMainComponent: setMainComponent
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, bindActionsToDispatch)(GlobalNavBar);

@@ -45,7 +45,9 @@ router.get("/:id", async function(req, res) {
 
 router.get("/local/:club", async function(req, res) {
   // req.params.id is our user id, req.params.club is the default club
-  let localData = {};
+  let localData = {
+    currentMainComponent: "bets"
+  };
 
   try {
     // grab all day for local object
