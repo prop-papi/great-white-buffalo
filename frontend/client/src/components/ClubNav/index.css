@@ -35,3 +35,44 @@
 .drowdown-menu-item {
   padding: 8px;
 }
+
+.joinLeaveClubsPane {
+  list-style-type: none;
+}
+
+.joinLeaveClubInd {
+  position: relative;
+  float: left;
+}
+
+.joinLeaveClubInd {
+  position: relative;
+  float: left;
+  border: 10px solid white;
+  height: 70px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 70px;
+}
+
+.joinLeaveClubInd-selected {
+  position: relative;
+  float: left;
+  border: 10px solid #738bd7;
+  height: 70px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 70px;
+}
+
+.joinLeaveClubButton {
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+}
+
+.modal-content {
+  min-height: 50vh;
+}

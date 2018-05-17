@@ -10,6 +10,8 @@ import {
   Modal,
   MenuItem,
   Image,
+  Tabs,
+  Tab,
   Tooltip,
   OverlayTrigger,
   ButtonToolbar,
@@ -27,15 +29,22 @@ class ClubNav extends Component {
       show: false,
       security: "Public",
       clubName: "",
-      logo: ""
+      logo: "",
+      availableClubs: [],
+      availableClubsClickMap: {},
+      leavableClubsClickMap: {}
     };
 
     this.handleNavItemClick = this.handleNavItemClick.bind(this);
     this.createClub = this.createClub.bind(this);
+    this.joinClubs = this.joinClubs.bind(this);
+    this.leaveClubs = this.leaveClubs.bind(this);
     this.handleShow = this.handleShow.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.selectSecurity = this.selectSecurity.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleAvailableClick = this.handleAvailableClick.bind(this);
+    this.handleLeaveClick = this.handleLeaveClick.bind(this);
   }
 
   handleNavItemClick(club) {
@@ -90,6 +99,30 @@ class ClubNav extends Component {
     }
   }
 
+  async joinClubs() {
+    console.log("joining clubs");
+    const add = [];
+    for (var key in this.state.availableClubsClickMap) {
+      if (this.state.availableClubsClickMap[key]) {
+        add.push(Number(key));
+      }
+    }
+    console.log(add);
+    this.setState({ show: false });
+  }
+
+  async leaveClubs() {
+    console.log("leaving clubs");
+    const leave = [];
+    for (var key in this.state.leavableClubsClickMap) {
+      if (this.state.leavableClubsClickMap[key]) {
+        leave.push(Number(key));
+      }
+    }
+    console.log(leave);
+    this.setState({ show: false });
+  }
+
   selectSecurity(e) {
     if (e === 1) {
       this.setState({ security: "Public" });
@@ -98,14 +131,54 @@ class ClubNav extends Component {
     }
   }
 
-  handleShow() {
+  async handleShow() {
     this.setState({ show: true });
+    try {
+      const params = { userId: localStorage.id };
+      const data = await axios.get(
+        `http://localhost:1337/api/clubs/getAvailableClubs`,
+        { params }
+      );
+      if (data.status === 200) {
+        const tempAvailClickMap = {};
+        const tempLeavableClickMap = {};
+        data.data.forEach(c => {
+          tempAvailClickMap[c.id] = false;
+        });
+        this.props.global.globalData.clubs.forEach(c => {
+          tempLeavableClickMap[c.id] = false;
+        });
+        this.setState({
+          availableClubs: data.data,
+          availableClubsClickMap: tempAvailClickMap,
+          leavableClubsClickMap: tempLeavableClickMap
+        });
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  handleAvailableClick(c) {
+    this.setState(prevState => ({
+      availableClubsClickMap: {
+        ...prevState.availableClubsClickMap,
+        [c.id]: !prevState.availableClubsClickMap[c.id]
+      }
+    }));
+  }
+
+  handleLeaveClick(c) {
+    this.setState(prevState => ({
+      leavableClubsClickMap: {
+        ...prevState.leavableClubsClickMap,
+        [c.id]: !prevState.leavableClubsClickMap[c.id]
+      }
+    }));
   }
 
   handleCancel() {
     this.setState({ show: false });
-    // this and the button shouldn't be neccesary...figure out modal issue, link below, just didn't want to get stuck on it
-    // https://github.com/react-bootstrap/react-bootstrap/issues/2812
   }
 
   handleChange(e) {
@@ -209,7 +282,7 @@ class ClubNav extends Component {
             <div className="club-logo-wrapper">
               <OverlayTrigger
                 placement="right"
-                overlay={<Tooltip id="tooltip">Create a Club</Tooltip>}
+                overlay={<Tooltip id="tooltip">Club Maintenance</Tooltip>}
               >
                 <Image
                   src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/plus.png"
@@ -221,54 +294,151 @@ class ClubNav extends Component {
             </div>
           </NavItem>
         </Nav>
-        <Modal show={this.state.show} onHide={this.handleCancel}>
+        <Modal
+          show={this.state.show}
+          onHide={this.handleCancel}
+          className="clubModal"
+        >
           <Modal.Header closeButton>
-            <Modal.Title>Create a Club</Modal.Title>
+            <Modal.Title>Club Maintenance</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Club name:{" "}
-            <input
-              type="text"
-              name="clubName"
-              style={{ width: 100 }}
-              value={this.state.clubName}
-              onChange={this.handleChange}
-            />{" "}
-            <br />
-            Logo url:{" "}
-            <input
-              type="text"
-              name="logo"
-              style={{ width: 100 }}
-              value={this.state.logo}
-              onChange={this.handleChange}
-            />{" "}
-            <br />
-            <ButtonToolbar className="testing" id="securityButton">
-              <DropdownButton title={this.state.security} id={1}>
-                <MenuItem
-                  className="menu"
-                  onSelect={this.selectSecurity}
-                  key={1}
-                  eventKey={1}
+            <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
+              <Tab eventKey={1} title="Create">
+                Club name:{" "}
+                <input
+                  type="text"
+                  name="clubName"
+                  style={{ width: 100 }}
+                  value={this.state.clubName}
+                  onChange={this.handleChange}
+                />{" "}
+                <br />
+                Logo url:{" "}
+                <input
+                  type="text"
+                  name="logo"
+                  style={{ width: 100 }}
+                  value={this.state.logo}
+                  onChange={this.handleChange}
+                />{" "}
+                <br />
+                <ButtonToolbar className="testing" id="securityButton">
+                  <DropdownButton title={this.state.security} id={1}>
+                    <MenuItem
+                      className="menu"
+                      onSelect={this.selectSecurity}
+                      key={1}
+                      eventKey={1}
+                    >
+                      Public
+                    </MenuItem>
+                    <MenuItem
+                      className="menu"
+                      onSelect={this.selectSecurity}
+                      key={2}
+                      eventKey={2}
+                    >
+                      Private
+                    </MenuItem>
+                  </DropdownButton>
+                </ButtonToolbar>
+                <br /> <br />
+                <Button onClick={this.createClub}>Create Club</Button>
+              </Tab>
+              <Tab eventKey={2} title="Join" className="joinLeaveClubsPane">
+                <br />
+                {this.state.availableClubs.length
+                  ? this.state.availableClubs.map(club => (
+                      <NavItem
+                        key={club.id}
+                        className="nav-item"
+                        className={
+                          this.state.availableClubsClickMap[club.id]
+                            ? "joinLeaveClubInd-selected"
+                            : "joinLeaveClubInd"
+                        }
+                        onClick={() => this.handleAvailableClick(club)}
+                      >
+                        <div className="club-logo-wrapper">
+                          <OverlayTrigger
+                            placement="right"
+                            overlay={
+                              <Tooltip id="tooltip">{club.name}</Tooltip>
+                            }
+                          >
+                            <Image
+                              src={club.logo}
+                              circle
+                              responsive
+                              className="nav-image"
+                            />
+                          </OverlayTrigger>
+                        </div>{" "}
+                      </NavItem>
+                    ))
+                  : "There are no clubs available to join!"}
+                <br /> <br />
+                <br />
+                <br />
+                <br />
+                <Button
+                  onClick={this.joinClubs}
+                  className="joinLeaveClubButton"
                 >
-                  Public
-                </MenuItem>
-                <MenuItem
-                  className="menu"
-                  onSelect={this.selectSecurity}
-                  key={2}
-                  eventKey={2}
+                  Join Club(s)
+                </Button>
+              </Tab>
+              <Tab eventKey={3} title="Leave" className="joinLeaveClubsPane">
+                <br />
+                {this.props.global.globalData.clubs.map(club => {
+                  if (club.id !== 12) {
+                    return (
+                      <NavItem
+                        key={club.id}
+                        className="nav-item"
+                        className={
+                          this.state.leavableClubsClickMap[club.id]
+                            ? "joinLeaveClubInd-selected"
+                            : "joinLeaveClubInd"
+                        }
+                        onClick={() => this.handleLeaveClick(club)}
+                      >
+                        <div
+                          className="club-logo-wrapper"
+                          className="joinLeaveClubInd"
+                        >
+                          <OverlayTrigger
+                            placement="right"
+                            overlay={
+                              <Tooltip id="tooltip">{club.name}</Tooltip>
+                            }
+                          >
+                            <Image
+                              src={club.logo}
+                              circle
+                              responsive
+                              className="nav-image"
+                            />
+                          </OverlayTrigger>
+                        </div>
+                      </NavItem>
+                    );
+                  }
+                })}
+                <br /> <br />
+                <br />
+                <br />
+                <br />
+                <Button
+                  onClick={this.leaveClubs}
+                  className="joinLeaveClubButton"
                 >
-                  Private
-                </MenuItem>
-              </DropdownButton>
-            </ButtonToolbar>
-            <br /> <br />
+                  Leave Club(s)
+                </Button>
+              </Tab>
+            </Tabs>
           </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.createClub}>Create Club</Button>
-          </Modal.Footer>
         </Modal>
       </div>
     );
