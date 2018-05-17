@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-//const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 const usersdb = require("../../db/models/users/index.js");
 const clubsdb = require("../../db/models/clubs/index.js");
 
@@ -14,7 +14,6 @@ router.post("/updateDefault", async function(req, res) {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Error updating user default club.");
-    return err;
   }
 });
 
@@ -31,20 +30,18 @@ router.post("/insertclub", async function(req, res) {
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Error inserting clubs.");
-    return err;
   }
 });
 
-// router.get("/getAvailableClubs", async function(req, res) {
-//   try {
-//     let data = await clubsdb.selectAllJoinableClubsForUser(req.query.userId);
-//     console.log(data);
-//     res.status(200).send(data);
-//   } catch (err) {
-//     console.log("error", err);
-//     res.status(500).send("Error fetching available clubs.");
-//     return err;
-//   }
-// });
+router.get("/getAvailableClubs", async function(req, res) {
+  try {
+    let data = await clubsdb.selectAllJoinableClubsForUser(req.query.userId);
+    console.log(data);
+    res.status(200).send(data);
+  } catch (err) {
+    console.log("error", err);
+    res.status(500).send("Error fetching available clubs.");
+  }
+});
 
 module.exports = router;
