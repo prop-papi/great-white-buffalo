@@ -10,29 +10,47 @@ class SideProfile extends Component {
     super(props);
     this.state = {
       isFriend: "",
-      myBets: []
+      myBets: [],
+      isMe: null
     };
   }
 
-  async componentDidMount() {
-    await this.checkIfFriend();
-    this.findMyBets();
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.userPane.selectedUser.username === localStorage.username) {
+      return {
+        isMe: true
+      };
+    } else {
+      return {
+        isMe: false
+      };
+    }
   }
 
-  async checkIfFriend() {
+  async componentDidMount() {
+    if (this.props.userPane.selectedUser.username !== localStorage.username) {
+      await Promise.all([this.checkIfFriend(), this.findMyBets()]);
+    }
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (this.state.isMe !== prevState.isMe) {
+      await this.findMyBets();
+    }
+  }
+
+  checkIfFriend() {
     let username = this.props.userPane.selectedUser.username;
     let found = false;
 
-    await (() => {
-      this.props.pendingFriends.forEach(
-        function(el) {
-          if (el.username === username) {
-            this.setState({ isFriend: "pending" });
-            found = true;
-          }
-        }.bind(this)
-      );
-    }).bind(this)();
+    this.props.pendingFriends.forEach(
+      function(el) {
+        if (el.username === username) {
+          this.setState({ isFriend: "pending" });
+          found = true;
+        }
+      }.bind(this)
+    );
 
     if (!found) {
       for (let i = 0; i < this.props.friends.length; i++) {
@@ -54,9 +72,7 @@ class SideProfile extends Component {
         myBets.push(bet);
       }
     });
-    this.setState({ myBets }, () => {
-      // console.log(this.state.myBets);
-    });
+    this.setState({ myBets });
   }
 
   handleFriend() {
@@ -96,6 +112,7 @@ class SideProfile extends Component {
   }
 
   render() {
+    console.log("render");
     let friendText = "";
     if (this.state.isFriend === "true") {
       friendText = "Unfriend";
@@ -147,9 +164,9 @@ class SideProfile extends Component {
           </div>
           <br />
           <Row>
-            {this.state.myBets.length === 0
+            {this.state.myBets.length === 0 && !this.state.isMe
               ? "This user has no open bets :("
-              : "Open Bets"}
+              : !this.state.isMe && "Open Bets"}
           </Row>
           {this.state.myBets.map((bet, key) => {
             return <Bet bet={bet} key={key} />;
