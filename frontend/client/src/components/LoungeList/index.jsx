@@ -97,9 +97,9 @@ class LoungeList extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  // async componentDidMount() {
-  //   await this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
-  // }
+  async componentDidMount() {
+    await this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
+  }
 
   render() {
     return (

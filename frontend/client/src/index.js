@@ -8,7 +8,7 @@ import thunk from "redux-thunk";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import storage from "redux-persist/lib/storage";
-const middleware = [thunk];
+// const middleware = [thunk];
 
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -39,7 +39,8 @@ const persistedReducer = persistReducer(persistConfig, allReducers);
 let store = createStore(
   persistedReducer,
   initialState,
-  applyMiddleware(...middleware)
+  // applyMiddleware(...middleware)
+  applyMiddleware(thunk)
 );
 let persistor = persistStore(store);
 

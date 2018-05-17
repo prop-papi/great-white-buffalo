@@ -11,6 +11,16 @@ class TestData extends React.Component {
   render() {
     return (
       <div>
+        {console.log("this.props.main: ", this.props.main)}
+        Redux current main component - called with this.props.component
+        <br />
+        <br />
+        {JSON.stringify(this.props.main)}
+        <br />
+        <br />
+        {JSON.stringify(this.props)}
+        <br />
+        <br />
         Redux current store local data - called with
         'this.props.local.localData'
         <br /> <br />
@@ -31,7 +41,8 @@ class TestData extends React.Component {
 function mapStateToProps(state) {
   return {
     global: state.global,
-    local: state.local
+    local: state.local,
+    main: state.component
   };
 }
 

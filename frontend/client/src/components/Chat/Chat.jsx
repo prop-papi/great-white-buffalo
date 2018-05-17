@@ -107,7 +107,51 @@ class Chat extends Component {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
+  componentWillReceiveProps(newProps) {
+    if (
+      this.props.currentLounge.currentLounge.id !==
+      newProps.currentLounge.currentLounge.id
+    ) {
+      this.setState({
+        cache: []
+      });
+
+      socket.emit("user.enter", {
+        user: localStorage.username,
+        currentLoungeID: this.props.currentLounge.currentLounge.id
+      });
+
+      socket.on(`user.enter.${localStorage.username}`, msg => {
+        this.setState({ recent50Messages: msg.reverse() });
+        this.scrollToBottom();
+      });
+
+      socket.on("message.send", msg => {
+        this.setState({ cache: [...this.state.cache, msg] });
+        this.scrollToBottom();
+      });
+
+      socket.on("message.typing", msg => {
+        if (!this.currentUserTyping) {
+          this.setState({
+            isTyping: true,
+            currentUserTyping: msg.user
+          });
+        }
+        setTimeout(() => {
+          this.setState({
+            isTyping: false,
+            currentUserTyping: null
+          });
+        }, 1500);
+      });
+    }
+  }
+
   componentDidMount() {
+    console.log("this.props.currentLounge:", this.props.currentLounge);
+    console.log("this.props.local:", this.props.local);
+    console.log("this.props:", this.props);
     socket.emit("user.enter", {
       user: localStorage.username,
       currentLoungeID: this.props.currentLounge.currentLounge.id
@@ -200,8 +244,8 @@ class Chat extends Component {
             type="text"
             value={this.state.text}
             placeholder={`Chatting in ${
-              "hello"
-              // this.props.currentLounge.currentLounge.name
+              // "hello"
+              this.props.currentLounge.currentLounge.name
             }`}
             // could also dynamically render "Lounge" vs a "Direct Message"
             // Chatting in  LOUNGE_NAME

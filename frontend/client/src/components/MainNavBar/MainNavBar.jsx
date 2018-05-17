@@ -13,19 +13,8 @@ class MainNavBar extends Component {
     super();
 
     this.state = {
-      activeTab: "bets",
       gamesList: ["Fortnite", "Overwatch", "Rocket League", "PUBG"]
     };
-
-    this.selectTabHandler = this.selectTabHandler.bind(this);
-  }
-
-  selectTabHandler(componentName) {
-    // const { local, setMainComponent } = this.props;
-    this.props.setMainComponent(this.props.local, componentName);
-    this.setState({
-      activeTab: componentName
-    });
   }
 
   render() {
@@ -34,16 +23,16 @@ class MainNavBar extends Component {
         <nav className="nav-main">
           <div
             className={
-              this.state.activeTab === "chat"
+              this.props.main.component === "chat"
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
-            onClick={() => this.selectTabHandler("chat")}
+            onClick={() => this.props.setMainComponent("chat")}
           >
             <a
               href="#"
               className={
-                this.state.activeTab === "chat"
+                this.props.main.component === "chat"
                   ? "nav-button-text-active"
                   : "nav-button-text"
               }
@@ -53,16 +42,16 @@ class MainNavBar extends Component {
           </div>{" "}
           <div
             className={
-              this.state.activeTab === "bets"
+              this.props.main.component === "bets"
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
-            onClick={() => this.selectTabHandler("bets")}
+            onClick={() => this.props.setMainComponent("bets")}
           >
             <a
               href="#"
               className={
-                this.state.activeTab === "bets"
+                this.props.main.component === "bets"
                   ? "nav-button-text-active"
                   : "nav-button-text"
               }
@@ -72,16 +61,16 @@ class MainNavBar extends Component {
           </div>{" "}
           <div
             className={
-              this.state.activeTab === "video"
+              this.props.main.component === "video"
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
-            onClick={() => this.selectTabHandler("video")}
+            onClick={() => this.props.setMainComponent("video")}
           >
             <a
               href="#"
               className={
-                this.state.activeTab === "video"
+                this.props.main.component === "video"
                   ? "nav-button-text-active"
                   : "nav-button-text"
               }
@@ -97,7 +86,8 @@ class MainNavBar extends Component {
 
 const mapStateToProps = state => {
   return {
-    local: state.local.localData
+    local: state.local.localData,
+    main: state.component
   };
 };
 

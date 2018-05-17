@@ -34,7 +34,6 @@ class GlobalNavBar extends Component {
     this.showNotificationList = this.showNotificationList.bind(this);
     this.handleNavItemCollapse = this.handleNavItemCollapse.bind(this);
     this.closeNotifications = this.closeNotifications.bind(this);
-    this.menuSelectHandler = this.menuSelectHandler.bind(this);
   }
 
   componentWillMount() {
@@ -216,7 +215,7 @@ class GlobalNavBar extends Component {
               </div>
               <div
                 className="dropdown-menu-item"
-                // onClick={() => this.menuSelectHandler("leaderboard")}
+                onClick={() => this.props.setMainComponent("leaderboard")}
               >
                 Leaderboards
               </div>

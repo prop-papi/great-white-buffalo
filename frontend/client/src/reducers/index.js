@@ -5,11 +5,13 @@ import notificationsData from "./notificationsReducer.js";
 import userPaneData from "./userPaneData.js";
 import message from "./messageReducer.js";
 import currentLounge from "./loungeReducer.js";
+import mainComponent from "./mainComponentReducer.js";
 
 export default combineReducers({
   local: localData,
   global: globalData,
   userPane: userPaneData,
+  component: mainComponent,
   notificationsData,
   currentLounge
 });

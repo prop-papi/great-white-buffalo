@@ -9,7 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   fetchHomeData,
-  setMainComponent,
   addBet,
   cancelMyBet,
   acceptBet,
@@ -70,7 +69,6 @@ class Home extends Component {
     // set app state here
     const {
       fetchHomeData,
-      setMainComponent,
       addBet,
       addLounge,
       cancelMyBet,
@@ -239,9 +237,7 @@ class Home extends Component {
               >
                 <MainNavBar />
                 <br />
-                {this.mainComponentRender(
-                  this.props.local.localData.currentMainComponent
-                )}
+                {this.mainComponentRender(this.props.main.component)}
               </Col>
               <Col
                 xs={2}
@@ -277,7 +273,8 @@ function mapStateToProps(state) {
     //globalData: state.globalData,
     local: state.local,
     global: state.global,
-    userPane: state.userPane
+    userPane: state.userPane,
+    main: state.component
   };
 }
 
