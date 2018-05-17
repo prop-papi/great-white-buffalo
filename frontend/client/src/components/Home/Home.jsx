@@ -25,10 +25,14 @@ import "./Home.css";
 import UserPane from "../UserPane/UserPane";
 
 const betSocket = io("http://localhost:3000/bets");
+const activeUserSocket = io("http://localhost:3000/activeUsers");
 
 class Home extends Component {
   constructor() {
     super();
+    this.state = {
+      usersOnline: {}
+    };
   }
   async componentDidMount() {
     // set app state here
@@ -72,6 +76,16 @@ class Home extends Component {
         voterId,
         localStorage.id
       );
+    });
+
+    activeUserSocket.emit("user.enter", {
+      username: localStorage.username,
+      id: localStorage.id,
+      online: "online"
+    });
+
+    activeUserSocket.on("user.enter", usersOnline => {
+      this.setState({ usersOnline });
     });
   }
 
@@ -128,7 +142,7 @@ class Home extends Component {
                 style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
               >
                 <UsersNav />
-                <UserPane />
+                <UserPane usersOnline={this.state.usersOnline} />
               </Col>
             </Row>
           </Grid>
