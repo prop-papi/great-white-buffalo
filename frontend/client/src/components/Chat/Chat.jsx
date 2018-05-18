@@ -194,7 +194,7 @@ class Chat extends Component {
       }, 1500);
     });
 
-    socket.on("user.leave", payload => {
+    socket.on(`${localStorage.username}.leave`, payload => {
       this.setState({
         recent50Messages: [],
         cache: []

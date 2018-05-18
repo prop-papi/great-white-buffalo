@@ -51,7 +51,7 @@ const chat = io.of("/chat").on("connection", socket => {
   socket.on("user.leave", payload => {
     console.log("event: user.leave");
     socket.leave(`lounge:${payload.previousLoungeID}`);
-    chat.emit("user.leave");
+    chat.emit(`${payload.user}.leave`);
     // socket.disconnect();
   });
 
