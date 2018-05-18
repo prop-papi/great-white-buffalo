@@ -3,6 +3,7 @@ import axios from "axios";
 import { ResponsiveEmbed } from "react-bootstrap";
 import { TWITCH_CLIENT_ID } from "../../../../../config.js";
 import { connect } from "react-redux";
+import "./ESportVid.css";
 
 class ESportVid extends Component {
   constructor() {
@@ -10,12 +11,6 @@ class ESportVid extends Component {
     this.state = {
       streamer: "",
       game: "",
-      gamesList: {
-        Fortnite: "fortnite",
-        Overwatch: "overwatch",
-        "Rocket League": "Rocket League",
-        PUBG: "playerunknown's battlegrounds"
-      },
       videoLink: null
     };
   }
@@ -30,7 +25,10 @@ class ESportVid extends Component {
       return name !== prevState.game ? { game: name } : null;
     } else {
       let videoLink = nextProps.currentLounge.currentLounge.video_link;
-      return { videoLink };
+      return {
+        videoLink,
+        streamer: ""
+      };
     }
   }
 
@@ -61,9 +59,7 @@ class ESportVid extends Component {
   getStream(clientID) {
     axios
       .get(
-        `https://api.twitch.tv/kraken/streams/?game=${
-          this.state.gamesList[this.props.local.club.name]
-        }&limit=1`,
+        `https://api.twitch.tv/kraken/streams/?game=${this.state.game}&limit=1`,
         {
           headers: {
             "Client-ID": clientID
@@ -81,7 +77,7 @@ class ESportVid extends Component {
   render() {
     if (this.state.streamer) {
       return (
-        <div align="center">
+        <div className="videoStream">
           <ResponsiveEmbed a4by3>
             <iframe
               src={`http://player.twitch.tv/?channel=${this.state.streamer}`}
@@ -92,7 +88,7 @@ class ESportVid extends Component {
       );
     } else if (this.state.videoLink) {
       return (
-        <div align="center">
+        <div className="videoStream">
           <ResponsiveEmbed a4by3>
             <iframe
               src={this.state.videoLink}
