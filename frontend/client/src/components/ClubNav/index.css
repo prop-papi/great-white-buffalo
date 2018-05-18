@@ -9,13 +9,18 @@
 }
 
 .nav-image {
-  width: 60px;
-  height: 60px;
+  width: 100%;
+  min-height: 40px;
+  height: 100%;
 }
 
 .nav-item > a:hover {
   width: 100%;
   background-color: transparent;
+}
+
+.nav-item > a {
+  padding: 10px 5px !important;
 }
 
 .nav-pills > li > a:hover {
@@ -75,4 +80,8 @@
 
 .modal-content {
   min-height: 50vh;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

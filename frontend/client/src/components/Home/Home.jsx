@@ -132,6 +132,15 @@ class Home extends Component {
     });
 
     notificationsSocket.on(
+      `incoming-request-${localStorage.username}`,
+      async user => {
+        await this.props.updateNotifications(localStorage.id);
+        // render some pop-up that tells you there's a new notification
+        this.createNotification(`${user} wants to be your friend!`);
+      }
+    );
+
+    notificationsSocket.on(
       `noNewFriends-${localStorage.username}`,
       async user => {
         await this.props.updateNotifications(localStorage.id);
@@ -223,6 +232,7 @@ class Home extends Component {
                 sm={2}
                 md={2}
                 style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
+                className="lounge-column"
               >
                 <LoungeList betSocket={betSocket} />
               </Col>
@@ -242,9 +252,13 @@ class Home extends Component {
                 sm={2}
                 md={2}
                 style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
+                className="userpane-column"
               >
                 <UsersNav />
-                <UserPane usersOnline={this.state.usersOnline} />
+                <UserPane
+                  usersOnline={this.state.usersOnline}
+                  notificationsSocket={notificationsSocket}
+                />
               </Col>
             </Row>
           </Grid>

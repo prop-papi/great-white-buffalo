@@ -42,19 +42,25 @@ const getFriends = async user => {
 };
 
 const addFriend = async (user_1, user_2, action_user) => {
-  const query = `INSERT INTO Friends (user_1, user_2, Friends.status, action_user)
+  const query1 = `SELECT * FROM Friends WHERE (user_1=${user_1} AND user_2=${user_2}) OR (user_1=${user_2} AND user_2=${user_1});`;
+  const query2 = `INSERT INTO Friends (user_1, user_2, Friends.status, action_user)
   VALUES (?, ?, 0, ?);`;
   try {
-    return await mysqldb.query(query, [user_1, user_2, action_user]);
+    let friendship = await mysqldb.query(query1);
+    if (!friendship.length) {
+      return await mysqldb.query(query2, [user_1, user_2, action_user]);
+    } else {
+      return;
+    }
   } catch (err) {
     return err;
   }
 };
 
 const removeFriend = async (user_1, user_2) => {
-  const query = `DELETE FROM Friends WHERE (user_1=? AND user_2=?);`;
+  const query = `DELETE FROM Friends WHERE (user_1=${user_1} AND user_2=${user_2}) OR (user_1=${user_2} AND user_2=${user_1});`;
   try {
-    return await mysqldb.query(query, [user_1, user_2]);
+    return await mysqldb.query(query);
   } catch (err) {
     return err;
   }

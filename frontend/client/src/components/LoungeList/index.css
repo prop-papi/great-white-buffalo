@@ -15,6 +15,7 @@
   border: 0px solid #ddd !important;
   background-color: transparent !important;
   text-align: center;
+  border-radius: 10px;
 }
 
 .list-group-item:hover {
@@ -34,4 +35,8 @@
 #securityButton {
   right: 5%;
   position: absolute;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
