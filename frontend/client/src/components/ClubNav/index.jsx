@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { updateLocalData, addClub, fetchHomeData } from "../../actions";
+import {
+  updateLocalData,
+  addClub,
+  fetchHomeData,
+  updateCurrentLounge
+} from "../../actions";
 import axios from "axios";
 
 import {
@@ -190,6 +195,7 @@ class ClubNav extends Component {
         [c.id]: !prevState.availableClubsClickMap[c.id]
       }
     }));
+    this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
   }
 
   handleLeaveClick(c) {
@@ -472,7 +478,9 @@ class ClubNav extends Component {
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
-    global: state.global
+    global: state.global,
+    local: state.local,
+    currentLounge: state.currentLounge
   };
 }
 
@@ -481,7 +489,8 @@ function bindActionsToDispatch(dispatch) {
     {
       updateLocalData: updateLocalData,
       addClub: addClub,
-      fetchHomeData: fetchHomeData
+      fetchHomeData: fetchHomeData,
+      updateCurrentLounge: updateCurrentLounge
     },
     dispatch
   );

@@ -108,17 +108,26 @@ class Chat extends Component {
   };
 
   componentWillReceiveProps(newProps) {
+    console.log(
+      "this.props.currentLounge: ",
+      this.props.currentLounge.currentLounge.id,
+      "newProps.currentLounge",
+      newProps.currentLounge.currentLounge.id
+    );
+
     if (
       this.props.currentLounge.currentLounge.id !==
       newProps.currentLounge.currentLounge.id
     ) {
-      this.setState({
-        cache: []
+      console.log("in the if");
+      socket.emit("user.leave", {
+        user: localStorage.username,
+        previousLoungeID: this.props.currentLounge.currentLounge.id
       });
 
       socket.emit("user.enter", {
         user: localStorage.username,
-        currentLoungeID: this.props.currentLounge.currentLounge.id
+        currentLoungeID: newProps.currentLounge.currentLounge.id
       });
 
       socket.on(`user.enter.${localStorage.username}`, msg => {
@@ -149,9 +158,6 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    console.log("this.props.currentLounge:", this.props.currentLounge);
-    console.log("this.props.local:", this.props.local);
-    console.log("this.props:", this.props);
     socket.emit("user.enter", {
       user: localStorage.username,
       currentLoungeID: this.props.currentLounge.currentLounge.id
@@ -180,6 +186,13 @@ class Chat extends Component {
           currentUserTyping: null
         });
       }, 1500);
+    });
+
+    socket.on("user.leave", payload => {
+      this.setState({
+        recent50Messages: [],
+        cache: []
+      });
     });
   }
 

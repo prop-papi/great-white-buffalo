@@ -20,6 +20,8 @@ const usersOnline = {};
 // chat namespace
 const chat = io.of("/chat").on("connection", socket => {
   socket.on("user.enter", msg => {
+    console.log(`${msg.user} entered lounge: ${msg.currentLoungeID}`);
+
     socket.join(`lounge:${msg.currentLoungeID}`);
     renderRecent50(`lounge:${msg.currentLoungeID}`, (err, result) => {
       chat
@@ -46,6 +48,13 @@ const chat = io.of("/chat").on("connection", socket => {
   });
 
   // disconnect
+  socket.on("user.leave", payload => {
+    console.log("event: user.leave");
+    socket.leave(`lounge:${payload.previousLoungeID}`);
+    chat.emit("user.leave");
+    socket.disconnect();
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
