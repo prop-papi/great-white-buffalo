@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-  updateLocalData,
-  addClub,
-  fetchHomeData,
-  updateCurrentLounge
-} from "../../actions";
+import { updateLocalData, addClub, fetchHomeData } from "../../actions";
+import { updateCurrentLounge } from "../../actions/loungeActions";
 import axios from "axios";
 
 import {
@@ -52,8 +48,9 @@ class ClubNav extends Component {
     this.handleLeaveClick = this.handleLeaveClick.bind(this);
   }
 
-  handleNavItemClick(club) {
-    this.props.updateLocalData(club.id);
+  async handleNavItemClick(club) {
+    await this.props.updateLocalData(club.id);
+    await this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
     // update default club in db
     let body = {
       user: localStorage.getItem("id"),
@@ -195,7 +192,6 @@ class ClubNav extends Component {
         [c.id]: !prevState.availableClubsClickMap[c.id]
       }
     }));
-    this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
   }
 
   handleLeaveClick(c) {

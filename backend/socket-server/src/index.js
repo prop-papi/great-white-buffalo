@@ -52,7 +52,7 @@ const chat = io.of("/chat").on("connection", socket => {
     console.log("event: user.leave");
     socket.leave(`lounge:${payload.previousLoungeID}`);
     chat.emit("user.leave");
-    socket.disconnect();
+    // socket.disconnect();
   });
 
   socket.on("disconnect", () => {

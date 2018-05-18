@@ -115,46 +115,52 @@ class Chat extends Component {
       newProps.currentLounge.currentLounge.id
     );
 
-    if (
-      this.props.currentLounge.currentLounge.id !==
-      newProps.currentLounge.currentLounge.id
-    ) {
-      console.log("in the if");
-      socket.emit("user.leave", {
-        user: localStorage.username,
-        previousLoungeID: this.props.currentLounge.currentLounge.id
-      });
+    // if (
+    //   this.props.currentLounge.currentLounge.id !==
+    //   newProps.currentLounge.currentLounge.id
+    // ) {
+    socket.emit("user.leave", {
+      user: localStorage.username,
+      previousLoungeID: this.props.currentLounge.currentLounge.id
+    });
 
-      socket.emit("user.enter", {
-        user: localStorage.username,
-        currentLoungeID: newProps.currentLounge.currentLounge.id
-      });
+    socket.emit("user.enter", {
+      user: localStorage.username,
+      currentLoungeID: newProps.currentLounge.currentLounge.id
+    });
 
-      socket.on(`user.enter.${localStorage.username}`, msg => {
-        this.setState({ recent50Messages: msg.reverse() });
-        this.scrollToBottom();
-      });
+    // socket.on(`user.enter.${localStorage.username}`, msg => {
+    //   this.setState({ recent50Messages: msg.reverse() });
+    //   this.scrollToBottom();
+    // });
 
-      socket.on("message.send", msg => {
-        this.setState({ cache: [...this.state.cache, msg] });
-        this.scrollToBottom();
-      });
+    // socket.on("message.send", msg => {
+    //   this.setState({ cache: [...this.state.cache, msg] });
+    //   this.scrollToBottom();
+    // });
 
-      socket.on("message.typing", msg => {
-        if (!this.currentUserTyping) {
-          this.setState({
-            isTyping: true,
-            currentUserTyping: msg.user
-          });
-        }
-        setTimeout(() => {
-          this.setState({
-            isTyping: false,
-            currentUserTyping: null
-          });
-        }, 1500);
-      });
-    }
+    // socket.on("message.typing", msg => {
+    //   if (!this.currentUserTyping) {
+    //     this.setState({
+    //       isTyping: true,
+    //       currentUserTyping: msg.user
+    //     });
+    //   }
+    //   setTimeout(() => {
+    //     this.setState({
+    //       isTyping: false,
+    //       currentUserTyping: null
+    //     });
+    //   }, 1500);
+    // });
+
+    // socket.on("user.leave", payload => {
+    //   this.setState({
+    //     recent50Messages: [],
+    //     cache: []
+    //   });
+    // });
+    // }
   }
 
   componentDidMount() {
@@ -244,12 +250,12 @@ class Chat extends Component {
                 </Row>
               );
             })}
+            {this.isTyping(this.state.currentUserTyping)}
             <div
               ref={el => {
                 this.messagesEnd = el;
               }}
             />
-            {this.isTyping(this.state.currentUserTyping)}
           </Grid>
         </div>
         <div className="message-input">
