@@ -61,3 +61,8 @@
 .user-in-message:hover {
   cursor: pointer;
 }
+
+.logo-li-item {
+  height: 45px;
+  margin-right: auto;
+}

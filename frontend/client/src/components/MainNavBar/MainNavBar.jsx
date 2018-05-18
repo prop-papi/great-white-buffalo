@@ -14,7 +14,6 @@ class MainNavBar extends Component {
   }
 
   render() {
-    console.log(this.props.main.component);
     return (
       <div className="main-component-wrapper">
         <nav className="nav-main">

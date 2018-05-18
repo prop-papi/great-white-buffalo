@@ -94,7 +94,7 @@ class FriendRequest extends Component {
       return (
         <div className="notification-wrapper">
           <ul className="horizontal-list notifications-list" role="navigation">
-            <li className="logo li">
+            <li className="logo-li-item li">
               <Image
                 className="notification-logo"
                 src={this.props.data.partner_picture}
@@ -139,7 +139,7 @@ class FriendRequest extends Component {
       return (
         <div className="notification-wrapper">
           <ul className="horizontal-list notifications-list" role="navigation">
-            <li className="logo li">
+            <li className="logo-li-item li">
               <Image
                 className="notification-logo"
                 src={this.props.data.partner_picture}
