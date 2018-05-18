@@ -15,31 +15,51 @@ class ESportVid extends Component {
         Overwatch: "overwatch",
         "Rocket League": "Rocket League",
         PUBG: "playerunknown's battlegrounds"
-      }
+      },
+      videoLink: null
     };
   }
 
-  componentDidMount() {
-    const name = this.props.local.club.name;
-    this.setState({ game: this.state.gamesList[name] });
-    this.getStream(TWITCH_CLIENT_ID);
-  }
-
   static getDerivedStateFromProps(nextProps, prevState) {
-    const name = nextProps.local.club.name;
-    return prevState.gamesList[name] !== prevState.game
-      ? { game: prevState.gamesList[name] }
-      : null;
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    if (prevState.game !== this.state.game) {
-      await this.getStream(TWITCH_CLIENT_ID);
+    if (nextProps.currentLounge.currentLounge.name === "General") {
+      const name =
+        nextProps.local.club.name === "PUBG"
+          ? "playerunknown's battlegrounds"
+          : nextProps.local.club.name;
+      console.log(name);
+      return name !== prevState.game ? { game: name } : null;
+    } else {
+      let videoLink = nextProps.currentLounge.currentLounge.video_link;
+      return { videoLink };
     }
   }
 
-  async getStream(clientID) {
-    await axios
+  async componentDidMount() {
+    if (this.props.currentLounge.currentLounge.name === "General") {
+      const name =
+        this.props.local.club.name === "PUBG"
+          ? "playerunknown's battlegrounds"
+          : this.props.local.club.name;
+      this.setState({ game: name });
+      await this.getStream(TWITCH_CLIENT_ID);
+    } else if (this.props.currentLounge.currentLounge.video_link) {
+      let videoLink = this.props.currentLounge.currentLounge.video_link;
+      this.setState({ videoLink });
+    }
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    const currLounge = this.props.currentLounge.currentLounge.name;
+    if (prevState.game !== this.state.game && currLounge === "General") {
+      await this.getStream(TWITCH_CLIENT_ID);
+    } /*else if (this.props.currentLounge.currentLounge.video_link) {
+      let videoLink = this.props.currentLounge.currentLounge.video_link;
+      this.setState({ videoLink });
+    }*/
+  }
+
+  getStream(clientID) {
+    axios
       .get(
         `https://api.twitch.tv/kraken/streams/?game=${
           this.state.gamesList[this.props.local.club.name]
@@ -65,6 +85,19 @@ class ESportVid extends Component {
           <ResponsiveEmbed a4by3>
             <iframe
               src={`http://player.twitch.tv/?channel=${this.state.streamer}`}
+              allowFullScreen={true}
+            />
+          </ResponsiveEmbed>
+        </div>
+      );
+    } else if (this.state.videoLink) {
+      return (
+        <div align="center">
+          <ResponsiveEmbed a4by3>
+            <iframe
+              src={this.state.videoLink}
+              allowFullScreen={true}
+              sandbox="allow-scripts allow-forms allow-same-origin"
             />
           </ResponsiveEmbed>
         </div>
@@ -76,7 +109,8 @@ class ESportVid extends Component {
 
 const mapStateToProps = state => {
   return {
-    local: state.local.localData
+    local: state.local.localData,
+    currentLounge: state.currentLounge
   };
 };
 

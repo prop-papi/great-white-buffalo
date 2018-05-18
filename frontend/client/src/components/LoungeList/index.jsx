@@ -39,6 +39,7 @@ class LoungeList extends Component {
   }
 
   async handleLoungeClick(lounge) {
+    console.log("HERE IS THE LOUNGE", lounge);
     await this.props.updateCurrentLounge(lounge);
     // display lounge data
   }
@@ -125,10 +126,7 @@ class LoungeList extends Component {
               <ListGroupItem
                 className="lounge-item"
                 key={lounge.id}
-                onClick={() => {
-                  this.handleShow;
-                  this.handleLoungeClick(lounge);
-                }}
+                onClick={() => this.handleLoungeClick(lounge)}
                 selected
               >
                 <span className="lounge-name">
