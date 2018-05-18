@@ -77,13 +77,12 @@ class ESportVid extends Component {
   render() {
     if (this.state.streamer) {
       return (
-        <div className="videoStream">
-          <ResponsiveEmbed a4by3>
-            <iframe
-              src={`http://player.twitch.tv/?channel=${this.state.streamer}`}
-              allowFullScreen={true}
-            />
-          </ResponsiveEmbed>
+        <div className="videoContainer">
+          <iframe
+            src={`http://player.twitch.tv/?channel=${this.state.streamer}`}
+            allowFullScreen={true}
+            className="videoFrame"
+          />
         </div>
       );
     } else if (this.state.videoLink) {
