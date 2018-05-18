@@ -128,6 +128,7 @@ export const acceptBet = (
         return {
           ...b,
           challenger: myId,
+          challenger_name: localStorage.username,
           is_my_bet: 1,
           status: "active"
         };
@@ -136,6 +137,7 @@ export const acceptBet = (
           return {
             ...b,
             challenger: acceptorId,
+            challenger_name: bet.challenger_name,
             is_my_bet: 1,
             status: "active"
           };
@@ -143,6 +145,7 @@ export const acceptBet = (
           return {
             ...b,
             challenger: acceptorId,
+            challenger_name: bet.challenger_name,
             is_my_bet: 0,
             status: "active"
           };

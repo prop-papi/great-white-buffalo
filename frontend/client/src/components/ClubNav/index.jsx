@@ -425,7 +425,10 @@ class ClubNav extends Component {
                 {this.state.loading
                   ? "Loading..."
                   : this.props.global.globalData.clubs.map(club => {
-                      if (club.id !== 12) {
+                      if (
+                        club.id !== 12 &&
+                        club.id !== this.props.local.localData.club.id
+                      ) {
                         return (
                           <NavItem
                             key={club.id}
@@ -481,7 +484,8 @@ class ClubNav extends Component {
 function mapStateToProps(state) {
   // specifies the slice of state this compnent wants and provides it
   return {
-    global: state.global
+    global: state.global,
+    local: state.local
   };
 }
 

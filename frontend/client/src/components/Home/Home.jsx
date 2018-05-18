@@ -86,6 +86,7 @@ class Home extends Component {
     });
 
     betSocket.on("bet.create", newBet => {
+      console.log("new bettttt");
       addBet(this.props.global.globalData, newBet);
     });
 
@@ -95,6 +96,10 @@ class Home extends Component {
 
     betSocket.on("bet.cancel", newBet => {
       cancelMyBet(this.props.global.globalData, newBet, 0);
+    });
+
+    betSocket.on("bet.expired", betId => {
+      console.log("why ", betId);
     });
 
     betSocket.on("bet.accept", (newBet, acceptorId) => {
