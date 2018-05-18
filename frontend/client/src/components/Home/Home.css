@@ -31,3 +31,20 @@
 .Toastify__toast--default {
   color: rgb(90, 105, 120) !important;
 }
+
+.club-column {
+  width: 55.5px !important;
+}
+
+.lounge-column {
+  width: 210.5px !important;
+}
+
+.userpane-column {
+  width: 240.5px !important;
+}
+
+.main-column {
+  width: calc(100% - 506.5px) !important;
+}
+/* 555.5px */

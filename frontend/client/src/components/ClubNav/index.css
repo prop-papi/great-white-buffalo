@@ -19,6 +19,10 @@
   background-color: transparent;
 }
 
+.nav-item > a {
+  padding: 10px 5px !important;
+}
+
 .nav-pills > li > a:hover {
   color: #fff;
   opacity: 0.5;
@@ -76,4 +80,8 @@
 
 .modal-content {
   min-height: 50vh;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

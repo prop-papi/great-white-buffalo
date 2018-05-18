@@ -54,3 +54,7 @@
   background-color: rgb(54, 57, 62) !important;
   color: rgb(194, 196, 198) !important;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

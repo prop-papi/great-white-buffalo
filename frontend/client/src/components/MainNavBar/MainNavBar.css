@@ -11,6 +11,24 @@
   border-color: rgb(66, 70, 76);
 }
 
+.nav-button-userpane {
+  width: 100%;
+  border-width: 2px;
+  border-radius: 20px;
+  background-color: transparent !important;
+  color: rgb(174, 176, 178);
+  border-color: rgb(66, 70, 76);
+}
+
+.nav-button-userpane-active {
+  width: 100%;
+  border-width: 2px;
+  border-radius: 20px;
+  background-color: rgb(115, 139, 215);
+  color: white;
+  border-color: rgb(66, 70, 76);
+}
+
 .main-nav-button {
   color: rgb(174, 176, 178);
   width: 33%;
@@ -27,6 +45,47 @@
 
 .nav-button:active {
   background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.nav-button-userpane:focus {
+  color: white !important;
+  border-color: rgb(115, 139, 215);
+  background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.nav-button-userpane:active {
+  background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.nav-button-userpane-active:focus {
+  color: white !important;
+  border-color: rgb(115, 139, 215);
+  background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.nav-button-userpane-active:active {
+  background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.nav-button-userpane-active:hover {
+  color: white;
+  background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.nav-button-userpane:hover {
+  color: white;
   outline: none !important;
   box-shadow: none;
 }

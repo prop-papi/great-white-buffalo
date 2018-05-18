@@ -232,6 +232,7 @@ class Home extends Component {
                 sm={2}
                 md={2}
                 style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
+                className="lounge-column"
               >
                 <LoungeList betSocket={betSocket} />
               </Col>
@@ -251,6 +252,7 @@ class Home extends Component {
                 sm={2}
                 md={2}
                 style={{ backgroundColor: "rgb(47,49,54)", height: "93vh" }}
+                className="userpane-column"
               >
                 <UsersNav />
                 <UserPane

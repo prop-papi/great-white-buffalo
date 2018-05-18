@@ -7,9 +7,18 @@ import "../MainNavBar/MainNavBar.css";
 class UsersNav extends Component {
   constructor() {
     super();
+
+    this.state = {
+      activeTab: "users"
+    };
+
+    this.handleButton = this.handleButton.bind(this);
   }
 
   handleButton(e) {
+    e.target.value === "Users"
+      ? this.setState({ activeTab: "users" })
+      : this.setState({ activeTab: "friends" });
     let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
     newUserPane.showUsers = e.target.value === "Users" ? true : false;
     newUserPane.didSelectUser = false;
@@ -22,7 +31,11 @@ class UsersNav extends Component {
         <Row className="nav-row">
           <Col align="center" md={6}>
             <Button
-              className="nav-button"
+              className={
+                this.state.activeTab === "users"
+                  ? "nav-button-userpane-active"
+                  : "nav-button-userpane"
+              }
               onClick={e => this.handleButton(e)}
               value="Users"
             >
@@ -31,7 +44,11 @@ class UsersNav extends Component {
           </Col>
           <Col align="center" md={6}>
             <Button
-              className="nav-button"
+              className={
+                this.state.activeTab === "friends"
+                  ? "nav-button-userpane-active"
+                  : "nav-button-userpane"
+              }
               onClick={e => this.handleButton(e)}
               value="Friends"
             >
