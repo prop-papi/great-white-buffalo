@@ -14,6 +14,7 @@ class MainNavBar extends Component {
   }
 
   render() {
+    console.log(this.props.main.component);
     return (
       <div className="main-component-wrapper">
         <nav className="nav-main">
@@ -38,7 +39,8 @@ class MainNavBar extends Component {
           </div>{" "}
           <div
             className={
-              this.props.main.component === "bets"
+              this.props.main.component === "bets" ||
+              this.props.main.component === undefined
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
@@ -47,7 +49,8 @@ class MainNavBar extends Component {
             <a
               href="#"
               className={
-                this.props.main.component === "bets"
+                this.props.main.component === "bets" ||
+                this.props.main.component === undefined
                   ? "nav-button-text-active"
                   : "nav-button-text"
               }
