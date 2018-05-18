@@ -97,6 +97,15 @@ class LoungeList extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  componentWillReceiveProps(newProps) {
+    if (
+      this.props.local.localData.lounges[0] !==
+      newProps.local.localData.lounges[0]
+    ) {
+      this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
+    }
+  }
+
   async componentDidMount() {
     await this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
   }
@@ -116,7 +125,10 @@ class LoungeList extends Component {
               <ListGroupItem
                 className="lounge-item"
                 key={lounge.id}
-                onClick={() => this.handleShow}
+                onClick={() => {
+                  this.handleShow;
+                  this.handleLoungeClick(lounge);
+                }}
                 selected
               >
                 <span className="lounge-name">

@@ -18,7 +18,7 @@ class TestData extends React.Component {
         {JSON.stringify(this.props.main)}
         <br />
         <br />
-        {JSON.stringify(this.props)}
+        {JSON.stringify(this.props.currentLounge)}
         <br />
         <br />
         Redux current store local data - called with
@@ -42,7 +42,8 @@ function mapStateToProps(state) {
   return {
     global: state.global,
     local: state.local,
-    main: state.component
+    main: state.component,
+    currentLounge: state.currentLounge
   };
 }
 

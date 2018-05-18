@@ -108,50 +108,62 @@ class Chat extends Component {
   };
 
   componentWillReceiveProps(newProps) {
-    if (
-      this.props.currentLounge.currentLounge.id !==
+    console.log(
+      "this.props.currentLounge: ",
+      this.props.currentLounge.currentLounge.id,
+      "newProps.currentLounge",
       newProps.currentLounge.currentLounge.id
-    ) {
-      this.setState({
-        cache: []
-      });
+    );
 
-      socket.emit("user.enter", {
-        user: localStorage.username,
-        currentLoungeID: this.props.currentLounge.currentLounge.id
-      });
+    // if (
+    //   this.props.currentLounge.currentLounge.id !==
+    //   newProps.currentLounge.currentLounge.id
+    // ) {
+    socket.emit("user.leave", {
+      user: localStorage.username,
+      previousLoungeID: this.props.currentLounge.currentLounge.id
+    });
 
-      socket.on(`user.enter.${localStorage.username}`, msg => {
-        this.setState({ recent50Messages: msg.reverse() });
-        this.scrollToBottom();
-      });
+    socket.emit("user.enter", {
+      user: localStorage.username,
+      currentLoungeID: newProps.currentLounge.currentLounge.id
+    });
 
-      socket.on("message.send", msg => {
-        this.setState({ cache: [...this.state.cache, msg] });
-        this.scrollToBottom();
-      });
+    // socket.on(`user.enter.${localStorage.username}`, msg => {
+    //   this.setState({ recent50Messages: msg.reverse() });
+    //   this.scrollToBottom();
+    // });
 
-      socket.on("message.typing", msg => {
-        if (!this.currentUserTyping) {
-          this.setState({
-            isTyping: true,
-            currentUserTyping: msg.user
-          });
-        }
-        setTimeout(() => {
-          this.setState({
-            isTyping: false,
-            currentUserTyping: null
-          });
-        }, 1500);
-      });
-    }
+    // socket.on("message.send", msg => {
+    //   this.setState({ cache: [...this.state.cache, msg] });
+    //   this.scrollToBottom();
+    // });
+
+    // socket.on("message.typing", msg => {
+    //   if (!this.currentUserTyping) {
+    //     this.setState({
+    //       isTyping: true,
+    //       currentUserTyping: msg.user
+    //     });
+    //   }
+    //   setTimeout(() => {
+    //     this.setState({
+    //       isTyping: false,
+    //       currentUserTyping: null
+    //     });
+    //   }, 1500);
+    // });
+
+    // socket.on("user.leave", payload => {
+    //   this.setState({
+    //     recent50Messages: [],
+    //     cache: []
+    //   });
+    // });
+    // }
   }
 
   componentDidMount() {
-    console.log("this.props.currentLounge:", this.props.currentLounge);
-    console.log("this.props.local:", this.props.local);
-    console.log("this.props:", this.props);
     socket.emit("user.enter", {
       user: localStorage.username,
       currentLoungeID: this.props.currentLounge.currentLounge.id
@@ -180,6 +192,13 @@ class Chat extends Component {
           currentUserTyping: null
         });
       }, 1500);
+    });
+
+    socket.on(`${localStorage.username}.leave`, payload => {
+      this.setState({
+        recent50Messages: [],
+        cache: []
+      });
     });
   }
 
@@ -231,12 +250,12 @@ class Chat extends Component {
                 </Row>
               );
             })}
+            {this.isTyping(this.state.currentUserTyping)}
             <div
               ref={el => {
                 this.messagesEnd = el;
               }}
             />
-            {this.isTyping(this.state.currentUserTyping)}
           </Grid>
         </div>
         <div className="message-input">
