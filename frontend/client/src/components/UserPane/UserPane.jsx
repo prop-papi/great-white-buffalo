@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row } from "react-bootstrap";
+import { Row, Image } from "react-bootstrap";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { updateUserPaneData } from "../../actions/index";
@@ -116,19 +116,24 @@ class UserPane extends Component {
       let { offline, online } = this.handleOnlineUsers(usersToLoad);
       return (
         <div>
-          <Row className="userpane-status">Online</Row>
+          <Row className="userpane-status">Online - {online.length}</Row>
           {online.map((user, key) => {
             return (
               <Row
                 key={key}
                 onClick={() => this.handleSelectedUser(user)}
-                className="userpane-row"
+                className="userpane-row-online"
               >
+                <Image
+                  className="logo"
+                  src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
+                  rounded
+                />{" "}
                 {user}
               </Row>
             );
           })}
-          <Row className="userpane-status">Offline</Row>
+          <Row className="userpane-status">Offline - {offline.length}</Row>
           {offline.map((user, key) => {
             return (
               <Row
@@ -136,6 +141,11 @@ class UserPane extends Component {
                 onClick={() => this.handleSelectedUser(user)}
                 className="userpane-row"
               >
+                <Image
+                  className="logo"
+                  src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
+                  rounded
+                />{" "}
                 {user}
               </Row>
             );

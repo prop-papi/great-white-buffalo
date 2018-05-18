@@ -23,8 +23,27 @@
 
 .userpane-row {
   color: rgb(174, 176, 178);
-  padding-top: 10px;
-  padding-left: 10px;
+  padding: 4px 3px 4px 3px;
+  cursor: pointer;
+  border-radius: 10px;
+  margin: 2px;
+}
+
+.userpane-row:hover {
+  background-color: rgb(61, 77, 87) !important;
+  color: white;
+}
+
+.userpane-row-online {
+  color: limegreen;
+  padding: 4px 3px 4px 3px;
+  cursor: pointer;
+  border-radius: 10px;
+  margin: 2px;
+}
+
+.userpane-row-online:hover {
+  background-color: rgb(61, 77, 87) !important;
 }
 
 .pending-message {
@@ -33,7 +52,11 @@
 
 .userpane-status {
   color: rgb(174, 176, 178);
-  padding-top: 10px;
-  text-align: center;
-  font-size: 15px;
+  padding-top: 20px;
+  padding-left: 13px;
+  font-size: 14px;
+  padding-bottom: 5px;
+}
+
+.logo {
 }
