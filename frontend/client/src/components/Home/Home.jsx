@@ -23,7 +23,7 @@ import {
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
-import ESportVid from "../ESport/ESportVid";
+import SportVid from "../Sport/SportVid";
 import Chat from "../Chat/Chat.jsx";
 import Leaderboard from "../Leaderboard/Leaderboard.jsx";
 import { connect } from "react-redux";
@@ -54,7 +54,7 @@ class Home extends Component {
     if (componentName === "chat") {
       return <Chat />;
     } else if (componentName === "video") {
-      return <ESportVid />;
+      return <SportVid />;
     } else if (componentName === "leaderboard") {
       return <Leaderboard />;
     } else {

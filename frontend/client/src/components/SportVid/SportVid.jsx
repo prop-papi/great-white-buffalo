@@ -3,9 +3,9 @@ import axios from "axios";
 import { ResponsiveEmbed } from "react-bootstrap";
 import { TWITCH_CLIENT_ID } from "../../../../../config.js";
 import { connect } from "react-redux";
-import "./ESportVid.css";
+import "./SportVid.css";
 
-class ESportVid extends Component {
+class SportVid extends Component {
   constructor() {
     super();
     this.state = {
@@ -109,4 +109,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(ESportVid);
+export default connect(mapStateToProps)(SportVid);
