@@ -15,7 +15,8 @@ import {
   acceptBet,
   voteOnBet,
   addLounge,
-  updateNotifications
+  updateNotifications,
+  externalResolved
 } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
@@ -71,7 +72,8 @@ class Home extends Component {
       addLounge,
       cancelMyBet,
       acceptBet,
-      voteOnBet
+      voteOnBet,
+      externalResolved
     } = this.props;
 
     await fetchHomeData(localStorage.id, localStorage.default_club);
@@ -113,6 +115,11 @@ class Home extends Component {
         voterId,
         localStorage.id
       );
+    });
+
+    betSocket.on("bet.externalResolved", (newBet, vote) => {
+      console.log("a bet of yours was externally resolved");
+      externalResolved(this.props.global.globalData, newBet, vote);
     });
 
     activeUserSocket.emit("user.enter", {
@@ -302,7 +309,8 @@ function bindActionsToDispatch(dispatch) {
       acceptBet: acceptBet,
       voteOnBet: voteOnBet,
       addLounge: addLounge,
-      updateNotifications: updateNotifications
+      updateNotifications: updateNotifications,
+      externalResolved: externalResolved
     },
     dispatch
   );

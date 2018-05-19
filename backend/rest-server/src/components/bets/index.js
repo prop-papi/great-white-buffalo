@@ -42,6 +42,51 @@ router.post("/accept", async function(req, res) {
   }
 });
 
+router.post("/externalResolved", async function(req, res) {
+  // name ambiguously as this should be able to handle admin decisions, voting, or any other external decision making
+  const { bet, vote } = req.body;
+  let creator_vote;
+  let challenger_vote;
+  let result;
+  if (vote !== 2) {
+    const status = "resolved";
+    if (vote === 0) {
+      //creator won
+      creator_vote = 1;
+      challenger_vote = 0;
+      result = bet.creator;
+    } else if (vote === 1) {
+      //challenger won
+      creator_vote = 0;
+      challenger_vote = 1;
+      result = bet.challenger;
+    }
+    try {
+      const updated = await betsdb.voteLoss(
+        bet.id,
+        status,
+        result,
+        creator_vote,
+        challenger_vote
+      );
+      const liar = creator_vote ? bet.challenger : bet.creator;
+      const rep = await betsdb.reputation(liar);
+      res.send(updated);
+    } catch (err) {
+      console.log(err);
+      res.status(401).send();
+    }
+  } else {
+    try {
+      const updated = await betsdb.stalemate(bet.id);
+      res.send(updated);
+    } catch (err) {
+      console.log(err);
+      res.status(401).send();
+    }
+  }
+});
+
 router.post("/vote", async function(req, res) {
   const { bet, myId, vote } = req.body;
   if (vote === 0) {

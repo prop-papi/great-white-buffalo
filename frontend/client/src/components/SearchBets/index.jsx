@@ -31,11 +31,13 @@ class SearchBets extends React.Component {
       searchValue: "",
       myOpenBets: [],
       myCurrentBets: [],
+      myAdminReview: [],
       myReviewBets: [],
       myHistoricalBets: [],
       myCanceledBets: [],
       myExpiredBets: [],
       myResolvedBets: [],
+      myStalemateBets: [],
       openBets: [],
       openBetsName:
         props.local.localData.club.name === "Global"
@@ -59,6 +61,7 @@ class SearchBets extends React.Component {
     let tempMyCanceled = [];
     let tempMyExpired = [];
     let tempMyResolved = [];
+    let tempMyStalemate = [];
     let tempOpen = [];
     this.props.global.globalData.bets.forEach(b => {
       if (b.is_my_bet) {
@@ -77,6 +80,9 @@ class SearchBets extends React.Component {
         } else if (b.status === "resolved") {
           tempMyResolved.push(b);
           tempMyHistorical.push(b);
+        } else if (b.status === "stalemate") {
+          tempMyStalemate.push(b);
+          tempMyHistorical.push(b);
         }
       } else if (
         b.status === "pending" &&
@@ -94,6 +100,7 @@ class SearchBets extends React.Component {
       myCanceledBets: tempMyCanceled,
       myExpiredBets: tempMyExpired,
       myResolvedBets: tempMyResolved,
+      myStalemateBets: tempMyStalemate,
       openBets: tempOpen,
       openBetsName:
         this.props.local.localData.club.name === "Global"
@@ -103,17 +110,26 @@ class SearchBets extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
+    console.log("component will receive props test");
     var tempMyOpen = [];
     var tempMyCurrent = [];
+    var tempMyAdminReview = [];
     var tempMyReview = [];
     var tempMyHistorical = [];
     var tempMyCanceled = [];
     var tempMyExpired = [];
     var tempMyResolved = [];
+    var tempMyStalemate = [];
     var tempOpen = [];
     newProps.global.globalData.bets.forEach(b => {
       if (b.is_my_bet) {
-        if (b.status === "pending") {
+        if (
+          b.status === "disputed" &&
+          b.club_admin === Number(localStorage.id)
+        ) {
+          // fix this later by having multiple admins / mods and not having you decide if it is your own bet
+          tempMyAdminReview.push(b);
+        } else if (b.status === "pending") {
           tempMyOpen.push(b);
         } else if (b.status === "active") {
           tempMyCurrent.push(b);
@@ -128,6 +144,9 @@ class SearchBets extends React.Component {
         } else if (b.status === "resolved") {
           tempMyResolved.push(b);
           tempMyHistorical.push(b);
+        } else if (b.status === "stalemate") {
+          tempMyStalemate.push(b);
+          tempMyHistorical.push(b);
         }
       } else if (
         b.status === "pending" &&
@@ -135,16 +154,23 @@ class SearchBets extends React.Component {
           newProps.local.localData.club.id === b.club)
       ) {
         tempOpen.push(b);
+      } else if (
+        b.status === "disputed" &&
+        b.club_admin === Number(localStorage.id)
+      ) {
+        tempMyAdminReview.push(b);
       }
     });
     this.setState({
       myOpenBets: tempMyOpen,
       myCurrentBets: tempMyCurrent,
+      myAdminReview: tempMyAdminReview,
       myReviewBets: tempMyReview,
       myHistoricalBets: tempMyHistorical,
       myCanceledBets: tempMyCanceled,
       myExpiredBets: tempMyExpired,
       myResolvedBets: tempMyResolved,
+      myStalemateBets: tempMyStalemate,
       openBets: tempOpen,
       openBetsName:
         newProps.local.localData.club.name === "Global"
@@ -201,8 +227,27 @@ class SearchBets extends React.Component {
             </Tab>
             <Tab
               eventKey={3}
-              title={"Review (" + this.state.myReviewBets.length + ")"}
+              title={
+                "Review (" +
+                (this.state.myReviewBets.length +
+                  this.state.myAdminReview.length) +
+                ")"
+              }
             >
+              {this.state.myAdminReview.length ? (
+                <div>
+                  <h3>Admin dispute Review</h3>
+                  {this.state.myAdminReview.map(b => (
+                    <Bet
+                      key={b.id}
+                      bet={b}
+                      betSocket={this.props.betSocket}
+                      notificationsSocket={this.props.notificationsSocket}
+                    />
+                  ))}{" "}
+                  <h3>My Bets to Review</h3>
+                </div>
+              ) : null}
               {this.state.myReviewBets.map(b => (
                 <Bet
                   key={b.id}

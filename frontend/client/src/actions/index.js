@@ -122,6 +122,7 @@ export const acceptBet = (
         return {
           ...b,
           challenger: myId,
+          challenger_name: localStorage.username,
           is_my_bet: 1,
           status: "active"
         };
@@ -130,6 +131,7 @@ export const acceptBet = (
           return {
             ...b,
             challenger: acceptorId,
+            challenger_name: bet.challenger_name,
             is_my_bet: 1,
             status: "active"
           };
@@ -295,6 +297,116 @@ export const voteOnBet = (
               escrow_balance: globalData.balances[0].escrow_balance
             }
           ];
+  const g = {
+    ...globalData,
+    bets: newBets,
+    balances: newBalances
+  };
+  setGlobalData(g, dispatch);
+};
+
+export const externalResolved = (
+  globalData,
+  bet,
+  vote // 0 -> creator won, 1 -> challenger won, 2 -> stalemate
+) => dispatch => {
+  // *** possibly add more in here later. KDR / wins / losses???? ***
+  let iWon;
+  const newBets = globalData.bets.map((b, index) => {
+    if (b.id !== bet.id) {
+      return b;
+    } else {
+      console.log("i found the bet");
+      if (
+        b.creator !== Number(localStorage.id) &&
+        b.challenger !== Number(localStorage.id)
+      ) {
+        return b;
+      } else {
+        if (vote === 2) {
+          iWon = "stalemate";
+          return {
+            ...b,
+            status: "stalemate"
+          };
+        } else if (vote === 0) {
+          if (b.creator === Number(localStorage.id)) {
+            // creator won and I am the creator
+            console.log("admin says i, the creator, won");
+            iWon = "yes";
+            return {
+              ...b,
+              status: "resolved",
+              result: b.creator,
+              challenger_vote: 0
+            };
+          } else {
+            // creator won and I am the challenger
+            iWon = "no";
+            return {
+              ...b,
+              status: "resolved",
+              result: b.creator,
+              challenger_vote: 0
+            };
+          }
+        } else if (vote === 1) {
+          if (b.creator === Number(localStorage.id)) {
+            // challenger won and I am the creator
+            iWon = "no";
+            return {
+              ...b,
+              status: "resolved",
+              result: b.challenger,
+              creator_vote: 0
+            };
+          } else {
+            // challenger won and I am the challenger
+            iWon = "yes";
+            return {
+              ...b,
+              status: "resolved",
+              result: b.challenger,
+              creator_vote: 0
+            };
+          }
+        }
+      }
+    }
+  });
+  const newBalances =
+    bet.creator !== Number(localStorage.id) &&
+    bet.challenger !== Number(localStorage.id)
+      ? [
+          {
+            available_balance: globalData.balances[0].available_balance,
+            escrow_balance: globalData.balances[0].escrow_balance
+          }
+        ]
+      : iWon === "stalemate"
+        ? [
+            {
+              available_balance:
+                globalData.balances[0].available_balance + bet.wager,
+              escrow_balance: globalData.balances[0].escrow_balance - bet.wager
+            }
+          ]
+        : iWon === "yes"
+          ? [
+              {
+                available_balance:
+                  globalData.balances[0].available_balance + 2 * bet.wager,
+                escrow_balance:
+                  globalData.balances[0].escrow_balance - bet.wager
+              }
+            ]
+          : [
+              {
+                available_balance: globalData.balances[0].available_balance,
+                escrow_balance:
+                  globalData.balances[0].escrow_balance - bet.wager
+              }
+            ];
   const g = {
     ...globalData,
     bets: newBets,

@@ -125,6 +125,10 @@ const bets = io.of("/bets").on("connection", socket => {
           packet.vote,
           packet.myVote
         );
+    } else if (packet.action === "externalResolved") {
+      bets
+        .to(packet.bet.club)
+        .emit("bet.externalResolved", packet.bet, packet.vote);
     } else if (packet.action === "newLounge") {
       socket.broadcast
         .to(packet.lounge.club)

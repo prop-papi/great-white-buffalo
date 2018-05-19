@@ -21,7 +21,7 @@ const insertNewBet = async (
   );`;
   try {
     let data = await mysqldb.query(query);
-    const insertedQuery = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
+    const insertedQuery = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Clubs.admin_id AS club_admin, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
     LEFT JOIN Users u1 on u1.id = creator
     LEFT JOIN Users u2 on u2.id = challenger
     INNER JOIN Clubs on Clubs.id = Bets.club
@@ -39,7 +39,7 @@ const insertNewBet = async (
 };
 
 const selectAllBetsFromClubsList = async (clubs, myId) => {
-  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, IF ((Bets.creator=${myId} OR Bets.challenger=${myId}), 1, 0) AS is_my_bet FROM Bets 
+  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Clubs.admin_id AS club_admin, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, IF ((Bets.creator=${myId} OR Bets.challenger=${myId}), 1, 0) AS is_my_bet FROM Bets 
   LEFT JOIN Users u1 on u1.id = creator
   LEFT JOIN Users u2 on u2.id = challenger
   INNER JOIN Clubs on Clubs.id = Bets.club
@@ -56,7 +56,11 @@ const selectAllBetsFromClubsList = async (clubs, myId) => {
 };
 
 const selectAllBetsFromClub = async club => {
-  const query = `select * from Bets WHERE club=${club};`;
+  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Clubs.admin_id AS club_admin, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, IF ((Bets.creator=${myId} OR Bets.challenger=${myId}), 1, 0) AS is_my_bet FROM Bets 
+  LEFT JOIN Users u1 on u1.id = creator
+  LEFT JOIN Users u2 on u2.id = challenger
+  INNER JOIN Clubs on Clubs.id = Bets.club
+  WHERE club=${club};`;
   try {
     return await mysqldb.query(query);
   } catch (err) {
@@ -111,8 +115,18 @@ const voteWin = async (betId, updateField, checkField) => {
   }
 };
 
+const stalemate = async betId => {
+  const query = `UPDATE Bets SET status='stalemate' WHERE id=${betId};`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 const getActiveBets = async () => {
-  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
+  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Clubs.admin_id AS club_admin, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
   LEFT JOIN Users u1 on u1.id = creator
   LEFT JOIN Users u2 on u2.id = challenger
   INNER JOIN Clubs on Clubs.id = Bets.club
@@ -126,7 +140,7 @@ const getActiveBets = async () => {
 };
 
 const getPendingBets = async () => {
-  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
+  const query = `SELECT u1.username AS creator_name, u2.username AS challenger_name, Clubs.name AS club_name, Clubs.admin_id AS club_admin, Bets.id, description, wager, quantity, Bets.status, creator, challenger, Bets.club, Bets.created_at, end_at, odds, expires, result, creator_vote, challenger_vote, 1 AS is_my_bet FROM Bets 
   LEFT JOIN Users u1 on u1.id = creator
   LEFT JOIN Users u2 on u2.id = challenger
   INNER JOIN Clubs on Clubs.id = Bets.club
@@ -159,6 +173,16 @@ const updateToExpiredBets = async ids => {
   }
 };
 
+const reputation = async liar => {
+  const query = `UPDATE Users SET reputation = reputation - 1 WHERE id=${liar};`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.insertNewBet = insertNewBet;
 module.exports.selectAllBetsFromClubsList = selectAllBetsFromClubsList;
 module.exports.selectAllBetsFromClub = selectAllBetsFromClub;
@@ -170,3 +194,5 @@ module.exports.getActiveBets = getActiveBets;
 module.exports.getPendingBets = getPendingBets;
 module.exports.updateToVotingBets = updateToVotingBets;
 module.exports.updateToExpiredBets = updateToExpiredBets;
+module.exports.stalemate = stalemate;
+module.exports.reputation = reputation;
