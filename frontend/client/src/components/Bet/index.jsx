@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import axios from "axios";
 import moment from "moment";
+import configs from "../../../../../config.js";
 import Confirm from "react-confirm-bootstrap";
 import {
   cancelMyBet,
@@ -85,7 +86,7 @@ class Bet extends React.Component {
       username: target.currentTarget.innerHTML
     };
     axios
-      .get("http://localhost:1337/api/userpane/selected", { params })
+      .get(`${configs.HOST}api/userpane/selected`, { params })
       .then(response => {
         //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
@@ -100,7 +101,7 @@ class Bet extends React.Component {
 
   async vote(v) {
     try {
-      const data = await axios.post(`http://localhost:1337/api/bets/vote`, {
+      const data = await axios.post(`${configs.HOST}api/bets/vote`, {
         bet: this.props.bet,
         myId: Number(localStorage.id),
         vote: v
@@ -148,7 +149,7 @@ class Bet extends React.Component {
 
   async cancelBet() {
     try {
-      const data = await axios.post(`http://localhost:1337/api/bets/cancel`, {
+      const data = await axios.post(`${configs.HOST}api/bets/cancel`, {
         betId: this.props.bet.id
       });
       if (data.status === 200) {
@@ -180,15 +181,12 @@ class Bet extends React.Component {
       bet: this.props.bet.id
     };
     try {
-      const data = await axios.post(`http://localhost:1337/api/bets/accept`, {
+      const data = await axios.post(`${configs.HOST}api/bets/accept`, {
         betId: this.props.bet.id,
         myId: localStorage.id
       });
       // trigger socket notification here as well
-      await axios.post(
-        `http://localhost:1337/api/notifications/betAccepted`,
-        body
-      );
+      await axios.post(`${configs.HOST}api/notifications/betAccepted`, body);
       if (data.status === 200) {
         if (data.data.changedRows) {
           this.props.acceptBet(

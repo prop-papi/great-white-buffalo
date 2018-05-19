@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import configs from "../../../../../config.js";
 import {
   FormGroup,
   FormControl,
@@ -41,10 +42,7 @@ export default class Login extends Component {
       password
     };
     try {
-      const data = await axios.post(
-        `http://localhost:1337/api/auth/login`,
-        body
-      );
+      const data = await axios.post(`${configs.HOST}api/auth/login`, body);
       localStorage.setItem("username", data.data[0].username);
       localStorage.setItem("id", data.data[0].id);
       localStorage.setItem("win_ratio", data.data[0].win_ratio);

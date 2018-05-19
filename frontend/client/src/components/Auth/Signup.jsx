@@ -52,10 +52,7 @@ export default class Signup extends Component {
       this.setState({ showPasswordAlert: true });
     } else {
       try {
-        const data = await axios.post(
-          `http://localhost:1337/api/auth/signup`,
-          body
-        );
+        const data = await axios.post(`${configs.HOST}api/auth/signup`, body);
         // alert based on server response for exising user
         if (data.data === "Username already exists.") {
           this.setState({ showUsernameAlert: true });

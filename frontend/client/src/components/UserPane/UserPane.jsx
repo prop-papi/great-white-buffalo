@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import configs from "../../../../../config.js";
 import { Row, Image } from "react-bootstrap";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -7,7 +8,7 @@ import SideProfile from "./SideProfile";
 import axios from "axios";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3000/activeUsers");
+const socket = io(`${configs.SOCKET_HOST}activeUsers`);
 
 class UserPane extends Component {
   constructor() {
@@ -36,7 +37,7 @@ class UserPane extends Component {
       currUser: localStorage.username
     };
     axios
-      .get("http://localhost:1337/api/userpane/allUsers", { params })
+      .get(`${configs.HOST}api/userpane/allUsers`, { params })
       .then(response => {
         let users = [];
         response.data.forEach(user => {
@@ -54,7 +55,7 @@ class UserPane extends Component {
       id
     };
     axios
-      .get("http://localhost:1337/api/userpane/friends", { params })
+      .get(`${configs.HOST}api/userpane/friends`, { params })
       .then(response => {
         let friends = [];
         let pendingFriends = [];
@@ -86,7 +87,7 @@ class UserPane extends Component {
     };
 
     axios
-      .get("http://localhost:1337/api/userpane/selected", { params })
+      .get(`${configs.HOST}api/userpane/selected`, { params })
       .then(response => {
         //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);

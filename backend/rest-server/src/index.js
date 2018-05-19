@@ -19,6 +19,13 @@ app.use(cookieParser());
 app.use(
   express.static(path.join(__dirname, "../../../frontend/client/public"))
 );
+
+app.get("*.js", function(req, res, next) {
+  req.url = req.url + ".gz";
+  res.set("Content-Encoding", "gzip");
+  next();
+});
+
 app.use("/api", router);
 
 app.get("/*", function(req, res) {

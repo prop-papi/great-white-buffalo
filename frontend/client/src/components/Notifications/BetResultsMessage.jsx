@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import configs from "../../../../../config.js";
 import { ListGroupItem, Image, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -19,7 +20,7 @@ class BetResultseMessage extends Component {
     };
     this.props.close();
     axios
-      .get("http://localhost:1337/api/userpane/selected", { params })
+      .get(`${configs.HOST}api/userpane/selected`, { params })
       .then(response => {
         //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
@@ -38,7 +39,7 @@ class BetResultseMessage extends Component {
       return (
         <div className="notification-wrapper">
           <ul className="horizontal-list notifications-list" role="navigation">
-            <li className="logo li">
+            <li className="logo-li-item li">
               <Image
                 className="notification-logo"
                 src={this.props.data.partner_picture}
@@ -67,7 +68,7 @@ class BetResultseMessage extends Component {
       return (
         <div className="notification-wrapper">
           <ul className="horizontal-list notifications-list" role="navigation">
-            <li className="logo li">
+            <li className="logo-li-item li">
               <Image
                 className="notification-logo"
                 src={this.props.data.partner_picture}

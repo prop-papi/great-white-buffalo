@@ -38,7 +38,8 @@ class MainNavBar extends Component {
           </div>{" "}
           <div
             className={
-              this.props.main.component === "bets"
+              this.props.main.component === "bets" ||
+              this.props.main.component === undefined
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
@@ -47,7 +48,8 @@ class MainNavBar extends Component {
             <a
               href="#"
               className={
-                this.props.main.component === "bets"
+                this.props.main.component === "bets" ||
+                this.props.main.component === undefined
                   ? "nav-button-text-active"
                   : "nav-button-text"
               }
