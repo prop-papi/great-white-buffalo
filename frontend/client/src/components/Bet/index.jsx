@@ -121,13 +121,18 @@ class Bet extends React.Component {
             localStorage.id,
             localStorage.id
           );
-          const payload = {
+          let payload = {
             bet: JSON.parse(JSON.stringify(this.props.bet)),
             action: "vote",
             voterId: Number(localStorage.id),
             vote: v,
             myVote: this.state.myVote
           };
+          if (this.state.myVote === "challenger") {
+            payload.bet.challenger_vote = v;
+          } else if (this.state.myVote === "creator") {
+            payload.bet.creator_vote = v;
+          }
           this.props.betSocket.emit("bet", payload);
           if (v === 0) {
             let payload2 = {

@@ -269,8 +269,38 @@ export const voteOnBet = (
             }
           }
         }
+      } else if (b.club_admin === Number(localStorage.id)) {
+        if (vote) {
+          // if its a 0, i don't care as I won't need to resolve a dispute
+          if (whoAmI === "creator") {
+            if (b.challenger_vote === 1) {
+              return {
+                ...b,
+                status: "disputed",
+                creator_vote: 1
+              };
+            } else {
+              return {
+                ...b,
+                creator_vote: 1
+              };
+            }
+          } else if (whoAmI === "challenger") {
+            if (b.creator_vote === 1) {
+              return {
+                ...b,
+                status: "disputed",
+                challenger_vote: 1
+              };
+            } else {
+              return {
+                ...b,
+                challenger_vote: 1
+              };
+            }
+          }
+        }
       } else {
-        // this is not my bet and I don't care what happened as I'll never see this
         return b;
       }
     }
@@ -369,12 +399,25 @@ export const externalResolved = (
     if (b.id !== bet.id) {
       return b;
     } else {
-      console.log("i found the bet");
       if (
         b.creator !== Number(localStorage.id) &&
         b.challenger !== Number(localStorage.id)
       ) {
-        return b;
+        if (bet.club_admin === Number(localStorage.id)) {
+          if (vote === 2) {
+            return {
+              ...b,
+              status: "stalemate"
+            };
+          } else {
+            return {
+              ...b,
+              status: "resolved"
+            };
+          }
+        } else {
+          return b;
+        }
       } else {
         if (vote === 2) {
           iWon = "stalemate";
