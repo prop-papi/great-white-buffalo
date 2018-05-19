@@ -11,10 +11,6 @@ import "./MainNavBar.css";
 class MainNavBar extends Component {
   constructor() {
     super();
-
-    this.state = {
-      gamesList: ["Fortnite", "Overwatch", "Rocket League", "PUBG"]
-    };
   }
 
   render() {
