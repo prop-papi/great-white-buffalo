@@ -6,6 +6,7 @@ import ESportVid from "../ESport/ESportVid";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { fetchHomeData, setMainComponent } from "../../actions";
+import { updateCurrentLounge } from "../../actions/loungeActions";
 import "./MainNavBar.css";
 
 class MainNavBar extends Component {
@@ -43,7 +44,10 @@ class MainNavBar extends Component {
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
-            onClick={() => this.props.setMainComponent("bets")}
+            onClick={() => {
+              this.props.setMainComponent("bets");
+              this.props.updateCurrentLounge(this.props.currentLounge);
+            }}
           >
             <a
               href="#"
@@ -85,7 +89,8 @@ class MainNavBar extends Component {
 const mapStateToProps = state => {
   return {
     local: state.local.localData,
-    main: state.component
+    main: state.component,
+    currentLounge: state.currentLounge
   };
 };
 
@@ -93,7 +98,8 @@ function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
       fetchHomeData: fetchHomeData,
-      setMainComponent: setMainComponent
+      setMainComponent: setMainComponent,
+      updateCurrentLounge: updateCurrentLounge
     },
     dispatch
   );

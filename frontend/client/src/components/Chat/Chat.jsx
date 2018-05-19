@@ -69,12 +69,13 @@ class Chat extends Component {
   }
 
   handleEnterKeyPress(e) {
+    const date = new Date();
     const payload = {
       text: this.state.text,
       user: localStorage.username,
       currentLoungeID: this.props.currentLounge.currentLounge.id,
       media: "",
-      createdAt: new Date()
+      createdAt: moment(date).format("YYYY-MM-DD HH:mm:ss")
     };
 
     if (e.key === "Enter") {
@@ -111,8 +112,8 @@ class Chat extends Component {
     }
   };
 
-  componentWillReceiveProps(newProps) {
-    socket.emit("user.leave", {
+  async componentWillReceiveProps(newProps) {
+    await socket.emit("user.leave", {
       user: localStorage.username,
       previousLoungeID: this.props.currentLounge.currentLounge.id
     });
@@ -129,8 +130,8 @@ class Chat extends Component {
       currentLoungeID: this.props.currentLounge.currentLounge.id
     });
 
-    socket.on(`user.enter.${localStorage.username}`, msg => {
-      this.setState({ recent50Messages: msg.reverse() });
+    socket.on(`user.enter.${localStorage.username}`, async msg => {
+      await this.setState({ recent50Messages: msg.reverse() });
       this.scrollToBottom();
     });
 

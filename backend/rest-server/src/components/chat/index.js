@@ -8,8 +8,8 @@ const {
 router.post("/send", async (req, res) => {
   try {
     console.log("payload: ", req.body);
-    let { user, currentLoungeID, text, media } = req.body;
-    insertNewMessage(user, currentLoungeID, text, media);
+    let { user, currentLoungeID, createdAt, text, media } = req.body;
+    insertNewMessage(user, currentLoungeID, createdAt, text, media);
     res.status(200).send("successful post");
   } catch (err) {
     console.log("error", err);
@@ -18,9 +18,16 @@ router.post("/send", async (req, res) => {
   }
 });
 
-// router.route("/message").post(async (req, res) => {
-//   await console.log("request: ", req);
-//   res.send(200);
-// });
+router.get("/get/:loungeID", async (req, res) => {
+  try {
+    let { loungeID } = req.params;
+    let messages = await selectTop50Messages(loungeID);
+    res.status(200).send(messages);
+  } catch (err) {
+    console.log("error: ", err);
+    res.status(500).send("Error getting");
+    return err;
+  }
+});
 
 module.exports = router;
