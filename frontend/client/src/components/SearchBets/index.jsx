@@ -174,13 +174,15 @@ class SearchBets extends React.Component {
         myExpiredBets: tempMyExpired,
         myClosedBets: tempMyClosed,
         myStalemateBets: tempMyStalemate,
-        openBets: tempOpen,
-        openBetsName:
-          newProps.local.localData.club.name === "Global"
-            ? "Open Wagers Globally"
-            : `Open Bets in ${newProps.local.localData.club.name}`
+        openBets: tempOpen
       });
     }
+    this.setState({
+      openBetsName:
+        newProps.local.localData.club.name === "Global"
+          ? "Open Wagers Globally"
+          : `Open Bets in ${newProps.local.localData.club.name}`
+    });
   }
 
   handleChange(e) {
