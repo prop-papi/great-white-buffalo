@@ -60,14 +60,15 @@ class Bet extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log("test"); // need to update to get derived state from props
-    this.setState({
-      myVoteResult: newProps.bet.is_my_bet
-        ? Number(localStorage.id) === newProps.bet.creator
-          ? newProps.bet.creator_vote
-          : newProps.bet.challenger_vote
-        : "N/A"
-    });
+    if (this.props.bet !== newProps.bet) {
+      this.setState({
+        myVoteResult: newProps.bet.is_my_bet
+          ? Number(localStorage.id) === newProps.bet.creator
+            ? newProps.bet.creator_vote
+            : newProps.bet.challenger_vote
+          : "N/A"
+      });
+    }
   }
 
   handleCancelBetError() {
@@ -201,50 +202,57 @@ class Bet extends React.Component {
   }
 
   async acceptBet() {
-    let body = {
-      owner: this.props.bet.creator,
-      partner: localStorage.id,
-      bet: this.props.bet.id
-    };
-    try {
-      const data = await axios.post(`${configs.HOST}api/bets/accept`, {
-        betId: this.props.bet.id,
-        myId: localStorage.id
-      });
-      // trigger socket notification here as well
-      await axios.post(`${configs.HOST}api/notifications/betAccepted`, body);
-      if (data.status === 200) {
-        if (data.data.changedRows) {
-          this.props.acceptBet(
-            this.props.global.globalData,
-            this.props.bet,
-            this.props.bet.wager,
-            localStorage.id,
-            localStorage.id
-          );
-          // socket emission for bets
-          let payload = {
-            bet: JSON.parse(JSON.stringify(this.props.bet)),
-            action: "accept",
-            acceptorId: Number(localStorage.id)
-          };
-          payload.bet.challenger_name = localStorage.username;
-          this.props.betSocket.emit("bet", payload);
-          // socket emission for notificatons
-          const payload2 = {
-            user: localStorage.username,
-            creator: this.props.bet.creator_name,
-            bet: this.props.bet.description,
-            club: this.props.bet.club_name
-          };
-          this.props.notificationsSocket.emit("bet-accepted", payload2);
-          this.setState({ myVote: "challenger" });
-        } else {
-          this.setState({ showAcceptBetError: true });
+    if (
+      this.props.bet.wager <=
+      this.props.global.globalData.balances[0].available_balance
+    ) {
+      let body = {
+        owner: this.props.bet.creator,
+        partner: localStorage.id,
+        bet: this.props.bet.id
+      };
+      try {
+        const data = await axios.post(`${configs.HOST}api/bets/accept`, {
+          betId: this.props.bet.id,
+          myId: localStorage.id
+        });
+        // trigger socket notification here as well
+        await axios.post(`${configs.HOST}api/notifications/betAccepted`, body);
+        if (data.status === 200) {
+          if (data.data.changedRows) {
+            this.props.acceptBet(
+              this.props.global.globalData,
+              this.props.bet,
+              this.props.bet.wager,
+              localStorage.id,
+              localStorage.id
+            );
+            // socket emission for bets
+            let payload = {
+              bet: JSON.parse(JSON.stringify(this.props.bet)),
+              action: "accept",
+              acceptorId: Number(localStorage.id)
+            };
+            payload.bet.challenger_name = localStorage.username;
+            this.props.betSocket.emit("bet", payload);
+            // socket emission for notificatons
+            const payload2 = {
+              user: localStorage.username,
+              creator: this.props.bet.creator_name,
+              bet: this.props.bet.description,
+              club: this.props.bet.club_name
+            };
+            this.props.notificationsSocket.emit("bet-accepted", payload2);
+            this.setState({ myVote: "challenger" });
+          } else {
+            this.setState({ showAcceptBetError: true });
+          }
         }
+      } catch (err) {
+        throw new Error(err);
       }
-    } catch (err) {
-      throw new Error(err);
+    } else {
+      this.setState({ showAcceptBetError: true });
     }
   }
 
@@ -294,8 +302,9 @@ class Bet extends React.Component {
                   >
                     <h4>Cannot accept this bet!</h4>
                     <p>
-                      Sorry, this bet was either canceled or accepted by another
-                      user.
+                      Sorry, error accepting this bet. Either you don't have
+                      enough tokens or it was already canceled or accepted by
+                      another user
                     </p>
                     <p>
                       <Button onClick={this.handleAcceptBetError}>Close</Button>
@@ -448,9 +457,13 @@ class Bet extends React.Component {
                     <Confirm
                       onConfirm={this.acceptBet}
                       value={0}
-                      body="Are you sure you want to accept this wager?"
+                      className="warningMessage"
+                      body={
+                        "Please note that as the challenger you will be AGAINST this wager's description of: " +
+                        this.props.bet.description
+                      }
                       confirmText="Confirm"
-                      title="Take Wager"
+                      title="Are you sure you want to accept this wager?"
                     >
                       <button>Take Wager</button>
                     </Confirm>

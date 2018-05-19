@@ -77,9 +77,12 @@ class CreateBet extends React.Component {
 
     this.tooltips = [
       <Tooltip id="tooltip">
-        Be as descriptive as possible as this description will need to be
-        understood and read by others to both accept and vote on the outcome of
-        this wager!!!
+        Be as descriptive as possible as this wager will potentially need to be
+        understood and decided by others! Word this wager as a true statement
+        from your (the creator's) point of view. For example, with a description
+        of 'The Cavaliers will beat the Celtics in Game 3 of the NBA Eastern
+        Conference Finals on May 19, 2018', the creator (you) will be on the
+        Cavalier's side and the challenger on the side of the Celtics
       </Tooltip>,
       <Tooltip id="tooltip">
         Please enter a whole number between 1 and your available balance (shown
@@ -161,7 +164,9 @@ class CreateBet extends React.Component {
       new Date(endsAt) >= new Date(expiresAt) &&
       wager !== "" &&
       description !== "" &&
-      Number(wager) >= 1
+      Number(wager) >= 1 &&
+      Number(wager) <=
+        this.props.global.globalData.balances[0].available_balance
     ) {
       const body = {
         club,
@@ -263,8 +268,9 @@ class CreateBet extends React.Component {
       <div className="row" id="createBetComponent">
         <div className="col-md-2" />
         <div className="col-md-8">
+          Wager Description{" "}
           <OverlayTrigger placement="right" overlay={this.tooltips[0]}>
-            <span>Description</span>
+            <i className="fa"> &#xf05a; </i>
           </OverlayTrigger>
           <FormControl
             componentClass="textarea"
@@ -276,9 +282,10 @@ class CreateBet extends React.Component {
           />
           <br />
           <div className="col-md-6">
+            Wager Amount{" "}
             <OverlayTrigger placement="right" overlay={this.tooltips[1]}>
-              <span>Wager Amount </span>
-            </OverlayTrigger>
+              <i className="fa"> &#xf05a; </i>
+            </OverlayTrigger>{" "}
             <input
               type="text"
               name="wager"
@@ -287,14 +294,16 @@ class CreateBet extends React.Component {
               onChange={this.handleChange}
             />
             <br /> <br />
+            Wager Odds{" "}
             <OverlayTrigger placement="right" overlay={this.tooltips[5]}>
-              <span>Wager Odds</span>
+              <i className="fa"> &#xf05a; </i>
             </OverlayTrigger>{" "}
             {this.state.odds}
             <br /> <br />
             <div className="datePicker">
+              Expires At{" "}
               <OverlayTrigger placement="right" overlay={this.tooltips[2]}>
-                <span>Expires At</span>
+                <i className="fa"> &#xf05a; </i>
               </OverlayTrigger>
               <DatePicker
                 name="expiresDate"
@@ -317,10 +326,11 @@ class CreateBet extends React.Component {
             />
           </div>
           <div className="col-md-6">
+            My Available Balance:{" "}
+            {this.props.global.globalData.balances[0].available_balance}{" "}
             <OverlayTrigger placement="right" overlay={this.tooltips[4]}>
-              <span>My Available Balance: </span>
+              <i className="fa"> &#xf05a; </i>
             </OverlayTrigger>
-            {this.props.global.globalData.balances[0].available_balance}
             <br /> <br />
             <span>
               <ButtonToolbar className="testing">
@@ -343,8 +353,9 @@ class CreateBet extends React.Component {
             </span>
             <div className="datePicker">
               <br />
+              Ends At{" "}
               <OverlayTrigger placement="right" overlay={this.tooltips[3]}>
-                <span>Ends At</span>
+                <i className="fa"> &#xf05a; </i>
               </OverlayTrigger>
               <br />
               <DatePicker

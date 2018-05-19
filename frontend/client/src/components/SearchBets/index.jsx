@@ -36,20 +36,26 @@ class SearchBets extends React.Component {
       myHistoricalBets: [],
       myCanceledBets: [],
       myExpiredBets: [],
-      myResolvedBets: [],
-      myStalemateBets: [],
+      myClosedBets: [],
       openBets: [],
       openBetsName:
         props.local.localData.club.name === "Global"
           ? "Open Wagers Globally"
-          : `Open Bets in ${props.local.localData.club.name}`
+          : `Open Bets in ${props.local.localData.club.name}`,
+      historyTab: "Closed"
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.changeHistoryView = this.changeHistoryView.bind(this);
 
     this.tooltips = [
-      // will i need this?
-      <Tooltip id="tooltip">IF I NEED A TOOLTIP IN HERE</Tooltip>
+      <Tooltip id="tooltip">
+        Please note you will be taking the opposite side of the wager's
+        description. For example, with a description of 'The Cavaliers will beat
+        the Celtics in Game 3 of the NBA Eastern Conference Finals on May 19,
+        2018', the creator will be on the Cavalier's side and the challenger
+        (you) on the side of the Celtics
+      </Tooltip>
     ];
   }
 
@@ -60,7 +66,7 @@ class SearchBets extends React.Component {
     let tempMyHistorical = [];
     let tempMyCanceled = [];
     let tempMyExpired = [];
-    let tempMyResolved = [];
+    let tempMyClosed = [];
     let tempMyStalemate = [];
     let tempOpen = [];
     this.props.global.globalData.bets.forEach(b => {
@@ -77,8 +83,8 @@ class SearchBets extends React.Component {
         } else if (b.status === "expired") {
           tempMyExpired.push(b);
           tempMyHistorical.push(b);
-        } else if (b.status === "resolved") {
-          tempMyResolved.push(b);
+        } else if (b.status === "resolved" || b.status === "stalemate") {
+          tempMyClosed.push(b);
           tempMyHistorical.push(b);
         } else if (b.status === "stalemate") {
           tempMyStalemate.push(b);
@@ -99,7 +105,7 @@ class SearchBets extends React.Component {
       myHistoricalBets: tempMyHistorical,
       myCanceledBets: tempMyCanceled,
       myExpiredBets: tempMyExpired,
-      myResolvedBets: tempMyResolved,
+      myClosedBets: tempMyClosed,
       myStalemateBets: tempMyStalemate,
       openBets: tempOpen,
       openBetsName:
@@ -110,73 +116,71 @@ class SearchBets extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log("component will receive props test");
-    var tempMyOpen = [];
-    var tempMyCurrent = [];
-    var tempMyAdminReview = [];
-    var tempMyReview = [];
-    var tempMyHistorical = [];
-    var tempMyCanceled = [];
-    var tempMyExpired = [];
-    var tempMyResolved = [];
-    var tempMyStalemate = [];
-    var tempOpen = [];
-    newProps.global.globalData.bets.forEach(b => {
-      if (b.is_my_bet) {
-        if (
+    if (this.props.global.globalData.bets !== newProps.global.globalData.bets) {
+      var tempMyOpen = [];
+      var tempMyCurrent = [];
+      var tempMyAdminReview = [];
+      var tempMyReview = [];
+      var tempMyHistorical = [];
+      var tempMyCanceled = [];
+      var tempMyExpired = [];
+      var tempMyClosed = [];
+      var tempMyStalemate = [];
+      var tempOpen = [];
+      newProps.global.globalData.bets.forEach(b => {
+        if (b.is_my_bet) {
+          if (
+            b.status === "disputed" &&
+            b.club_admin === Number(localStorage.id)
+          ) {
+            // fix this later by having multiple admins / mods and not having you decide if it is your own bet
+            tempMyAdminReview.push(b);
+          } else if (b.status === "pending") {
+            tempMyOpen.push(b);
+          } else if (b.status === "active") {
+            tempMyCurrent.push(b);
+          } else if (b.status === "voting" || b.status === "disputed") {
+            tempMyReview.push(b);
+          } else if (b.status === "canceled") {
+            tempMyCanceled.push(b);
+            tempMyHistorical.push(b);
+          } else if (b.status === "expired") {
+            tempMyExpired.push(b);
+            tempMyHistorical.push(b);
+          } else if (b.status === "resolved" || b.status === "stalemate") {
+            tempMyClosed.push(b);
+            tempMyHistorical.push(b);
+          }
+        } else if (
+          b.status === "pending" &&
+          (newProps.local.localData.club.name === "Global" ||
+            newProps.local.localData.club.id === b.club)
+        ) {
+          tempOpen.push(b);
+        } else if (
           b.status === "disputed" &&
           b.club_admin === Number(localStorage.id)
         ) {
-          // fix this later by having multiple admins / mods and not having you decide if it is your own bet
           tempMyAdminReview.push(b);
-        } else if (b.status === "pending") {
-          tempMyOpen.push(b);
-        } else if (b.status === "active") {
-          tempMyCurrent.push(b);
-        } else if (b.status === "voting" || b.status === "disputed") {
-          tempMyReview.push(b);
-        } else if (b.status === "canceled") {
-          tempMyCanceled.push(b);
-          tempMyHistorical.push(b);
-        } else if (b.status === "expired") {
-          tempMyExpired.push(b);
-          tempMyHistorical.push(b);
-        } else if (b.status === "resolved") {
-          tempMyResolved.push(b);
-          tempMyHistorical.push(b);
-        } else if (b.status === "stalemate") {
-          tempMyStalemate.push(b);
-          tempMyHistorical.push(b);
         }
-      } else if (
-        b.status === "pending" &&
-        (newProps.local.localData.club.name === "Global" ||
-          newProps.local.localData.club.id === b.club)
-      ) {
-        tempOpen.push(b);
-      } else if (
-        b.status === "disputed" &&
-        b.club_admin === Number(localStorage.id)
-      ) {
-        tempMyAdminReview.push(b);
-      }
-    });
-    this.setState({
-      myOpenBets: tempMyOpen,
-      myCurrentBets: tempMyCurrent,
-      myAdminReview: tempMyAdminReview,
-      myReviewBets: tempMyReview,
-      myHistoricalBets: tempMyHistorical,
-      myCanceledBets: tempMyCanceled,
-      myExpiredBets: tempMyExpired,
-      myResolvedBets: tempMyResolved,
-      myStalemateBets: tempMyStalemate,
-      openBets: tempOpen,
-      openBetsName:
-        newProps.local.localData.club.name === "Global"
-          ? "Open Wagers Globally"
-          : `Open Bets in ${newProps.local.localData.club.name}`
-    });
+      });
+      this.setState({
+        myOpenBets: tempMyOpen,
+        myCurrentBets: tempMyCurrent,
+        myAdminReview: tempMyAdminReview,
+        myReviewBets: tempMyReview,
+        myHistoricalBets: tempMyHistorical,
+        myCanceledBets: tempMyCanceled,
+        myExpiredBets: tempMyExpired,
+        myClosedBets: tempMyClosed,
+        myStalemateBets: tempMyStalemate,
+        openBets: tempOpen,
+        openBetsName:
+          newProps.local.localData.club.name === "Global"
+            ? "Open Wagers Globally"
+            : `Open Bets in ${newProps.local.localData.club.name}`
+      });
+    }
   }
 
   handleChange(e) {
@@ -185,6 +189,10 @@ class SearchBets extends React.Component {
 
   handleSubmit(e) {
     event.preventDefault();
+  }
+
+  changeHistoryView(selected) {
+    this.setState({ historyTab: selected });
   }
 
   render() {
@@ -261,18 +269,65 @@ class SearchBets extends React.Component {
               eventKey={4}
               title={"History (" + this.state.myHistoricalBets.length + ")"}
             >
-              <h3>
-                Make a clickable list here to change between canceled expired or
-                resolved!!!
-              </h3>
-              {this.state.myHistoricalBets.map(b => (
-                <Bet
-                  key={b.id}
-                  bet={b}
-                  betSocket={this.props.betSocket}
-                  notificationsSocket={this.props.notificationsSocket}
-                />
-              ))}
+              <ButtonToolbar className="selectHistoryDropdown">
+                <br />
+                <DropdownButton title={this.state.historyTab + " "} id={1}>
+                  <MenuItem
+                    className="menu"
+                    onSelect={() => this.changeHistoryView("Closed")}
+                    key={1}
+                    eventKey={1}
+                  >
+                    Closed
+                  </MenuItem>
+                  <MenuItem
+                    className="menu"
+                    onSelect={() => this.changeHistoryView("Expired")}
+                    key={2}
+                    eventKey={2}
+                  >
+                    Expired
+                  </MenuItem>
+                  <MenuItem
+                    className="menu"
+                    onSelect={() => this.changeHistoryView("Canceled")}
+                    key={3}
+                    eventKey={3}
+                  >
+                    Canceled
+                  </MenuItem>
+                </DropdownButton>
+              </ButtonToolbar>
+              {this.state.historyTab === "Closed"
+                ? this.state.myClosedBets.map(b => (
+                    <Bet
+                      key={b.id}
+                      bet={b}
+                      betSocket={this.props.betSocket}
+                      notificationsSocket={this.props.notificationsSocket}
+                    />
+                  ))
+                : null}
+              {this.state.historyTab === "Expired"
+                ? this.state.myExpiredBets.map(b => (
+                    <Bet
+                      key={b.id}
+                      bet={b}
+                      betSocket={this.props.betSocket}
+                      notificationsSocket={this.props.notificationsSocket}
+                    />
+                  ))
+                : null}
+              {this.state.historyTab === "Canceled"
+                ? this.state.myCanceledBets.map(b => (
+                    <Bet
+                      key={b.id}
+                      bet={b}
+                      betSocket={this.props.betSocket}
+                      notificationsSocket={this.props.notificationsSocket}
+                    />
+                  ))
+                : null}
             </Tab>
             <Tab
               eventKey={5}
@@ -300,14 +355,6 @@ class SearchBets extends React.Component {
               />
             </Tab>
           </Tabs>
-
-          {/* My Open Wagers ({this.state.myOpenBets.length}) */}
-          {/* {this.state.myOpenBets.map(b => <Bet key={b.id} bet={b} />)} */}
-          {/* My Active Wagers ({this.state.myCurrentBets.length}) */}
-          {/* {this.state.myCurrentBets.map(b => <Bet key={b.id} bet={b} />)} */}
-          {/* Available {this.props.local.localData.club.name} Wagers ({ */}
-          {/* this.state.openBets.length */}
-          {/* {this.state.openBets.map(b => <Bet key={b.id} bet={b} />)} */}
         </div>
       </div>
     );

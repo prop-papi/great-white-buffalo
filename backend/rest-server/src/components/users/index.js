@@ -11,8 +11,6 @@ const notificationsdb = require("../../db/models/notifications/index.js");
 // fetch global and local club data on user login
 router.get("/:id", async function(req, res) {
   // req.params.id is our user id, req.params.club is the default club
-  console.log(req.params.id); // think we need to error handle better in here
-  // this is undefined if you go to /home not logged in and it breaks everything
   let globalData = {};
   let myClubs = [];
   try {
