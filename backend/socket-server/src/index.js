@@ -146,18 +146,21 @@ const bets = io.of("/bets").on("connection", socket => {
 // active users namespace
 const activeUsers = io.of("/activeUsers").on("connection", socket => {
   socket.on("user.enter", user => {
+    console.log("MOFUCKER USER ENTERED", usersOnline);
     socket.join(user.online);
     usersOnline[user.username] = { id: user.id, socket_id: socket.id };
     activeUsers.to("online").emit("user.enter", usersOnline);
+    console.log("Usersonline: ", socket);
   });
   // disconnect
-  socket.on("disconnect", socket => {
-    for (val in usersOnline) {
-      if (val.socket_id === socket.id) {
+  socket.on("disconnect", () => {
+    for (let val in usersOnline) {
+      if (usersOnline[val].socket_id === socket.id) {
         delete usersOnline[val];
       }
     }
-    console.log("Usersonline: ", usersOnline);
+    activeUsers.to("online").emit("user.leave", usersOnline);
+    // console.log("user just left: ", usersOnline);
   });
 
   // error handling
