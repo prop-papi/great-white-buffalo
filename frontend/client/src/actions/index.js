@@ -305,6 +305,59 @@ export const voteOnBet = (
   setGlobalData(g, dispatch);
 };
 
+export const voting = (globalData, bet) => dispatch => {
+  const newBets = globalData.bets.map((b, index) => {
+    if (b.id !== bet.id) {
+      return b;
+    } else {
+      return {
+        ...b,
+        status: "voting"
+      };
+    }
+  });
+  const g = {
+    ...globalData,
+    bets: newBets
+  };
+  setGlobalData(g, dispatch);
+};
+
+export const expired = (globalData, bet) => dispatch => {
+  const newBets = globalData.bets.map((b, index) => {
+    if (b.id !== bet.id) {
+      return b;
+    } else {
+      return {
+        ...b,
+        status: "expired"
+      };
+    }
+  });
+
+  const newBalances =
+    Number(localStorage.id) === bet.creator
+      ? [
+          {
+            available_balance:
+              globalData.balances[0].available_balance + bet.wager,
+            escrow_balance: globalData.balances[0].escrow_balance - bet.wager
+          }
+        ]
+      : [
+          {
+            available_balance: globalData.balances[0].available_balance,
+            escrow_balance: globalData.balances[0].escrow_balance
+          }
+        ];
+  const g = {
+    ...globalData,
+    bets: newBets,
+    balances: newBalances
+  };
+  setGlobalData(g, dispatch);
+};
+
 export const externalResolved = (
   globalData,
   bet,

@@ -16,7 +16,9 @@ import {
   voteOnBet,
   addLounge,
   updateNotifications,
-  externalResolved
+  externalResolved,
+  voting,
+  expired
 } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
@@ -73,7 +75,9 @@ class Home extends Component {
       cancelMyBet,
       acceptBet,
       voteOnBet,
-      externalResolved
+      externalResolved,
+      voting,
+      expired
     } = this.props;
 
     await fetchHomeData(localStorage.id, localStorage.default_club);
@@ -118,8 +122,11 @@ class Home extends Component {
     });
 
     betSocket.on("bet.externalResolved", (newBet, vote) => {
-      console.log("a bet of yours was externally resolved");
       externalResolved(this.props.global.globalData, newBet, vote);
+    });
+
+    betSocket.on("bet.expired", bet => {
+      expired(this.props.global.globalData, bet);
     });
 
     activeUserSocket.emit("user.enter", {
@@ -179,6 +186,7 @@ class Home extends Component {
         await this.props.updateNotifications(localStorage.id);
         // FOR DEREK - the bet parameter contains the entire bet object here, i'm using the payload
         // render some pop-up that tells you there's a new notification
+        await voting(this.props.global.globalData, bet);
         this.createNotification(
           `Your wager: ${payload.bet} in ${payload.club} with ${
             payload.challenger
@@ -310,7 +318,9 @@ function bindActionsToDispatch(dispatch) {
       voteOnBet: voteOnBet,
       addLounge: addLounge,
       updateNotifications: updateNotifications,
-      externalResolved: externalResolved
+      externalResolved: externalResolved,
+      voting: voting,
+      expired: expired
     },
     dispatch
   );

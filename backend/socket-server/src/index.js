@@ -213,6 +213,7 @@ let updateActiveBetsAndEmit = async () => {
   let dateCompare = moment(date)
     .add(1, "m")
     .utc()
+    .add(new Date().getTimezoneOffset(), "minutes")
     .toDate();
 
   _.each(activeBets, function(bet) {
@@ -256,10 +257,11 @@ let updatePendingBetsAndEmit = async () => {
   let dateCompare = moment(date)
     .add(1, "m")
     .utc()
+    .add(new Date().getTimezoneOffset(), "minutes")
     .toDate();
 
   _.each(pendingBets, function(bet) {
-    bet["end_at"] < dateCompare
+    bet["expires"] < dateCompare
       ? (idsToSetExpired.push(bet["id"]), betsExpired.push(bet))
       : null;
   });
@@ -268,8 +270,14 @@ let updatePendingBetsAndEmit = async () => {
     await betsdb.updateToExpiredBets(idsToSetExpired);
     console.log(`Bet id(s): ${idsToSetExpired} have expired.`);
   }
+  if (betsExpired.length) {
+    betsExpired.forEach(bet => {
+      bets.to(bet.club).emit("bet.expired", bet);
+    });
+  }
 };
-let cron1 = schedule.scheduleJob("30 * * * *", async function() {
+
+let cron1 = schedule.scheduleJob("43 * * * *", async function() {
   updateActiveBetsAndEmit();
   updatePendingBetsAndEmit();
 });

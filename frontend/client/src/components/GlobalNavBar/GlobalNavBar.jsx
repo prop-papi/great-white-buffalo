@@ -127,6 +127,7 @@ class GlobalNavBar extends Component {
         </li>
         <li className="li right">
           <span className="label win-ratio">
+            {this.props.global.globalData.balances[0].available_balance}
             Wager Win Ratio:{" "}
             {(Number(localStorage.getItem("win_ratio")) * 100)
               .toString()

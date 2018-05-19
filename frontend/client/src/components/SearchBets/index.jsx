@@ -300,6 +300,7 @@ class SearchBets extends React.Component {
                   </MenuItem>
                 </DropdownButton>
               </ButtonToolbar>
+              <br />
               {this.state.historyTab === "Closed"
                 ? this.state.myClosedBets.map(b => (
                     <Bet
