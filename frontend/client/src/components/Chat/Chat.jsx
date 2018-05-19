@@ -20,7 +20,7 @@ import axios from "axios";
 import "./Chat.css";
 
 // connection to socket server
-const socket = io("http://localhost:3000/chat");
+const socket = io(`${configs.SOCKET_HOST}chat`);
 
 class Chat extends Component {
   constructor(props) {

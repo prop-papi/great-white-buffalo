@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import configs from "../../../../../config.js";
 import axios from "axios";
 import { Image, Row, Button } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -95,7 +96,7 @@ class SideProfile extends Component {
         user_2
       };
       axios
-        .post("http://localhost:1337/api/userpane/removeFriend", body)
+        .post(`${configs.HOST}api/userpane/removeFriend`, body)
         .then(response => {
           this.props.fetchFriends(localStorage.id);
           this.setState({ isFriend: "false", friendText: "Add Friend" });
@@ -110,7 +111,7 @@ class SideProfile extends Component {
         action_user: localStorage.id
       };
       axios
-        .post("http://localhost:1337/api/userpane/addFriend", body)
+        .post(`${configs.HOST}api/userpane/addFriend`, body)
         .then(response => {
           this.props.fetchFriends(localStorage.id);
           this.setState({ isFriend: "pending" });
