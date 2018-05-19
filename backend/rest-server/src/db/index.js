@@ -35,7 +35,7 @@ let messages = new mongoose.Schema({
   lounge: Number,
   text: String,
   media: String,
-  created_at: Date
+  createdAt: Date
 });
 
 let Message = mongoose.model("Messages", messages);

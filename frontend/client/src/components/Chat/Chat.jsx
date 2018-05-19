@@ -69,13 +69,14 @@ class Chat extends Component {
   }
 
   handleEnterKeyPress(e) {
-    const date = new Date();
+    // const date = new Date();
     const payload = {
       text: this.state.text,
       user: localStorage.username,
       currentLoungeID: this.props.currentLounge.currentLounge.id,
       media: "",
-      createdAt: moment(date).format("YYYY-MM-DD HH:mm:ss")
+      createdAt: new Date()
+      // createdAt: moment(date).format("YYYY-MM-DD HH:mm:ss")
     };
 
     if (e.key === "Enter") {
@@ -99,7 +100,7 @@ class Chat extends Component {
         <Row>
           <Col xs={2} sm={1.5} md={1.25} lg={1} />
           <Col xs={10} sm={10.5} md={10.75} lg={11} className="chat-username">
-            <a>{user} </a>is typing...
+            <a>{user} </a>typing...
           </Col>
         </Row>
       );
@@ -144,7 +145,11 @@ class Chat extends Component {
       if (!this.currentUserTyping) {
         this.setState({
           isTyping: true,
-          currentUserTyping: msg.user
+          currentUserTyping: `${msg.user} is`
+        });
+      } else if (this.currentUserTyping) {
+        this.setState({
+          currentUserTyping: "a few people are"
         });
       }
       setTimeout(() => {
@@ -155,9 +160,9 @@ class Chat extends Component {
       }, 1500);
     });
 
-    socket.on(`${localStorage.username}.leave`, payload => {
-      this.setState({
-        recent50Messages: [],
+    socket.on(`${localStorage.username}.leave`, async payload => {
+      await this.setState({
+        // recent50Messages: [],
         cache: []
       });
     });
@@ -225,12 +230,8 @@ class Chat extends Component {
             type="text"
             value={this.state.text}
             placeholder={`Chatting in ${
-              // "hello"
               this.props.currentLounge.currentLounge.name
             }`}
-            // could also dynamically render "Lounge" vs a "Direct Message"
-            // Chatting in  LOUNGE_NAME
-            // Chatting with  @USER (Direct Message)
             onChange={this.handleChange}
             onKeyPress={this.handleEnterKeyPress}
           />

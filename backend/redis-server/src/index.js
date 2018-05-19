@@ -7,7 +7,9 @@ const client = redis.createClient();
 
 // on connect
 client.on("connect", () => {
-  console.log("redis server connected!");
+  client.flushall();
+  console.log("client cleaned");
+  console.log("redis connected");
 });
 
 // on error
