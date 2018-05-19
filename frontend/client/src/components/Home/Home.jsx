@@ -23,7 +23,7 @@ import {
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
-import SportVid from "../Sport/SportVid";
+import SportVid from "../SportVid/SportVid";
 import Chat from "../Chat/Chat.jsx";
 import Leaderboard from "../Leaderboard/Leaderboard.jsx";
 import { connect } from "react-redux";
@@ -213,6 +213,13 @@ class Home extends Component {
     });
   }
 
+  checkAdmin() {
+    return (
+      this.props.currentLounge.currentLounge.admin_id ===
+      parseInt(localStorage.id)
+    );
+  }
+
   render() {
     if (
       this.props.local.localData &&
@@ -261,7 +268,7 @@ class Home extends Component {
                 className="main-column"
               >
                 <MainNavBar />
-                <br />
+                {this.checkAdmin() ? <button>Edit</button> : <br />}
                 {this.mainComponentRender(this.props.main.component)}
               </Col>
               <Col

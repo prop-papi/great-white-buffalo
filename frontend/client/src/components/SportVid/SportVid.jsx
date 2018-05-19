@@ -87,14 +87,13 @@ class SportVid extends Component {
       );
     } else if (this.state.videoLink) {
       return (
-        <div className="videoStream">
-          <ResponsiveEmbed a4by3>
-            <iframe
-              src={this.state.videoLink}
-              allowFullScreen={true}
-              sandbox="allow-scripts allow-forms allow-same-origin"
-            />
-          </ResponsiveEmbed>
+        <div className="videoContainer">
+          <iframe
+            src={this.state.videoLink}
+            allowFullScreen={true}
+            sandbox="allow-scripts allow-forms allow-same-origin"
+            className="videoFrame"
+          />
         </div>
       );
     }
