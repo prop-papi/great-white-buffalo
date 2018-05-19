@@ -1,7 +1,7 @@
 const Message = require("../../index.js").Message;
 const moment = require("moment");
 
-const insertNewMessage = async (user, lounge, text, media) => {
+const insertNewMessage = async (user, lounge, createdAt, text, media) => {
   let date = new Date();
   let messageDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
   const object = {
@@ -9,7 +9,7 @@ const insertNewMessage = async (user, lounge, text, media) => {
     lounge,
     text,
     media,
-    created_at: messageDate
+    createdAt: createdAt || messageDate
   };
 
   try {
@@ -22,9 +22,9 @@ const insertNewMessage = async (user, lounge, text, media) => {
   }
 };
 
-const selectTop50Messages = async () => {
+const selectTop50Messages = async loungeID => {
   try {
-    let data = await Message.find({}).limit(50);
+    let data = await Message.find({ lounge: loungeID }).limit(50);
     return data;
   } catch (err) {
     console.log("error", err);

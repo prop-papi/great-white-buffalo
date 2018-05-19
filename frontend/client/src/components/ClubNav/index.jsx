@@ -52,7 +52,6 @@ class ClubNav extends Component {
 
   async handleNavItemClick(club) {
     await this.props.updateLocalData(club.id);
-    await this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
     // update default club in db
     let body = {
       user: localStorage.getItem("id"),
@@ -63,6 +62,7 @@ class ClubNav extends Component {
       `${configs.HOST}api/clubs/updateDefault`,
       body
     );
+    this.props.updateCurrentLounge(this.props.local.localData.lounges[0]);
   }
 
   async createClub() {

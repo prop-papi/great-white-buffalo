@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const chatdb = require("../../db/models/messages/");
+const {
+  insertNewMessage,
+  selectTop50Messages
+} = require("../../db/models/messages/");
 
-router.post("/message", async (req, res) => {
+router.post("/send", async (req, res) => {
   try {
-    res.status(200).send();
+    console.log("payload: ", req.body);
+    let { user, currentLoungeID, createdAt, text, media } = req.body;
+    insertNewMessage(user, currentLoungeID, createdAt, text, media);
+    res.status(200).send("successful post");
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Error storing to database");
@@ -12,9 +18,16 @@ router.post("/message", async (req, res) => {
   }
 });
 
-// router.route("/message").post(async (req, res) => {
-//   await console.log("request: ", req);
-//   res.send(200);
-// });
+router.get("/get/:loungeID", async (req, res) => {
+  try {
+    let { loungeID } = req.params;
+    let messages = await selectTop50Messages(loungeID);
+    res.status(200).send(messages);
+  } catch (err) {
+    console.log("error: ", err);
+    res.status(500).send("Error getting");
+    return err;
+  }
+});
 
 module.exports = router;

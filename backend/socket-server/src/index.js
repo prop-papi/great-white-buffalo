@@ -9,6 +9,8 @@ const redis = require("redis");
 const redisClient = require("../../redis-server/src/index.js").client;
 const schedule = require("node-schedule");
 const { getListLength, renderRecent50 } = require("../helpers/index.js");
+const axios = require("axios");
+const configs = require("../../../config.js");
 
 io.listen(3000, err => {
   if (err) throw err;
@@ -19,10 +21,30 @@ const usersOnline = {};
 
 // chat namespace
 const chat = io.of("/chat").on("connection", socket => {
-  socket.on("user.enter", msg => {
+  socket.on("user.enter", async msg => {
     console.log(`${msg.user} entered lounge: ${msg.currentLoungeID}`);
 
     socket.join(`lounge:${msg.currentLoungeID}`);
+
+    await getListLength(`lounge:${msg.currentLoungeID}`, (err, result) => {
+      if (result === 0) {
+        axios
+          .get(`${configs.HOST}api/message/get/${msg.currentLoungeID}`)
+          .then(res => {
+            console.log("res: ", res.data);
+            res.data.forEach(message => {
+              redisClient.lpush(
+                `lounge:${msg.currentLoungeID}`,
+                JSON.stringify(message)
+              );
+            });
+          })
+          .catch(err => {
+            console.log("server get error: ", err);
+          });
+      }
+    });
+
     renderRecent50(`lounge:${msg.currentLoungeID}`, (err, result) => {
       chat
         .to(`lounge:${msg.currentLoungeID}`)
@@ -47,14 +69,13 @@ const chat = io.of("/chat").on("connection", socket => {
       .emit("message.typing", msg);
   });
 
-  // disconnect
   socket.on("user.leave", payload => {
     console.log("event: user.leave");
     socket.leave(`lounge:${payload.previousLoungeID}`);
     chat.emit(`${payload.user}.leave`);
-    // socket.disconnect();
   });
 
+  // disconnect
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
