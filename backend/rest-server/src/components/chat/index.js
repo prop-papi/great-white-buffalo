@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const chatdb = require("../../db/models/messages/");
+const {
+  insertNewMessage,
+  selectTop50Messages
+} = require("../../db/models/messages/");
 
-router.post("/message", async (req, res) => {
+router.post("/send", async (req, res) => {
   try {
-    res.status(200).send();
+    console.log("payload: ", req.body);
+    let { user, currentLoungeID, text, media } = req.body;
+    insertNewMessage(user, currentLoungeID, text, media);
+    res.status(200).send("successful post");
   } catch (err) {
     console.log("error", err);
     res.status(500).send("Error storing to database");

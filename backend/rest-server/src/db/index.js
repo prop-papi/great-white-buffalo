@@ -30,8 +30,8 @@ mongoose.connect(mongoConnectString, function(err) {
 
 let mongodb = mongoose.connection;
 
-let messages = mongoose.Schema({
-  user: Number,
+let messages = new mongoose.Schema({
+  user: String,
   lounge: Number,
   text: String,
   media: String,
