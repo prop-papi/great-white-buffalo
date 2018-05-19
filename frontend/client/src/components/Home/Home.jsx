@@ -65,7 +65,6 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    // set app state here
     const {
       fetchHomeData,
       addBet,
@@ -123,6 +122,10 @@ class Home extends Component {
     });
 
     activeUserSocket.on("user.enter", usersOnline => {
+      this.setState({ usersOnline });
+    });
+
+    activeUserSocket.on("user.leave", usersOnline => {
       this.setState({ usersOnline });
     });
 
@@ -194,8 +197,6 @@ class Home extends Component {
       closeOnClick: true
     });
   }
-
-  betCreate(bet) {}
 
   render() {
     if (

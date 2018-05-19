@@ -151,13 +151,13 @@ const activeUsers = io.of("/activeUsers").on("connection", socket => {
     activeUsers.to("online").emit("user.enter", usersOnline);
   });
   // disconnect
-  socket.on("disconnect", socket => {
-    for (val in usersOnline) {
-      if (val.socket_id === socket.id) {
+  socket.on("disconnect", () => {
+    for (let val in usersOnline) {
+      if (usersOnline[val].socket_id === socket.id) {
         delete usersOnline[val];
       }
     }
-    console.log("Usersonline: ", usersOnline);
+    activeUsers.to("online").emit("user.leave", usersOnline);
   });
 
   // error handling
