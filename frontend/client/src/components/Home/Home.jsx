@@ -122,12 +122,10 @@ class Home extends Component {
     });
 
     activeUserSocket.on("user.enter", usersOnline => {
-      console.log("users online: ", usersOnline);
       this.setState({ usersOnline });
     });
 
     activeUserSocket.on("user.leave", usersOnline => {
-      console.log("LEAVE ME ALONE: ", usersOnline);
       this.setState({ usersOnline });
     });
 
