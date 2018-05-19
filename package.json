@@ -9,10 +9,8 @@
     "server-dev": "nodemon backend/rest-server/src/index.js",
     "start:socket-server": "nodemon backend/socket-server/src/index.js",
     "start:redis-server": "nodemon backend/redis-server/src/index.js",
-    "start:leaderboard-service":
-      "nodemon backend/services/leaderboard-fetcher/bin/entry.js",
-    "start:lounge-fetcher-service":
-      "nodemon backend/services//lounge-fetcher/bin/entry.js"
+    "start:leaderboard-service": "nodemon backend/services/leaderboard-fetcher/bin/entry.js",
+    "start:lounge-fetcher-service": "nodemon backend/services//lounge-fetcher/bin/entry.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +31,7 @@
     "create-react-class": "^15.6.3",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "g": "^2.0.1",
     "glamor": "^2.20.40",
     "jest": "^22.4.3",
     "jsonwebtoken": "^8.2.1",
@@ -47,6 +46,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "pm2": "^2.10.4",
     "promise-mysql": "^3.2.1",
     "react": "^16.3.2",
     "react-16-bootstrap-date-picker": "^5.1.2",
@@ -84,6 +84,8 @@
     "webpack-cli": "^2.1.2"
   },
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   }
 }
