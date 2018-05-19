@@ -62,8 +62,19 @@ const archiveLounges = async ids => {
   }
 };
 
+const getAllLounges = async () => {
+  const query = `SELECT id FROM Lounges WHERE is_archived=0`;
+  try {
+    return await mysqldb.query(query);
+  } catch (err) {
+    console.log("error", err);
+    return err;
+  }
+};
+
 module.exports.selectAllLoungesInClub = selectAllLoungesInClub;
 module.exports.checkLoungeExist = checkLoungeExist;
 module.exports.insertLounge = insertLounge;
 module.exports.selectLoungesForArchive = selectLoungesForArchive;
 module.exports.archiveLounges = archiveLounges;
+module.exports.getAllLounges = getAllLounges;
