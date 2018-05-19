@@ -9,8 +9,7 @@
     "server-dev": "nodemon backend/rest-server/src/index.js",
     "start:socket-server": "nodemon backend/socket-server/src/index.js",
     "start:redis-server": "nodemon backend/redis-server/src/index.js",
-    "start:leaderboard-service":
-      "nodemon backend/services/leaderboard-fetcher/bin/entry.js"
+    "start:leaderboard-service": "nodemon backend/services/leaderboard-fetcher/bin/entry.js"
   },
   "repository": {
     "type": "git",
@@ -80,6 +79,8 @@
     "webpack-cli": "^2.1.2"
   },
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   }
 }

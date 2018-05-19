@@ -286,7 +286,8 @@ function mapStateToProps(state) {
     local: state.local,
     global: state.global,
     userPane: state.userPane,
-    main: state.component
+    main: state.component,
+    currentLounge: state.currentLounge
   };
 }
 
