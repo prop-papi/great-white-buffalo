@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./GlobalNavBar.css";
+import configs from "../../../../../config.js";
 import {
   Image,
   Dropdown,
@@ -101,7 +102,7 @@ class GlobalNavBar extends Component {
       username
     };
     axios
-      .get("http://localhost:1337/api/userpane/selected", { params })
+      .get(`${configs.HOST}api/userpane/selected`, { params })
       .then(response => {
         //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);

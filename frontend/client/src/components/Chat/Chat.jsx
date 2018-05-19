@@ -10,6 +10,7 @@ import {
   Row,
   Col
 } from "react-bootstrap";
+import configs from "../../../../../config.js";
 import { updateUserPaneData } from "../../actions";
 import moment from "moment";
 import io from "socket.io-client";
@@ -54,7 +55,7 @@ class Chat extends Component {
       username: target.currentTarget.innerHTML
     };
     axios
-      .get("http://localhost:1337/api/userpane/selected", { params })
+      .get(`${configs.HOST}api/userpane/selected`, { params })
       .then(response => {
         //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);

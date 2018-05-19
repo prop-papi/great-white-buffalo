@@ -7,6 +7,7 @@ import SearchBets from "../SearchBets/index.jsx";
 import CreateBet from "../CreateBet/index.jsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import configs from "../../../../../config.js";
 import {
   fetchHomeData,
   addBet,
@@ -29,9 +30,9 @@ import axios from "axios";
 import "./Home.css";
 import UserPane from "../UserPane/UserPane";
 
-const betSocket = io("http://localhost:3000/bets");
-const activeUserSocket = io("http://localhost:3000/activeUsers");
-const notificationsSocket = io("http://localhost:3000/notifications");
+const betSocket = io(`${configs.SOCKET_HOST}bets`);
+const activeUserSocket = io(`${configs.SOCKET_HOST}activeUsers`);
+const notificationsSocket = io(`${configs.SOCKET_HOST}notifications`);
 
 class Home extends Component {
   constructor(props) {

@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { updateLocalData, addClub, fetchHomeData } from "../../actions";
 import { updateCurrentLounge } from "../../actions/loungeActions";
 import axios from "axios";
+import configs from "../../../../../config.js";
 
 import {
   Nav,
@@ -58,7 +59,7 @@ class ClubNav extends Component {
     };
     localStorage.setItem("default_club", club.id);
     let updatedClub = axios.post(
-      "http://localhost:1337/api/clubs/updateDefault",
+      `${configs.HOST}api/clubs/updateDefault`,
       body
     );
   }
@@ -74,7 +75,7 @@ class ClubNav extends Component {
     };
     try {
       const data = await axios.post(
-        `http://localhost:1337/api/clubs/insertclub`,
+        `${configs.HOST}api/clubs/insertclub`,
         body
       );
       if (data.status === 200) {
@@ -109,10 +110,9 @@ class ClubNav extends Component {
           add.push([Number(key), Number(localStorage.id)]);
         }
       }
-      const data = await axios.post(
-        `http://localhost:1337/api/clubs/addUsersClubs`,
-        { add }
-      );
+      const data = await axios.post(`${configs.HOST}api/clubs/addUsersClubs`, {
+        add
+      });
       if (data.status === 200) {
         await this.props.fetchHomeData(
           localStorage.id,
@@ -134,7 +134,7 @@ class ClubNav extends Component {
         }
       }
       const data = await axios.post(
-        `http://localhost:1337/api/clubs/removeUsersClubs`,
+        `${configs.HOST}api/clubs/removeUsersClubs`,
         { leave }
       );
       if (data.status === 200) {
@@ -162,7 +162,7 @@ class ClubNav extends Component {
     try {
       const params = { userId: localStorage.id };
       const data = await axios.get(
-        `http://localhost:1337/api/clubs/getAvailableClubs`,
+        `${configs.HOST}api/clubs/getAvailableClubs`,
         { params }
       );
       if (data.status === 200) {

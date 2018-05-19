@@ -1,4 +1,5 @@
 import axios from "axios";
+import configs from "../../../../config.js";
 
 export const setLocalData = (localData, dispatch) => {
   dispatch({ type: "LOCAL_DATA", localData });
@@ -26,12 +27,10 @@ export const updateUserPaneData = userPaneData => dispatch => {
 
 export const fetchHomeData = (id, club) => async dispatch => {
   // utilize some kind of loading screen
-  const globalData = await axios.get(`http://localhost:1337/api/users/${id}`);
-  const localData = await axios.get(
-    `http://localhost:1337/api/users/local/${club}`
-  );
+  const globalData = await axios.get(`${configs.HOST}api/users/${id}`);
+  const localData = await axios.get(`${configs.HOST}api/users/local/${club}`);
   const notifications = await axios.get(
-    `http://localhost:1337/api/notifications/${id}`
+    `${configs.HOST}api/notifications/${id}`
   );
   setGlobalData(globalData.data, dispatch);
   setLocalData(localData.data, dispatch);
@@ -41,15 +40,13 @@ export const fetchHomeData = (id, club) => async dispatch => {
 };
 
 export const updateLocalData = club => async dispatch => {
-  const localData = await axios.get(
-    `http://localhost:1337/api/users/local/${club}`
-  );
+  const localData = await axios.get(`${configs.HOST}api/users/local/${club}`);
   setLocalData(localData.data, dispatch);
 };
 
 export const updateNotifications = id => async dispatch => {
   const notifications = await axios.get(
-    `http://localhost:1337/api/notifications/${id}`
+    `${configs.HOST}api/notifications/${id}`
   );
   setNotifications(notifications.data.notifications, dispatch);
 };

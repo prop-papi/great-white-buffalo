@@ -4,6 +4,7 @@ import axios from "axios";
 import { bindActionCreators } from "redux";
 import { updateCurrentLounge } from "../../actions/loungeActions.js";
 import { addLounge } from "../../actions/index.js";
+import configs from "../../../../../config.js";
 
 import {
   ListGroup,
@@ -56,7 +57,7 @@ class LoungeList extends Component {
     };
     try {
       const data = await axios.post(
-        `http://localhost:1337/api/lounges/insertlounge`,
+        `${configs.HOST}api/lounges/insertlounge`,
         body
       );
       if (data.status === 200) {

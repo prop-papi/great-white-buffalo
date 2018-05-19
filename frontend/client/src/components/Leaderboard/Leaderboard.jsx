@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import configs from "../../../../../config.js";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
@@ -59,7 +60,7 @@ class Leaderboard extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:1337/api/leaderboard/")
+      .get(`${configs.HOST}api/leaderboard/`)
       .then(res => {
         console.log("res: ", res);
         this.setState({

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import configs from "../../../../../config.js";
 import { ListGroupItem, Image, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -18,7 +19,7 @@ class BetAcceptMessage extends Component {
     };
     this.props.close();
     axios
-      .get("http://localhost:1337/api/userpane/selected", { params })
+      .get(`${configs.HOST}api/userpane/selected`, { params })
       .then(response => {
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
         newUserPane.didSelectUser = true;

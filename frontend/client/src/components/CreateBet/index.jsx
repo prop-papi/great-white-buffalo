@@ -22,6 +22,7 @@ import {
   ControlLabel,
   Alert
 } from "react-bootstrap";
+import configs from "../../../../../config.js";
 
 // add confirmation dialogue w/ bet details!!!
 
@@ -172,10 +173,7 @@ class CreateBet extends React.Component {
         user: localStorage.id
       };
       try {
-        const data = await axios.post(
-          `http://localhost:1337/api/bets/create`,
-          body
-        );
+        const data = await axios.post(`${configs.HOST}api/bets/create`, body);
         if (data.status === 200) {
           const newBet = data.data;
           this.setState({
