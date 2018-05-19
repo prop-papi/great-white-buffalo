@@ -119,7 +119,7 @@ class Home extends Component {
 
     betSocket.on("bet.externalResolved", (newBet, vote) => {
       console.log("a bet of yours was externally resolved");
-      //externalResolved(this.props.global.globalData, newBet, vote);
+      externalResolved(this.props.global.globalData, newBet, vote);
     });
 
     activeUserSocket.emit("user.enter", {

@@ -223,11 +223,12 @@ class Bet extends React.Component {
             localStorage.id
           );
           // socket emission for bets
-          const payload = {
+          let payload = {
             bet: JSON.parse(JSON.stringify(this.props.bet)),
             action: "accept",
             acceptorId: Number(localStorage.id)
           };
+          payload.bet.challenger_name = localStorage.username;
           this.props.betSocket.emit("bet", payload);
           // socket emission for notificatons
           const payload2 = {

@@ -122,6 +122,7 @@ export const acceptBet = (
         return {
           ...b,
           challenger: myId,
+          challenger_name: localStorage.username,
           is_my_bet: 1,
           status: "active"
         };
@@ -130,6 +131,7 @@ export const acceptBet = (
           return {
             ...b,
             challenger: acceptorId,
+            challenger_name: bet.challenger_name,
             is_my_bet: 1,
             status: "active"
           };
@@ -314,7 +316,11 @@ export const externalResolved = (
     if (b.id !== bet.id) {
       return b;
     } else {
-      if (b.creator !== localStorage.id && b.challenger !== localStorage.id) {
+      console.log("i found the bet");
+      if (
+        b.creator !== Number(localStorage.id) &&
+        b.challenger !== Number(localStorage.id)
+      ) {
         return b;
       } else {
         if (vote === 2) {
@@ -324,8 +330,9 @@ export const externalResolved = (
             status: "stalemate"
           };
         } else if (vote === 0) {
-          if (b.creator === localStorage.id) {
+          if (b.creator === Number(localStorage.id)) {
             // creator won and I am the creator
+            console.log("admin says i, the creator, won");
             iWon = "yes";
             return {
               ...b,
@@ -344,7 +351,7 @@ export const externalResolved = (
             };
           }
         } else if (vote === 1) {
-          if (b.creator === localStorage.id) {
+          if (b.creator === Number(localStorage.id)) {
             // challenger won and I am the creator
             iWon = "no";
             return {
@@ -367,8 +374,9 @@ export const externalResolved = (
       }
     }
   });
-  const newBalances = // do this based on if I won, lost, or stalemate, only change if my bet
-    b.creator !== localStorage.id && b.challenger !== localStorage.id
+  const newBalances =
+    bet.creator !== Number(localStorage.id) &&
+    bet.challenger !== Number(localStorage.id)
       ? [
           {
             available_balance: globalData.balances[0].available_balance,
@@ -379,21 +387,24 @@ export const externalResolved = (
         ? [
             {
               available_balance:
-                globalData.balances[0].available_balance + wager,
-              escrow_balance: globalData.balances[0].escrow_balance - wager
+                globalData.balances[0].available_balance + bet.wager,
+              escrow_balance: globalData.balances[0].escrow_balance - bet.wager
             }
           ]
         : iWon === "yes"
           ? [
               {
-                available_balance: globalData.balances[0].available_balance,
-                escrow_balance: globalData.balances[0].escrow_balance
+                available_balance:
+                  globalData.balances[0].available_balance + 2 * bet.wager,
+                escrow_balance:
+                  globalData.balances[0].escrow_balance - bet.wager
               }
             ]
           : [
               {
                 available_balance: globalData.balances[0].available_balance,
-                escrow_balance: globalData.balances[0].escrow_balance
+                escrow_balance:
+                  globalData.balances[0].escrow_balance - bet.wager
               }
             ];
   const g = {
