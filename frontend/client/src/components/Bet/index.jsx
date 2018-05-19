@@ -60,6 +60,7 @@ class Bet extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
+    console.log("test"); // need to update to get derived state from props
     this.setState({
       myVoteResult: newProps.bet.is_my_bet
         ? Number(localStorage.id) === newProps.bet.creator
@@ -140,6 +141,31 @@ class Bet extends React.Component {
           }
         } else {
           this.setState({ showCancelBetError: true });
+        }
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async adminVote(v) {
+    // 0 -> creator won, 1 -> challenger won, 2 -> stalemate
+    try {
+      const data = await axios.post(
+        `http://localhost:1337/api/bets/externalResolved`,
+        {
+          bet: this.props.bet,
+          vote: v
+        }
+      );
+      if (data.status === 200) {
+        if (data.data.changedRows) {
+          const payload = {
+            bet: this.props.bet,
+            action: "externalResolved",
+            vote: v
+          };
+          this.props.betSocket.emit("bet", payload);
         }
       }
     } catch (err) {
@@ -276,18 +302,22 @@ class Bet extends React.Component {
                   </Alert>
                 ) : null}
                 <div className="col-md-8" id="betInfo">
-                  {"My "}
-                  {this.state.myVote === "N/A" ? "potential " : ""}
-                  {"opponent: "}
+                  Creator:{" "}
                   <span
                     className="opponent-name"
                     onClick={this.displaySideProfile}
                   >
-                    {this.state.myVote === "creator"
-                      ? this.props.bet.challenger_name
-                      : this.props.bet.creator_name}
+                    {this.props.bet.creator_name}
                   </span>
                   <br />
+                  Challenger:{" "}
+                  <span
+                    className="opponent-name"
+                    onClick={this.displaySideProfile}
+                  >
+                    {this.props.bet.challenger_name}
+                  </span>
+                  <br /> <br />
                   {"Club: " + this.props.bet.club_name}
                   <br /> <br />
                   {"Odds: " + this.props.bet.odds} <br />
@@ -354,10 +384,48 @@ class Bet extends React.Component {
                   this.state.myVoteResult !== null ? (
                     "I voted that I won this wager, waiting on my opponent"
                   ) : null}
-                  {this.props.bet.status === "disputed" ? (
+                  {this.props.bet.status === "disputed" &&
+                  this.props.bet.club_admin !== Number(localStorage.id) ? (
                     <div>
-                      This bet is in dispute!!! Should there just be a button
-                      here to send to a vote???
+                      This bet is in dispute!!! Please wait for an admin to
+                      decide on the outcome.
+                    </div>
+                  ) : null}
+                  {this.props.bet.status === "disputed" &&
+                  this.props.bet.club_admin === Number(localStorage.id) ? (
+                    <div>
+                      Who won this wager?
+                      <br />
+                      <br />
+                      <Confirm
+                        onConfirm={() => this.adminVote(0)}
+                        value={0}
+                        body="Are you sure the Creator won this wager?"
+                        confirmText="Confirm"
+                        title="Admin disput - Creator wins"
+                      >
+                        <button>Creator</button>
+                      </Confirm>
+                      <br /> <br />
+                      <Confirm
+                        onConfirm={() => this.adminVote(1)}
+                        value={0}
+                        body="Are you sure the Challenger won this wager?"
+                        confirmText="Confirm"
+                        title="Admin disput - Challenger wins"
+                      >
+                        <button>Challenger</button>
+                      </Confirm>
+                      <br /> <br />
+                      <Confirm
+                        onConfirm={() => this.adminVote(2)}
+                        value={0}
+                        body="I cannot determine the outcome and this wager will have an outcome of stalemate."
+                        confirmText="Confirm"
+                        title="Admin disput - Stalemate"
+                      >
+                        <button>Stalemate</button>
+                      </Confirm>
                     </div>
                   ) : null}
                   {this.props.bet.status === "canceled"
@@ -367,7 +435,12 @@ class Bet extends React.Component {
                     ? "This wager expired with no takers"
                     : null}
                   {this.props.bet.status === "resolved"
-                    ? "Put bet result here!!!"
+                    ? this.props.bet.result === this.props.bet.creator
+                      ? `${this.props.bet.creator_name} won this bet`
+                      : `${this.props.bet.challenger_name} won this bet`
+                    : null}
+                  {this.props.bet.status === "stalemate"
+                    ? "This was determined to be a stalemate by the admins"
                     : null}
                   {this.props.bet.status === "pending" &&
                   this.state.myVote === "N/A" ? (

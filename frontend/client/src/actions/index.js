@@ -303,6 +303,107 @@ export const voteOnBet = (
   setGlobalData(g, dispatch);
 };
 
+export const externalResolved = (
+  globalData,
+  bet,
+  vote // 0 -> creator won, 1 -> challenger won, 2 -> stalemate
+) => dispatch => {
+  // *** possibly add more in here later. KDR / wins / losses???? ***
+  let iWon;
+  const newBets = globalData.bets.map((b, index) => {
+    if (b.id !== bet.id) {
+      return b;
+    } else {
+      if (b.creator !== localStorage.id && b.challenger !== localStorage.id) {
+        return b;
+      } else {
+        if (vote === 2) {
+          iWon = "stalemate";
+          return {
+            ...b,
+            status: "stalemate"
+          };
+        } else if (vote === 0) {
+          if (b.creator === localStorage.id) {
+            // creator won and I am the creator
+            iWon = "yes";
+            return {
+              ...b,
+              status: "resolved",
+              result: b.creator,
+              challenger_vote: 0
+            };
+          } else {
+            // creator won and I am the challenger
+            iWon = "no";
+            return {
+              ...b,
+              status: "resolved",
+              result: b.creator,
+              challenger_vote: 0
+            };
+          }
+        } else if (vote === 1) {
+          if (b.creator === localStorage.id) {
+            // challenger won and I am the creator
+            iWon = "no";
+            return {
+              ...b,
+              status: "resolved",
+              result: b.challenger,
+              creator_vote: 0
+            };
+          } else {
+            // challenger won and I am the challenger
+            iWon = "yes";
+            return {
+              ...b,
+              status: "resolved",
+              result: b.challenger,
+              creator_vote: 0
+            };
+          }
+        }
+      }
+    }
+  });
+  const newBalances = // do this based on if I won, lost, or stalemate, only change if my bet
+    b.creator !== localStorage.id && b.challenger !== localStorage.id
+      ? [
+          {
+            available_balance: globalData.balances[0].available_balance,
+            escrow_balance: globalData.balances[0].escrow_balance
+          }
+        ]
+      : iWon === "stalemate"
+        ? [
+            {
+              available_balance:
+                globalData.balances[0].available_balance + wager,
+              escrow_balance: globalData.balances[0].escrow_balance - wager
+            }
+          ]
+        : iWon === "yes"
+          ? [
+              {
+                available_balance: globalData.balances[0].available_balance,
+                escrow_balance: globalData.balances[0].escrow_balance
+              }
+            ]
+          : [
+              {
+                available_balance: globalData.balances[0].available_balance,
+                escrow_balance: globalData.balances[0].escrow_balance
+              }
+            ];
+  const g = {
+    ...globalData,
+    bets: newBets,
+    balances: newBalances
+  };
+  setGlobalData(g, dispatch);
+};
+
 export const addBet = (globalData, newBet) => dispatch => {
   const g = {
     ...globalData,
