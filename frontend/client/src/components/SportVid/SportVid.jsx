@@ -21,7 +21,6 @@ class SportVid extends Component {
         nextProps.local.club.name === "PUBG"
           ? "playerunknown's battlegrounds"
           : nextProps.local.club.name;
-      console.log(name);
       return name !== prevState.game ? { game: name } : null;
     } else {
       let videoLink = nextProps.currentLounge.currentLounge.video_link;

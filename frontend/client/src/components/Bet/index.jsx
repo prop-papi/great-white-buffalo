@@ -60,15 +60,14 @@ class Bet extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.bet !== newProps.bet) {
-      this.setState({
-        myVoteResult: newProps.bet.is_my_bet
-          ? Number(localStorage.id) === newProps.bet.creator
-            ? newProps.bet.creator_vote
-            : newProps.bet.challenger_vote
-          : "N/A"
-      });
-    }
+    // need to update to get derived state from props
+    this.setState({
+      myVoteResult: newProps.bet.is_my_bet
+        ? Number(localStorage.id) === newProps.bet.creator
+          ? newProps.bet.creator_vote
+          : newProps.bet.challenger_vote
+        : "N/A"
+    });
   }
 
   handleCancelBetError() {

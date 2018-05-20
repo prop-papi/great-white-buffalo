@@ -42,6 +42,8 @@ const insertLounge = async (club, name, time, security, adminId, videoLink) => {
   }
 };
 
+// const updateLounge =
+
 const selectLoungesForArchive = async () => {
   const query = `select id, end_time from Lounges where end_time!='null' and is_archived=0;`;
   try {

@@ -1,0 +1,11 @@
+/* .modal-content {
+  min-height: 35% !important;
+} */
+.modal-body {
+  overflow-y: scroll;
+  /* height: 100% !important; */
+}
+
+.modal-footer {
+  height: auto !important;
+}
