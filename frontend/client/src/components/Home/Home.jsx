@@ -312,6 +312,7 @@ class Home extends Component {
                 ? this.props.currentLounge.currentLounge.video_link
                 : ""
             }
+            id={this.props.currentLounge.currentLounge.id}
           />
         </div>
       );

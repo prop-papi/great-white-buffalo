@@ -42,7 +42,14 @@ const insertLounge = async (club, name, time, security, adminId, videoLink) => {
   }
 };
 
-// const updateLounge =
+const updateLoungeLink = async (link, id) => {
+  const query = `update Lounges set video_link=? where id=?`;
+  try {
+    return await mysqldb.query(query, [link, id]);
+  } catch (err) {
+    return err;
+  }
+};
 
 const selectLoungesForArchive = async () => {
   const query = `select id, end_time from Lounges where end_time!='null' and is_archived=0;`;
@@ -80,3 +87,4 @@ module.exports.insertLounge = insertLounge;
 module.exports.selectLoungesForArchive = selectLoungesForArchive;
 module.exports.archiveLounges = archiveLounges;
 module.exports.getAllLounges = getAllLounges;
+module.exports.updateLoungeLink = updateLoungeLink;

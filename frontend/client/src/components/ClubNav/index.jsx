@@ -404,8 +404,6 @@ class ClubNav extends Component {
                     </MenuItem>
                   </DropdownButton>
                 </ButtonToolbar>
-                {/* <br /> <br />
-                <Button onClick={this.createClub}>Create Club</Button> */}
               </Modal.Body>
             </Tab>
             <Tab eventKey={2} title="Join" className="joinLeaveClubsPane">
@@ -443,16 +441,6 @@ class ClubNav extends Component {
                         </NavItem>
                       ))
                     : "There are no clubs available to join!"}
-                {/* <br /> <br />
-                <br />
-                <br />
-                <br />
-                <Button
-                  onClick={this.joinClubs}
-                  className="joinLeaveClubButton"
-                >
-                  Join Club(s)
-                </Button> */}
               </Modal.Body>
             </Tab>
             <Tab eventKey={3} title="Leave" className="joinLeaveClubsPane">
@@ -498,16 +486,6 @@ class ClubNav extends Component {
                         );
                       }
                     })}
-                {/* <br /> <br />
-                <br />
-                <br />
-                <br />
-                <Button
-                  onClick={this.leaveClubs}
-                  className="joinLeaveClubButton"
-                >
-                  Leave Club(s)
-                </Button> */}
               </Modal.Body>
             </Tab>
           </Tabs>
