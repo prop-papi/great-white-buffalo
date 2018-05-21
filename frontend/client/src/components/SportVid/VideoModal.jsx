@@ -15,6 +15,10 @@ class VideoModal extends Component {
     this.setState({ link: this.props.link });
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return nextProps.link !== prevState.link ? { link: nextProps.link } : null;
+  }
+
   onChange(e) {
     this.setState({ link: e.target.value });
   }
@@ -24,7 +28,14 @@ class VideoModal extends Component {
       link: this.state.link,
       id: this.props.id
     };
-    //axios.post(`${configs.HOST}api/lounges/updateLink/`),;
+    axios
+      .post(`${configs.HOST}api/lounges/updateLink/`, body)
+      .then(response => {
+        console.log("successful update");
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -46,7 +57,7 @@ class VideoModal extends Component {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button>Submit</Button>
+          <Button onClick={() => this.onSubmit()}>Submit</Button>
         </Modal.Footer>
       </Modal>
     );
