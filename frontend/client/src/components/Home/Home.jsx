@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Modal } from "react-bootstrap";
+import { Grid, Row, Col, Modal, Button } from "react-bootstrap";
 import ClubNav from "../ClubNav/index";
 import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
@@ -274,11 +274,17 @@ class Home extends Component {
                 className="main-column"
               >
                 <MainNavBar />
-                {this.checkAdmin() ? (
-                  <button onClick={() => this.videoEditTapped()}>Edit</button>
-                ) : (
-                  <br />
-                )}
+                <div align="right">
+                  {this.checkAdmin() && (
+                    <Button
+                      className="edit-button"
+                      onClick={() => this.videoEditTapped()}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </div>
+                <br />
                 {this.mainComponentRender(this.props.main.component)}
               </Col>
               <Col

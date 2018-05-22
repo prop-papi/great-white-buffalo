@@ -32,6 +32,7 @@ class VideoModal extends Component {
       .post(`${configs.HOST}api/lounges/updateLink/`, body)
       .then(response => {
         console.log("successful update");
+        this.props.setShow();
       })
       .catch(err => {
         console.log(err);
