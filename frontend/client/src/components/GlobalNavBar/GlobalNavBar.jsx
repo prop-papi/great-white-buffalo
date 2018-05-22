@@ -121,13 +121,14 @@ class GlobalNavBar extends Component {
         <li className="logo li">
           <Image
             className="logo"
-            src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/gwb-logo.png"
+            src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/updated-favicon.png"
             rounded
           />
         </li>
         <li className="li right">
           <span className="label win-ratio">
             {this.props.global.globalData.balances[0].available_balance}
+            {" tokens available  | "}
             Wager Win Ratio:{" "}
             {(Number(localStorage.getItem("win_ratio")) * 100)
               .toString()

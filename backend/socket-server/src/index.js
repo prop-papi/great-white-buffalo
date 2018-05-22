@@ -277,7 +277,7 @@ let updatePendingBetsAndEmit = async () => {
   }
 };
 
-let cron1 = schedule.scheduleJob("57 * * * *", async function() {
+let cron1 = schedule.scheduleJob("30 * * * *", async function() {
   updateActiveBetsAndEmit();
   updatePendingBetsAndEmit();
 });
