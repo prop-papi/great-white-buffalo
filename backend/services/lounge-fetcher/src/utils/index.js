@@ -146,6 +146,7 @@ let makeSportRequest = async (sport, date, loungeDate, club, backupDate) => {
   let body = await asyncRequest(
     `http://scores.nbcsports.msnbc.com/ticker/data/gamesMSNBC.js.asp?jsonp=true&sport=${sport}&period=${date}`
   );
+  console.log(body);
   // parse out response
   let data = JSON.parse(
     body.replace("shsMSNBCTicker.loadGamesData(", "").replace(");", "")
@@ -186,8 +187,10 @@ let makeSportRequest = async (sport, date, loungeDate, club, backupDate) => {
 let asyncRequest = async value =>
   new Promise((resolve, reject) => {
     request.get(value, (error, response, data) => {
-      if (error) reject(error);
-      else resolve(data);
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else resolve(data);
     });
   });
 

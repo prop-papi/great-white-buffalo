@@ -5,7 +5,7 @@ const schedule = require("node-schedule");
 const { getUsersBy } = require("./utils/");
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.LEADER_PORT || 4050;
 
 app.use(bodyParser.json());
 

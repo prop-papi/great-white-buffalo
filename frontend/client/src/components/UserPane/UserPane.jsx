@@ -8,7 +8,7 @@ import SideProfile from "./SideProfile";
 import axios from "axios";
 import io from "socket.io-client";
 
-const socket = io(`${configs.SOCKET_HOST}activeUsers`);
+const socket = io(`${configs.SOCKET_HOST}activeUsersSocket`);
 
 class UserPane extends Component {
   constructor() {
