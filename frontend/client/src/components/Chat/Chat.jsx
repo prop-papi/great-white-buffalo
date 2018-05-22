@@ -20,7 +20,7 @@ import axios from "axios";
 import "./Chat.css";
 
 // connection to socket server
-const socket = io(`${configs.SOCKET_HOST}chat`);
+const socket = io(`${configs.SOCKET_HOST}chatSocket`);
 
 class Chat extends Component {
   constructor(props) {
@@ -186,10 +186,13 @@ class Chat extends Component {
                     md={10.75}
                     lg={11}
                     className="chat-username"
-                    onClick={this.displaySideProfile}
                   >
-                    <a>{msg.user}: </a>
-                    {msg.text}
+                    <a
+                      className="message-username"
+                      onClick={this.displaySideProfile}
+                    >
+                      {msg.user}
+                    </a>: {msg.text}
                   </Col>
                 </Row>
               );

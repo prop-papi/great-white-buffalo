@@ -1,5 +1,6 @@
 require("dotenv").config();
 const app = require("express")();
+const cors = require("cors");
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const _ = require("underscore");
@@ -12,15 +13,22 @@ const { getListLength, renderRecent50 } = require("../helpers/index.js");
 const axios = require("axios");
 const configs = require("../../../config.js");
 
-io.listen(3000, err => {
-  if (err) throw err;
-  console.log("listening on PORT:3000");
+// const corsOptions = {
+//   origin: 'https://gwbuff.com',
+//   credentials: true,
+// };
+
+app.use(cors());
+
+server.listen(3000, err => {
+  if (err) console.log(err);
+  console.log("listening on PORT: 3000");
 });
 
 const usersOnline = {};
 
 // chat namespace
-const chat = io.of("/chat").on("connection", socket => {
+const chat = io.of("/chatSocket").on("connection", socket => {
   socket.on("user.enter", async msg => {
     console.log(`${msg.user} entered lounge: ${msg.currentLoungeID}`);
 
@@ -29,7 +37,7 @@ const chat = io.of("/chat").on("connection", socket => {
     await getListLength(`lounge:${msg.currentLoungeID}`, (err, result) => {
       if (result === 0) {
         axios
-          .get(`${configs.HOST}api/message/get/${msg.currentLoungeID}`)
+          .get(`${configs.HOST2}api/message/get/${msg.currentLoungeID}`)
           .then(res => {
             console.log("res: ", res.data);
             res.data.forEach(message => {
@@ -87,7 +95,7 @@ const chat = io.of("/chat").on("connection", socket => {
 });
 
 // notification namespace
-const notifications = io.of("/notifications").on("connection", socket => {
+const notifications = io.of("/notificationsSocket").on("connection", socket => {
   socket.on("fr-accepted", payload => {
     notifications.emit(`newFriend-${payload.friend}`, payload.user);
   });
@@ -120,7 +128,7 @@ const notifications = io.of("/notifications").on("connection", socket => {
 });
 
 // bet namespace
-const bets = io.of("/bets").on("connection", socket => {
+const bets = io.of("/betsSocket").on("connection", socket => {
   socket.on("user.enter", payload => {
     payload.clubList.forEach(c => {
       socket.join(c.id);
@@ -169,7 +177,7 @@ const bets = io.of("/bets").on("connection", socket => {
 });
 
 // active users namespace
-const activeUsers = io.of("/activeUsers").on("connection", socket => {
+const activeUsers = io.of("/activeUsersSocket").on("connection", socket => {
   socket.on("user.enter", user => {
     socket.join(user.online);
     usersOnline[user.username] = { id: user.id, socket_id: socket.id };

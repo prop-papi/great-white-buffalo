@@ -34,9 +34,9 @@ import "./Home.css";
 import UserPane from "../UserPane/UserPane";
 import VideoModal from "../SportVid/VideoModal";
 
-const betSocket = io(`${configs.SOCKET_HOST}bets`);
-const activeUserSocket = io(`${configs.SOCKET_HOST}activeUsers`);
-const notificationsSocket = io(`${configs.SOCKET_HOST}notifications`);
+const betSocket = io(`${configs.SOCKET_HOST}betsSocket`);
+const activeUserSocket = io(`${configs.SOCKET_HOST}activeUsersSocket`);
+const notificationsSocket = io(`${configs.SOCKET_HOST}notificationsSocket`);
 
 class Home extends Component {
   constructor(props) {
