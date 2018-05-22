@@ -22,6 +22,9 @@ import {
 } from "react-bootstrap";
 
 import "./index.css";
+const CREATE_CLUB = "Create Club";
+const JOIN_CLUB = "Join Club(s)";
+const LEAVE_CLUB = "Leave Club(s)";
 
 class ClubNav extends Component {
   constructor() {
@@ -35,7 +38,13 @@ class ClubNav extends Component {
       availableClubs: [],
       availableClubsClickMap: {},
       leavableClubsClickMap: {},
-      loading: false
+      loading: false,
+      tabs: {
+        1: CREATE_CLUB,
+        2: JOIN_CLUB,
+        3: LEAVE_CLUB
+      },
+      selectedTab: ""
     };
 
     this.handleNavItemClick = this.handleNavItemClick.bind(this);
@@ -163,7 +172,7 @@ class ClubNav extends Component {
   }
 
   async handleShow() {
-    this.setState({ show: true });
+    this.setState({ show: true, selectedTab: "Create Club" });
     try {
       const params = { userId: localStorage.id };
       const data = await axios.get(
@@ -214,6 +223,22 @@ class ClubNav extends Component {
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  handleSelectedTab(e) {
+    this.setState({ selectedTab: this.state.tabs[e] });
+  }
+
+  handleClubAction(e) {
+    console.log("testing right here", e.target.value === JOIN_CLUB);
+    if (e.target.value === CREATE_CLUB) {
+      this.createClub();
+    } else if (e.target.value === JOIN_CLUB) {
+      console.log("JOINED");
+      this.joinClubs();
+    } else if (e.target.value === LEAVE_CLUB) {
+      this.leaveClubs();
+    }
   }
 
   render() {
@@ -333,9 +358,14 @@ class ClubNav extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Club Maintenance</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
-              <Tab eventKey={1} title="Create">
+
+          <Tabs
+            defaultActiveKey={1}
+            id="uncontrolled-tab-example"
+            onSelect={e => this.handleSelectedTab(e)}
+          >
+            <Tab eventKey={1} title="Create">
+              <Modal.Body>
                 Club name:{" "}
                 <input
                   type="text"
@@ -354,7 +384,7 @@ class ClubNav extends Component {
                   onChange={this.handleChange}
                 />{" "}
                 <br />
-                <ButtonToolbar className="testing" id="securityButton">
+                <ButtonToolbar /*className="testing" id="securityButton"*/>
                   <DropdownButton title={this.state.security} id={1}>
                     <MenuItem
                       className="menu"
@@ -374,10 +404,10 @@ class ClubNav extends Component {
                     </MenuItem>
                   </DropdownButton>
                 </ButtonToolbar>
-                <br /> <br />
-                <Button onClick={this.createClub}>Create Club</Button>
-              </Tab>
-              <Tab eventKey={2} title="Join" className="joinLeaveClubsPane">
+              </Modal.Body>
+            </Tab>
+            <Tab eventKey={2} title="Join" className="joinLeaveClubsPane">
+              <Modal.Body>
                 <br />
                 {this.state.loading
                   ? "Loading data for new clubs..."
@@ -411,18 +441,10 @@ class ClubNav extends Component {
                         </NavItem>
                       ))
                     : "There are no clubs available to join!"}
-                <br /> <br />
-                <br />
-                <br />
-                <br />
-                <Button
-                  onClick={this.joinClubs}
-                  className="joinLeaveClubButton"
-                >
-                  Join Club(s)
-                </Button>
-              </Tab>
-              <Tab eventKey={3} title="Leave" className="joinLeaveClubsPane">
+              </Modal.Body>
+            </Tab>
+            <Tab eventKey={3} title="Leave" className="joinLeaveClubsPane">
+              <Modal.Body>
                 <br />
                 {this.state.loading
                   ? "Loading..."
@@ -464,19 +486,17 @@ class ClubNav extends Component {
                         );
                       }
                     })}
-                <br /> <br />
-                <br />
-                <br />
-                <br />
-                <Button
-                  onClick={this.leaveClubs}
-                  className="joinLeaveClubButton"
-                >
-                  Leave Club(s)
-                </Button>
-              </Tab>
-            </Tabs>
-          </Modal.Body>
+              </Modal.Body>
+            </Tab>
+          </Tabs>
+          <Modal.Footer>
+            <Button
+              onClick={e => this.handleClubAction(e)}
+              value={this.state.selectedTab}
+            >
+              {this.state.selectedTab}
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
     );

@@ -1,0 +1,11 @@
+.modal-body {
+  overflow-y: scroll;
+}
+
+.modal-footer {
+  height: auto !important;
+}
+
+.link-input {
+  width: 100%;
+}

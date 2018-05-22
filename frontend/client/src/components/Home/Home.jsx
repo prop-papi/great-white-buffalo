@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col } from "react-bootstrap";
+import { Grid, Row, Col, Modal, Button } from "react-bootstrap";
 import ClubNav from "../ClubNav/index";
 import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
@@ -23,7 +23,7 @@ import {
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
-import ESportVid from "../ESport/ESportVid";
+import SportVid from "../SportVid/SportVid";
 import Chat from "../Chat/Chat.jsx";
 import Leaderboard from "../Leaderboard/Leaderboard.jsx";
 import { connect } from "react-redux";
@@ -32,6 +32,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./Home.css";
 import UserPane from "../UserPane/UserPane";
+import VideoModal from "../SportVid/VideoModal";
 
 const betSocket = io(`${configs.SOCKET_HOST}bets`);
 const activeUserSocket = io(`${configs.SOCKET_HOST}activeUsers`);
@@ -44,7 +45,8 @@ class Home extends Component {
     this.mainComponentRender = this.mainComponentRender.bind(this);
 
     this.state = {
-      usersOnline: {}
+      usersOnline: {},
+      showModal: false
     };
 
     this.createNotification = this.createNotification.bind(this);
@@ -54,7 +56,7 @@ class Home extends Component {
     if (componentName === "chat") {
       return <Chat />;
     } else if (componentName === "video") {
-      return <ESportVid />;
+      return <SportVid />;
     } else if (componentName === "leaderboard") {
       return <Leaderboard />;
     } else {
@@ -213,6 +215,17 @@ class Home extends Component {
     });
   }
 
+  checkAdmin() {
+    return !this.props.currentLounge.currentLounge
+      ? false
+      : this.props.currentLounge.currentLounge.admin_id ===
+          parseInt(localStorage.id);
+  }
+
+  videoEditTapped() {
+    this.setState({ showModal: !this.state.showModal });
+  }
+
   render() {
     if (
       this.props.local.localData &&
@@ -261,6 +274,16 @@ class Home extends Component {
                 className="main-column"
               >
                 <MainNavBar />
+                <div align="right">
+                  {this.checkAdmin() && (
+                    <Button
+                      className="edit-button"
+                      onClick={() => this.videoEditTapped()}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </div>
                 <br />
                 {this.mainComponentRender(this.props.main.component)}
               </Col>
@@ -287,6 +310,20 @@ class Home extends Component {
             rtl={false}
           />
           <ToastContainer />
+          <VideoModal
+            showModal={this.state.showModal}
+            setShow={this.videoEditTapped.bind(this)}
+            link={
+              this.props.currentLounge.currentLounge
+                ? this.props.currentLounge.currentLounge.video_link
+                : ""
+            }
+            id={
+              this.props.currentLounge.currentLounge
+                ? this.props.currentLounge.currentLounge.id
+                : ""
+            }
+          />
         </div>
       );
     } else {

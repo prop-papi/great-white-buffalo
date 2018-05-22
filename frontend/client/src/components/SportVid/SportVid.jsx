@@ -3,9 +3,9 @@ import axios from "axios";
 import { ResponsiveEmbed } from "react-bootstrap";
 import { TWITCH_CLIENT_ID } from "../../../../../config.js";
 import { connect } from "react-redux";
-import "./ESportVid.css";
+import "./SportVid.css";
 
-class ESportVid extends Component {
+class SportVid extends Component {
   constructor() {
     super();
     this.state = {
@@ -21,7 +21,6 @@ class ESportVid extends Component {
         nextProps.local.club.name === "PUBG"
           ? "playerunknown's battlegrounds"
           : nextProps.local.club.name;
-      console.log(name);
       return name !== prevState.game ? { game: name } : null;
     } else {
       let videoLink = nextProps.currentLounge.currentLounge.video_link;
@@ -87,14 +86,13 @@ class ESportVid extends Component {
       );
     } else if (this.state.videoLink) {
       return (
-        <div className="videoStream">
-          <ResponsiveEmbed a4by3>
-            <iframe
-              src={this.state.videoLink}
-              allowFullScreen={true}
-              sandbox="allow-scripts allow-forms allow-same-origin"
-            />
-          </ResponsiveEmbed>
+        <div className="videoContainer">
+          <iframe
+            src={this.state.videoLink}
+            allowFullScreen={true}
+            sandbox="allow-scripts allow-forms allow-same-origin"
+            className="videoFrame"
+          />
         </div>
       );
     }
@@ -109,4 +107,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(ESportVid);
+export default connect(mapStateToProps)(SportVid);

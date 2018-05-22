@@ -20,4 +20,16 @@ router.post("/insertlounge", async function(req, res) {
   }
 });
 
+router.post("/updateLink", async function(req, res) {
+  try {
+    let updatedLounge = await loungesdb.updateLoungeLink(
+      req.body.link,
+      req.body.id
+    );
+    res.status(200).send();
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
 module.exports = router;

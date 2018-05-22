@@ -60,6 +60,7 @@ class Bet extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
+    // need to update to get derived state from props
     if (this.props.bet !== newProps.bet) {
       this.setState({
         myVoteResult: newProps.bet.is_my_bet
