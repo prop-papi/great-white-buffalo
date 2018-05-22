@@ -78,7 +78,7 @@ class SportVid extends Component {
       return (
         <div className="videoContainer">
           <iframe
-            src={`http://player.twitch.tv/?channel=${this.state.streamer}`}
+            src={`https://player.twitch.tv/?channel=${this.state.streamer}`}
             allowFullScreen={true}
             className="videoFrame"
           />
