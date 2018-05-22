@@ -78,9 +78,9 @@
   bottom: 5%;
 }
 
-.modal-content {
+/* .modal-content {
   min-height: 50vh;
-}
+} */
 
 ::-webkit-scrollbar {
   display: none;

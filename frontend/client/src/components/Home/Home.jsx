@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Row, Col } from "react-bootstrap";
+import { Grid, Row, Col, Modal, Button } from "react-bootstrap";
 import ClubNav from "../ClubNav/index";
 import GlobalNavBar from "../GlobalNavBar/GlobalNavBar";
 import LoungeList from "../LoungeList/index";
@@ -16,12 +16,14 @@ import {
   voteOnBet,
   addLounge,
   updateNotifications,
-  externalResolved
+  externalResolved,
+  voting,
+  expired
 } from "../../actions";
 import MainNavBar from "../MainNavBar/MainNavBar";
 import Loading from "../Globals/Loading/Loading";
 import UsersNav from "../UsersNav/UsersNav";
-import ESportVid from "../ESport/ESportVid";
+import SportVid from "../SportVid/SportVid";
 import Chat from "../Chat/Chat.jsx";
 import Leaderboard from "../Leaderboard/Leaderboard.jsx";
 import { connect } from "react-redux";
@@ -30,6 +32,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./Home.css";
 import UserPane from "../UserPane/UserPane";
+import VideoModal from "../SportVid/VideoModal";
 
 const betSocket = io(`${configs.SOCKET_HOST}bets`);
 const activeUserSocket = io(`${configs.SOCKET_HOST}activeUsers`);
@@ -42,7 +45,8 @@ class Home extends Component {
     this.mainComponentRender = this.mainComponentRender.bind(this);
 
     this.state = {
-      usersOnline: {}
+      usersOnline: {},
+      showModal: false
     };
 
     this.createNotification = this.createNotification.bind(this);
@@ -52,7 +56,7 @@ class Home extends Component {
     if (componentName === "chat") {
       return <Chat />;
     } else if (componentName === "video") {
-      return <ESportVid />;
+      return <SportVid />;
     } else if (componentName === "leaderboard") {
       return <Leaderboard />;
     } else {
@@ -73,7 +77,9 @@ class Home extends Component {
       cancelMyBet,
       acceptBet,
       voteOnBet,
-      externalResolved
+      externalResolved,
+      voting,
+      expired
     } = this.props;
 
     await fetchHomeData(localStorage.id, localStorage.default_club);
@@ -118,8 +124,11 @@ class Home extends Component {
     });
 
     betSocket.on("bet.externalResolved", (newBet, vote) => {
-      console.log("a bet of yours was externally resolved");
       externalResolved(this.props.global.globalData, newBet, vote);
+    });
+
+    betSocket.on("bet.expired", bet => {
+      expired(this.props.global.globalData, bet);
     });
 
     activeUserSocket.emit("user.enter", {
@@ -179,6 +188,7 @@ class Home extends Component {
         await this.props.updateNotifications(localStorage.id);
         // FOR DEREK - the bet parameter contains the entire bet object here, i'm using the payload
         // render some pop-up that tells you there's a new notification
+        await voting(this.props.global.globalData, bet);
         this.createNotification(
           `Your wager: ${payload.bet} in ${payload.club} with ${
             payload.challenger
@@ -203,6 +213,17 @@ class Home extends Component {
       hideProgressBar: false,
       closeOnClick: true
     });
+  }
+
+  checkAdmin() {
+    return !this.props.currentLounge.currentLounge
+      ? false
+      : this.props.currentLounge.currentLounge.admin_id ===
+          parseInt(localStorage.id);
+  }
+
+  videoEditTapped() {
+    this.setState({ showModal: !this.state.showModal });
   }
 
   render() {
@@ -253,6 +274,16 @@ class Home extends Component {
                 className="main-column"
               >
                 <MainNavBar />
+                <div align="right">
+                  {this.checkAdmin() && (
+                    <Button
+                      className="edit-button"
+                      onClick={() => this.videoEditTapped()}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </div>
                 <br />
                 {this.mainComponentRender(this.props.main.component)}
               </Col>
@@ -279,6 +310,20 @@ class Home extends Component {
             rtl={false}
           />
           <ToastContainer />
+          <VideoModal
+            showModal={this.state.showModal}
+            setShow={this.videoEditTapped.bind(this)}
+            link={
+              this.props.currentLounge.currentLounge
+                ? this.props.currentLounge.currentLounge.video_link
+                : ""
+            }
+            id={
+              this.props.currentLounge.currentLounge
+                ? this.props.currentLounge.currentLounge.id
+                : ""
+            }
+          />
         </div>
       );
     } else {
@@ -310,7 +355,9 @@ function bindActionsToDispatch(dispatch) {
       voteOnBet: voteOnBet,
       addLounge: addLounge,
       updateNotifications: updateNotifications,
-      externalResolved: externalResolved
+      externalResolved: externalResolved,
+      voting: voting,
+      expired: expired
     },
     dispatch
   );

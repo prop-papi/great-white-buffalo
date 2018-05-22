@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Grid, Col, Row, Button, Navbar, Nav, NavItem } from "react-bootstrap";
 import SearchBets from "../SearchBets/index.jsx";
 import Chat from "../Chat/Chat.jsx";
-import ESportVid from "../ESport/ESportVid";
+import SportVid from "../SportVid/SportVid";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { fetchHomeData, setMainComponent } from "../../actions";
