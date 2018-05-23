@@ -154,45 +154,57 @@ class LoungeList extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Lounge name:{" "}
-            <input
-              type="text"
-              name="loungeName"
-              style={{ width: 100 }}
-              value={this.state.loungeName}
-              onChange={this.handleChange}
-            />{" "}
+            <div className="row">
+              <div className="col-md-3">Lounge name: </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  name="loungeName"
+                  style={{ width: 100 }}
+                  value={this.state.loungeName}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div className="col-md-2" />
+              <div className="col-md-3">
+                <ButtonToolbar /*className="testing" id="securityButton"*/>
+                  <DropdownButton title={this.state.security} id={1}>
+                    <MenuItem
+                      className="menu"
+                      onSelect={this.selectSecurity}
+                      key={1}
+                      eventKey={1}
+                    >
+                      Public
+                    </MenuItem>
+                    <MenuItem
+                      className="menu"
+                      onSelect={this.selectSecurity}
+                      key={2}
+                      eventKey={2}
+                    >
+                      Private
+                    </MenuItem>
+                  </DropdownButton>
+                </ButtonToolbar>
+              </div>
+              <div className="col-md-1" />
+            </div>
             <br />
-            Video Link:{" "}
-            <input
-              type="text"
-              name="videoLink"
-              style={{ width: 100 }}
-              value={this.state.videoLink}
-              onChange={this.handleChange}
-            />{" "}
+            <div className="row">
+              <div className="col-md-3">Video Link: </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  name="videoLink"
+                  style={{ width: 100 }}
+                  value={this.state.videoLink}
+                  onChange={this.handleChange}
+                />
+              </div>
+            </div>
             <br />
-            <ButtonToolbar className="testing" id="securityButton">
-              <DropdownButton title={this.state.security} id={1}>
-                <MenuItem
-                  className="menu"
-                  onSelect={this.selectSecurity}
-                  key={1}
-                  eventKey={1}
-                >
-                  Public
-                </MenuItem>
-                <MenuItem
-                  className="menu"
-                  onSelect={this.selectSecurity}
-                  key={2}
-                  eventKey={2}
-                >
-                  Private
-                </MenuItem>
-              </DropdownButton>
-            </ButtonToolbar>
-            <br /> <br />
+            <br />
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.createNewLounge}>Create Lounge</Button>

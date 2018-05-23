@@ -341,7 +341,7 @@ class ClubNav extends Component {
                 overlay={<Tooltip id="tooltip">Club Maintenance</Tooltip>}
               >
                 <Image
-                  src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/plus.png"
+                  src="https://i.imgur.com/ZH5iMOH.png"
                   circle
                   responsive
                   className="nav-image"
@@ -366,44 +366,57 @@ class ClubNav extends Component {
           >
             <Tab eventKey={1} title="Create">
               <Modal.Body>
-                Club name:{" "}
-                <input
-                  type="text"
-                  name="clubName"
-                  style={{ width: 100 }}
-                  value={this.state.clubName}
-                  onChange={this.handleChange}
-                />{" "}
+                <div className="row">
+                  <div className="col-md-3">Club name: </div>
+                  <div className="col-md-3">
+                    <input
+                      type="text"
+                      name="clubName"
+                      style={{ width: 100 }}
+                      value={this.state.clubName}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                  <div className="col-md-2" />
+                  <div className="col-md-3">
+                    <ButtonToolbar /*className="testing" id="securityButton"*/>
+                      <DropdownButton title={this.state.security} id={1}>
+                        <MenuItem
+                          className="menu"
+                          onSelect={this.selectSecurity}
+                          key={1}
+                          eventKey={1}
+                        >
+                          Public
+                        </MenuItem>
+                        <MenuItem
+                          className="menu"
+                          onSelect={this.selectSecurity}
+                          key={2}
+                          eventKey={2}
+                        >
+                          Private
+                        </MenuItem>
+                      </DropdownButton>
+                    </ButtonToolbar>
+                  </div>
+                  <div className="col-md-1" />
+                </div>
                 <br />
-                Logo url:{" "}
-                <input
-                  type="text"
-                  name="logo"
-                  style={{ width: 100 }}
-                  value={this.state.logo}
-                  onChange={this.handleChange}
-                />{" "}
+                <div className="row">
+                  <div className="col-md-3">Logo URL: </div>
+                  <div className="col-md-3">
+                    <input
+                      type="text"
+                      name="logo"
+                      style={{ width: 100 }}
+                      value={this.state.logo}
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                </div>
                 <br />
-                <ButtonToolbar /*className="testing" id="securityButton"*/>
-                  <DropdownButton title={this.state.security} id={1}>
-                    <MenuItem
-                      className="menu"
-                      onSelect={this.selectSecurity}
-                      key={1}
-                      eventKey={1}
-                    >
-                      Public
-                    </MenuItem>
-                    <MenuItem
-                      className="menu"
-                      onSelect={this.selectSecurity}
-                      key={2}
-                      eventKey={2}
-                    >
-                      Private
-                    </MenuItem>
-                  </DropdownButton>
-                </ButtonToolbar>
+                <br />
               </Modal.Body>
             </Tab>
             <Tab eventKey={2} title="Join" className="joinLeaveClubsPane">
