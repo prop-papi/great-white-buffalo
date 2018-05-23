@@ -15,7 +15,6 @@ module.exports = {
 
   // param loungeID needs to take in the form of "lounge:<lounge id int>"
   renderRecent50: (loungeID, cb) => {
-    console.log("in renderRecent50");
     client.lrange(loungeID, 0, -1, (err, result) => {
       err ? console.log("error: ", err) : cb(err, result);
     });
