@@ -1,5 +1,5 @@
 .searchResults {
-  height: 80vh;
+  height: 75vh;
   border-radius: 4px;
   width: 100%;
   color: rgb(194, 196, 198);
@@ -15,7 +15,7 @@
 }
 
 .searchBox {
-  height: 80vh;
+  height: 75vh;
 }
 
 .panel-body {

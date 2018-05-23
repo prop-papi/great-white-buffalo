@@ -336,26 +336,26 @@ class Bet extends React.Component {
                   <br /> <br />
                   {"Club: " + this.props.bet.club_name}
                   <br /> <br />
-                  {"Odds: " + this.props.bet.odds} <br />
-                  {"Bet expiration: " +
-                    moment(new Date(this.props.bet.expires))
-                      .subtract(this.state.timeZoneOffset, "minutes")
-                      .format("MMMM Do YYYY, h:mm a") +
-                    " (" +
-                    moment(new Date(this.props.bet.expires))
-                      .subtract(this.state.timeZoneOffset, "minutes")
-                      .fromNow() +
-                    ")"}
-                  <br />
-                  {"Bet end: " +
-                    moment(new Date(this.props.bet.end_at))
-                      .subtract(this.state.timeZoneOffset, "minutes")
-                      .format("MMMM Do YYYY, h:mm a") +
-                    " (" +
-                    moment(new Date(this.props.bet.end_at))
-                      .subtract(this.state.timeZoneOffset, "minutes")
-                      .fromNow() +
-                    ")"}
+                  {"Odds: " + this.props.bet.odds} <br /> <br />
+                  {this.props.bet.status === "pending"
+                    ? "Bet expiration: " +
+                      moment(new Date(this.props.bet.expires))
+                        .subtract(this.state.timeZoneOffset, "minutes")
+                        .format("MMMM Do YYYY, h:mm a") +
+                      " (" +
+                      moment(new Date(this.props.bet.expires))
+                        .subtract(this.state.timeZoneOffset, "minutes")
+                        .fromNow() +
+                      ")"
+                    : "Bet end: " +
+                      moment(new Date(this.props.bet.end_at))
+                        .subtract(this.state.timeZoneOffset, "minutes")
+                        .format("MMMM Do YYYY, h:mm a") +
+                      " (" +
+                      moment(new Date(this.props.bet.end_at))
+                        .subtract(this.state.timeZoneOffset, "minutes")
+                        .fromNow() +
+                      ")"}
                 </div>
                 <div className="col-md-4" id="betActionInfo">
                   {this.props.bet.status === "pending" &&
@@ -367,11 +367,15 @@ class Bet extends React.Component {
                       confirmText="Confirm"
                       title="Cancel Wager"
                     >
-                      <button>Cancel Wager</button>
+                      <Button>Cancel Wager</Button>
                     </Confirm>
                   ) : null}
                   {this.props.bet.status === "active"
-                    ? "Active Bet! anything I want to see in here? Don't Show expiration date for active bets! Just end date! Make the description field clearer who is on what side"
+                    ? `This is an active bet! Remember, as the ${
+                        this.state.myVote
+                      }, you are ` +
+                      (this.state.myVote === "creator" ? "for" : "against") +
+                      " the bet description!"
                     : null}
                   {this.props.bet.status === "voting" &&
                   this.state.myVoteResult === null ? (
@@ -383,7 +387,7 @@ class Bet extends React.Component {
                         confirmText="Confirm"
                         title="Won Wager"
                       >
-                        <button>I won</button>
+                        <Button>I won</Button>
                       </Confirm>
                       <br /> <br />
                       <Confirm
@@ -393,12 +397,12 @@ class Bet extends React.Component {
                         confirmText="Confirm"
                         title="Lost Wager"
                       >
-                        <button>I lost</button>
+                        <Button>I lost</Button>
                       </Confirm>
                     </div>
                   ) : this.props.bet.status === "voting" &&
                   this.state.myVoteResult !== null ? (
-                    "I voted that I won this wager, waiting on my opponent"
+                    "I voted that I won this wager"
                   ) : null}
                   {this.props.bet.status === "disputed" &&
                   this.props.bet.club_admin !== Number(localStorage.id) ? (
@@ -420,7 +424,7 @@ class Bet extends React.Component {
                         confirmText="Confirm"
                         title="Admin disput - Creator wins"
                       >
-                        <button>Creator</button>
+                        <Button>Creator</Button>
                       </Confirm>
                       <br /> <br />
                       <Confirm
@@ -430,7 +434,7 @@ class Bet extends React.Component {
                         confirmText="Confirm"
                         title="Admin disput - Challenger wins"
                       >
-                        <button>Challenger</button>
+                        <Button>Challenger</Button>
                       </Confirm>
                       <br /> <br />
                       <Confirm
@@ -440,7 +444,7 @@ class Bet extends React.Component {
                         confirmText="Confirm"
                         title="Admin disput - Stalemate"
                       >
-                        <button>Stalemate</button>
+                        <Button>Stalemate</Button>
                       </Confirm>
                     </div>
                   ) : null}
@@ -471,7 +475,7 @@ class Bet extends React.Component {
                       confirmText="Confirm"
                       title="Are you sure you want to accept this wager?"
                     >
-                      <button>Take Wager</button>
+                      <Button>Take Wager</Button>
                     </Confirm>
                   ) : null}
                 </div>
