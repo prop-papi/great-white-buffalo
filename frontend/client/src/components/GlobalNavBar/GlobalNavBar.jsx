@@ -37,7 +37,7 @@ class GlobalNavBar extends Component {
     this.closeNotifications = this.closeNotifications.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     document.addEventListener("mousedown", this.handleNavItemCollapse, false);
   }
 
@@ -47,6 +47,12 @@ class GlobalNavBar extends Component {
       this.handleNavItemCollapse,
       false
     );
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return nextProps.showNotifications !== prevState.showNotifications
+      ? { showNotifications: nextProps.showNotifications }
+      : null;
   }
 
   closeNotifications() {
