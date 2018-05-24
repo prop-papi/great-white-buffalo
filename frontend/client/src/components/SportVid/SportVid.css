@@ -13,3 +13,34 @@
   height: 100%;
   border: 0;
 }
+
+.edit-button {
+  width: 15%;
+  text-align: center;
+  border-width: 2px;
+  border-radius: 20px;
+  background-color: transparent !important;
+  color: rgb(174, 176, 178);
+  border-color: rgb(66, 70, 76);
+}
+
+.edit-button:active {
+  color: white !important;
+  background-color: rgb(115, 139, 215) !important;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.edit-button:focus {
+  /* color: white !important;
+  border-color: rgb(115, 139, 215);
+  background-color: rgb(115, 139, 215) !important; */
+  border-color: rgb(66, 70, 76);
+  color: rgb(174, 176, 178);
+  outline: none !important;
+  box-shadow: none;
+}
+
+.edit-button:hover {
+  color: white;
+}

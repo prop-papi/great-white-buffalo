@@ -275,14 +275,15 @@ class Home extends Component {
               >
                 <MainNavBar />
                 <div align="right">
-                  {this.checkAdmin() && (
-                    <Button
-                      className="edit-button"
-                      onClick={() => this.videoEditTapped()}
-                    >
-                      Edit
-                    </Button>
-                  )}
+                  {this.checkAdmin() &&
+                    this.props.main.component === "video" && (
+                      <Button
+                        className="edit-button"
+                        onClick={() => this.videoEditTapped()}
+                      >
+                        Edit
+                      </Button>
+                    )}
                 </div>
                 <br />
                 {this.mainComponentRender(this.props.main.component)}

@@ -40,7 +40,6 @@ class LoungeList extends Component {
   }
 
   async handleLoungeClick(lounge) {
-    console.log("HERE IS THE LOUNGE", lounge);
     await this.props.updateCurrentLounge(lounge);
     // display lounge data
   }
@@ -62,14 +61,12 @@ class LoungeList extends Component {
       );
       if (data.status === 200) {
         const newLounge = data.data;
-        console.log(newLounge);
         this.props.addLounge(this.props.local.localData, newLounge);
         if (newLounge.security === "public") {
           const payload = {
             lounge: newLounge,
             action: "newLounge"
           };
-          console.log("payload", payload);
           this.props.betSocket.emit("bet", payload);
         }
         this.setState({ show: false, loungeName: "", videoLink: "" });
