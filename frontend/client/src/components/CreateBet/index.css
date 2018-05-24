@@ -12,8 +12,12 @@
   float: right;
 } */
 
-.testing {
+/* .testing {
   display: inline-block;
   position: absolute;
-  right: 5px;
+  right: 5%;
+} */
+
+.hover {
+  cursor: help;
 }
