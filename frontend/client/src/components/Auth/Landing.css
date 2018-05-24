@@ -1,0 +1,74 @@
+@font-face {
+  font-family: "buffon-heavy";
+  src: url("../../font/Buffon-Heavy.otf");
+}
+
+@font-face {
+  font-family: "mission-gothic-light";
+  src: url("../../font/Mission\ Gothic\ Light.otf");
+}
+
+.formSide {
+  height: 100vh;
+  background-color: rgb(115, 139, 215);
+  display: flex;
+  align-items: center;
+}
+
+.formSideContent {
+  max-width: 80vh;
+  height: auto;
+  background-color: rgb(115, 139, 215);
+  /* position: relative; */
+}
+
+.logoSide {
+  background-color: #2f3136;
+  height: 100vh;
+  position: relative;
+}
+
+.largeLogo {
+  display: block;
+  max-width: 64vh;
+  max-height: 64vh;
+  margin: auto;
+  margin-top: 18%;
+}
+
+.companyName {
+  text-align: left;
+  font-size: 7em;
+  font-family: "buffon-heavy";
+  margin: 0% 0% -50px 5%;
+  /* display: table-caption; */
+}
+
+.logOrSign {
+  margin: 0% 0% 0% 5%;
+}
+
+.slogonBox {
+  margin: 5% -5% 0% 5%;
+  height: auto;
+  width: auto;
+}
+
+.slogonBox span {
+  font-size: 3em;
+  padding: 5px 15px 5px 15px;
+  border-radius: 3px;
+  font-family: "mission-gothic-light";
+  color: white;
+  background-color: #333;
+}
+
+.butWhy {
+  text-align: right;
+  position: fixed;
+  right: 1%;
+  bottom: 1%;
+  font-size: 1em;
+  font-family: "mission-gothic-light";
+  cursor: pointer;
+}

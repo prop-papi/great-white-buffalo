@@ -25,8 +25,9 @@ export default class Login extends Component {
     };
 
     this.alertStyle = {
-      width: "42%",
-      marginLeft: "10px"
+      width: "200%",
+      marginLeft: "225px",
+      marginTop: "-90px"
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -71,60 +72,65 @@ export default class Login extends Component {
 
   render() {
     return (
-      <div className="login-form-container">
-        <Form horizontal>
-          <FormGroup controlId="formHorizontalUsername">
-            <Col componentClass={ControlLabel} sm={2}>
-              Username:
-            </Col>
-            <Col sm={10}>
+      <div className="login-form-container row">
+        <div className="col-md-4">
+          <Form className="fontsPlease" horizontal>
+            <FormGroup className="authField" controlId="formHorizontalUsername">
+              <ControlLabel>Username</ControlLabel>
               <FormControl
                 className="login-form"
                 value={this.state.username}
                 type="username"
                 name="username"
-                placeholder="Username"
                 onChange={this.handleInputChange}
               />
-            </Col>
-          </FormGroup>
+            </FormGroup>
 
-          <FormGroup controlId="formHorizontalPassword">
-            <Col componentClass={ControlLabel} sm={2}>
-              Password:
-            </Col>
-            <Col sm={10}>
+            <FormGroup className="authField" controlId="formHorizontalPassword">
+              <ControlLabel>Password</ControlLabel>
               <FormControl
                 className="login-form"
                 value={this.state.password}
                 type="password"
                 name="password"
-                placeholder="Password"
                 onChange={this.handleInputChange}
               />
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Button type="submit" onClick={e => this.submitAuthData(e)}>
+            </FormGroup>
+            <FormGroup>
+              <Button
+                type="submit"
+                className="authButton"
+                onClick={e => this.submitAuthData(e)}
+              >
                 Sign in
               </Button>
-            </Col>
-          </FormGroup>
-          {this.state.showLoginErrorAlert ? (
-            <Alert
-              bsStyle="danger"
-              style={this.alertStyle}
-              onDismiss={this.handleDismissLoginError}
-            >
-              <h4>Oh snap! You got an error!</h4>
-              <p>Invalid username/password credentials, please try again.</p>
-              <p>
-                <Button onClick={this.handleDismissLoginError}>Close</Button>
-              </p>
-            </Alert>
-          ) : null}
-        </Form>
+            </FormGroup>
+            {this.state.showLoginErrorAlert ? (
+              <Alert
+                bsStyle="danger"
+                style={this.alertStyle}
+                onDismiss={this.handleDismissLoginError}
+              >
+                <h4>Oh snap! You got an error!</h4>
+                <p>Invalid username/password credentials, please try again.</p>
+                <p>
+                  <Button onClick={this.handleDismissLoginError}>Close</Button>
+                </p>
+              </Alert>
+            ) : null}
+          </Form>
+        </div>
+        <div className="col-md-6">
+          <br />
+          <span className="loginSignup">Login</span>
+          <div
+            onClick={() => this.props.handleSwitch(0)}
+            className="switchButton"
+          >
+            Click here to create an account!
+          </div>
+        </div>
+        <div className="col-md-2" />
       </div>
     );
   }

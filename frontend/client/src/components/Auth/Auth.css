@@ -1,4 +1,4 @@
-.auth-header {
+/* .auth-header {
   width: 100%;
   padding: 50px 0;
 }
@@ -6,12 +6,15 @@
   width: 300px;
   display: block;
   margin: auto;
-}
+} */
 
 .login-form-container,
 .signup-form-container {
-  width: 70%;
-  margin-top: 20px;
+  width: 100%;
+  height: 50vh;
+  margin: 0 auto;
+  padding: 1%;
+  /* position: relative; */
 }
 
 .auth-form {
@@ -25,5 +28,38 @@
 }
 
 .login-form {
-  width: 30%;
+  width: 100%;
+}
+
+.authButton {
+  margin-top: 7px !important;
+  /* font-weight: 600; */
+  color: white;
+  background-color: #333;
+}
+
+.authField {
+  margin-bottom: 0px !important;
+}
+
+.loginSignup {
+  font-family: "mission-gothic-light";
+  font-weight: 1000;
+  font-size: 2em;
+  margin: 15% 27px;
+}
+
+.switchButton {
+  /* text-align: left; */
+  /* position: fixed; */
+  /* left: 60%; */
+  /* bottom: 1%; */
+  margin-left: 35px;
+  font-size: 0.9em;
+  font-family: "mission-gothic-light";
+  cursor: pointer;
+}
+
+.fontsPlease {
+  font-family: "mission-gothic-light";
 }

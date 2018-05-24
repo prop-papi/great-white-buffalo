@@ -27,8 +27,9 @@ export default class Signup extends Component {
     };
 
     this.alertStyle = {
-      width: "42%",
-      marginLeft: "10px"
+      width: "200%",
+      marginLeft: "225px",
+      marginTop: "-150px"
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -98,90 +99,97 @@ export default class Signup extends Component {
 
   render() {
     return (
-      <div className="login-form-container">
-        <Form horizontal>
-          <FormGroup controlId="formHorizontalUsername">
-            <Col componentClass={ControlLabel} sm={2}>
-              Username:
-            </Col>
-            <Col sm={10}>
+      <div className="login-form-container row">
+        <div className="col-md-4">
+          <Form className="fontsPlease" horizontal>
+            <FormGroup className="authField" controlId="formHorizontalUsername">
+              <ControlLabel>Username</ControlLabel>
               <FormControl
                 className="login-form"
-                type="username"
                 value={this.state.username}
+                type="username"
                 name="username"
-                placeholder="Username"
                 onChange={this.handleInputChange}
               />
-            </Col>
-          </FormGroup>
+            </FormGroup>
 
-          <FormGroup controlId="formHorizontalPassword">
-            <Col componentClass={ControlLabel} sm={2}>
-              Password:
-            </Col>
-            <Col sm={10}>
+            <FormGroup className="authField" controlId="formHorizontalPassword">
+              <ControlLabel>Password</ControlLabel>
               <FormControl
                 className="login-form"
-                type="password"
                 value={this.state.password}
+                type="password"
                 name="password"
-                placeholder="Password"
                 onChange={this.handleInputChange}
               />
-            </Col>
-          </FormGroup>
+            </FormGroup>
 
-          <FormGroup controlId="formHorizontalPassword2">
-            <Col componentClass={ControlLabel} sm={2}>
-              Re-type Password:
-            </Col>
-            <Col sm={10}>
+            <FormGroup
+              className="authField"
+              controlId="formHorizontalPassword2"
+            >
+              <ControlLabel>Re-type Password</ControlLabel>
               <FormControl
                 className="login-form"
-                type="password"
                 value={this.state.passwordConfirm}
+                type="password"
                 name="passwordConfirm"
-                placeholder="Re-type Password"
                 onChange={this.handleInputChange}
               />
-            </Col>
-          </FormGroup>
+            </FormGroup>
 
-          <FormGroup>
-            <Col smOffset={2} sm={10}>
-              <Button type="submit" onClick={e => this.submitAuthData(e)}>
+            <FormGroup>
+              <Button
+                type="submit"
+                className="authButton"
+                onClick={e => this.submitAuthData(e)}
+              >
                 Sign Up
               </Button>
-            </Col>
-          </FormGroup>
-          {this.state.showPasswordAlert ? (
-            <Alert
-              bsStyle="danger"
-              style={this.alertStyle}
-              onDismiss={this.handleDismissPasswordError}
-            >
-              <h4>Oh snap! You got an error!</h4>
-              <p>Please input matching passwords.</p>
-              <p>
-                <Button onClick={this.handleDismissPasswordError}>Close</Button>
-              </p>
-            </Alert>
-          ) : null}
-          {this.state.showUsernameAlert ? (
-            <Alert
-              bsStyle="danger"
-              style={this.alertStyle}
-              onDismiss={this.handleDismissUsernameError}
-            >
-              <h4>Oh snap! You got an error!</h4>
-              <p>Username already exists, please choose a different one.</p>
-              <p>
-                <Button onClick={this.handleDismissUsernameError}>Close</Button>
-              </p>
-            </Alert>
-          ) : null}
-        </Form>
+            </FormGroup>
+            {this.state.showPasswordAlert ? (
+              <Alert
+                bsStyle="danger"
+                style={this.alertStyle}
+                onDismiss={this.handleDismissPasswordError}
+              >
+                <h4>Oh snap! You got an error!</h4>
+                <p>Please input matching passwords.</p>
+                <p>
+                  <Button onClick={this.handleDismissPasswordError}>
+                    Close
+                  </Button>
+                </p>
+              </Alert>
+            ) : null}
+            {this.state.showUsernameAlert ? (
+              <Alert
+                bsStyle="danger"
+                style={this.alertStyle}
+                onDismiss={this.handleDismissUsernameError}
+              >
+                <h4>Oh snap! You got an error!</h4>
+                <p>Username already exists, please choose a different one.</p>
+                <p>
+                  <Button onClick={this.handleDismissUsernameError}>
+                    Close
+                  </Button>
+                </p>
+              </Alert>
+            ) : null}
+          </Form>
+        </div>
+        <div className="col-md-6">
+          <br />
+          <span className="loginSignup">Sign Up</span>
+          <div
+            onClick={() => this.props.handleSwitch(1)}
+            className="switchButton"
+          >
+            Click here to log in!
+          </div>
+        </div>
+        <div className="col-md-2" />
       </div>
     );
   }
