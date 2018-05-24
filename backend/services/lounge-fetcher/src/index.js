@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 4000;
 app.use(bodyParser.json());
 
 // cron scheduled to run every 3 hours, can be changed easily to every day
-let cron = schedule.scheduleJob("* * */3 * *", function() {
+let cron = schedule.scheduleJob("*/10 * * * * *", function() {
   // run some function to fetch sports data and write to the db
   util.addNewLounges();
   util.archiveLounges();

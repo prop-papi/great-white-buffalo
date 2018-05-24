@@ -8,10 +8,12 @@ const loungesRouter = require("../components/lounges");
 const messageRouter = require("../components/chat/");
 const leaderboardRouter = require("../components/leaderboard/");
 const userPaneRouter = require("../components/users-pane/");
+const authenticate = require("../middleware/passport.js").authenticate;
 const router = express.Router();
 
 router
   .use("/auth", authRouter)
+  .use(authenticate)
   .use("/users", usersRouter)
   .use("/bets", betsRouter)
   .use("/clubs", clubsRouter)

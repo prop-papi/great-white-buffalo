@@ -21,16 +21,10 @@ export default class App extends Component {
     return (
       <div>
         <Switch>
+          <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/home" component={Home} />
-          <Route path="/searchbets" component={SearchBets} />
-          <Route path="/createbet" component={CreateBet} />
-          <Route path="/test" component={TestInfo} />
-          <Route path="/clubnav" component={ClubNav} />
-          <Route path="/lounges" component={LoungeList} />
-          <Route path="/chat" component={Chat} />
-          <Route path="/leaderboard" component={Leaderboard} />
         </Switch>
       </div>
     );
