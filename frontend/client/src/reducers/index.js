@@ -1,17 +1,16 @@
 import { combineReducers } from "redux";
-import localData from "./setLocalData.js";
-import globalData from "./setGlobalData.js";
+import local from "./setLocalData.js";
+import global from "./setGlobalData.js";
 import notificationsData from "./notificationsReducer.js";
-import userPaneData from "./userPaneData.js";
-import message from "./messageReducer.js";
+import userPane from "./userPaneData.js";
 import currentLounge from "./loungeReducer.js";
-import mainComponent from "./mainComponentReducer.js";
+import component from "./mainComponentReducer.js";
 
 export default combineReducers({
-  local: localData,
-  global: globalData,
-  userPane: userPaneData,
-  component: mainComponent,
+  local,
+  global,
+  userPane,
+  component,
   notificationsData,
   currentLounge
 });

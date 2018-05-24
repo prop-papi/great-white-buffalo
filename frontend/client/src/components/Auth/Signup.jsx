@@ -13,7 +13,6 @@ import {
 } from "react-bootstrap";
 
 import "./Auth.css";
-import configs from "../../../../../config.js";
 
 export default class Signup extends Component {
   constructor() {
