@@ -21,9 +21,13 @@ class SportVid extends Component {
         nextProps.local.club.name === "PUBG"
           ? "playerunknown's battlegrounds"
           : nextProps.local.club.name;
-      return name !== prevState.game ? { game: name } : null;
+      console.log("YO YO", name !== prevState.game);
+      return name !== prevState.game
+        ? { game: name }
+        : { videoLink: "", streamer: "" };
     } else {
       let videoLink = nextProps.currentLounge.currentLounge.video_link;
+      console.log("Get derived state", videoLink);
       return {
         videoLink,
         streamer: ""
@@ -49,10 +53,7 @@ class SportVid extends Component {
     const currLounge = this.props.currentLounge.currentLounge.name;
     if (prevState.game !== this.state.game && currLounge === "General") {
       await this.getStream(TWITCH_CLIENT_ID);
-    } /*else if (this.props.currentLounge.currentLounge.video_link) {
-      let videoLink = this.props.currentLounge.currentLounge.video_link;
-      this.setState({ videoLink });
-    }*/
+    }
   }
 
   getStream(clientID) {
