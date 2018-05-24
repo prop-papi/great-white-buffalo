@@ -36,7 +36,7 @@ export default class Landing extends React.Component {
         <div className="col-md-6 logoSide">
           <Image
             className="largeLogo"
-            src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/updated-logo.png"
+            src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/updated-logo-large-for-site.png"
             rounded
           />
         </div>
