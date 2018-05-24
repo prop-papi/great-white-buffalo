@@ -49,7 +49,7 @@ export default class Login extends Component {
       localStorage.setItem("win_ratio", data.data[0].win_ratio);
       localStorage.setItem("reputation", data.data[0].reputation);
       localStorage.setItem("default_club", data.data[0].default_club);
-      document.cookie = JSON.parse(data.headers.auth).token;
+      document.cookie = "token=" + JSON.parse(data.headers.auth).token;
       this.props.history.push("/home");
     } catch (err) {
       this.setState({ showLoginErrorAlert: true });

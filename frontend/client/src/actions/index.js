@@ -38,10 +38,11 @@ export const fetchHomeData = (id, club) => async dispatch => {
     setNotifications(notifications.data.notifications, dispatch);
     setUserPaneData({ showUsers: true, didSelectUser: false }, dispatch);
     setMainComponent("bets");
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     window.location.href = "http://localhost:1337/login";
   }
+};
 
 export const updateLocalData = club => async dispatch => {
   const localData = await axios.get(`${configs.HOST}api/users/local/${club}`);
