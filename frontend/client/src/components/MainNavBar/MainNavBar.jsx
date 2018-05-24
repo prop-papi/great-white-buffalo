@@ -44,10 +44,7 @@ class MainNavBar extends Component {
                 ? "main-nav-button-active"
                 : "main-nav-button"
             }
-            onClick={() => {
-              this.props.setMainComponent("bets");
-              this.props.updateCurrentLounge(this.props.currentLounge);
-            }}
+            onClick={() => this.props.setMainComponent("bets")}
           >
             <a
               href="#"

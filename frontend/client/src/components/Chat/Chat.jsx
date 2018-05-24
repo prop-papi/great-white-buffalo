@@ -26,10 +26,10 @@ class Chat extends Component {
   constructor(props) {
     super(props);
 
+    this.displaySideProfile = this.displaySideProfile.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleEnterKeyPress = this.handleEnterKeyPress.bind(this);
     this.isTyping = this.isTyping.bind(this);
-    this.displaySideProfile = this.displaySideProfile.bind(this);
 
     this.state = {
       text: "",
@@ -57,7 +57,6 @@ class Chat extends Component {
     axios
       .get(`${configs.HOST}api/userpane/selected`, { params })
       .then(response => {
-        //this.setState({ selectedUser: response.data[0] });
         let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
         newUserPane.didSelectUser = true;
         newUserPane.selectedUser = response.data[0];
@@ -69,17 +68,15 @@ class Chat extends Component {
   }
 
   handleEnterKeyPress(e) {
-    // const date = new Date();
-    const payload = {
-      text: this.state.text,
-      user: localStorage.username,
-      currentLoungeID: this.props.currentLounge.currentLounge.id,
-      media: "",
-      createdAt: new Date()
-      // createdAt: moment(date).format("YYYY-MM-DD HH:mm:ss")
-    };
-
     if (e.key === "Enter") {
+      const payload = {
+        text: this.state.text,
+        user: localStorage.username,
+        currentLoungeID: this.props.currentLounge.currentLounge.id,
+        media: "",
+        createdAt: new Date()
+      };
+
       socket.emit("message.send", payload);
       this.setState({ text: "" });
       axios
@@ -100,7 +97,7 @@ class Chat extends Component {
         <Row>
           <Col xs={2} sm={1.5} md={1.25} lg={1} />
           <Col xs={10} sm={10.5} md={10.75} lg={11} className="chat-username">
-            <a>{user} </a>typing...
+            <a>{user}</a> typing...
           </Col>
         </Row>
       );
@@ -108,9 +105,7 @@ class Chat extends Component {
   }
 
   scrollToBottom = () => {
-    if (this.messagesEnd) {
-      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-    }
+    this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
 
   async componentWillReceiveProps(newProps) {
@@ -132,7 +127,7 @@ class Chat extends Component {
     });
 
     socket.on(`user.enter.${localStorage.username}`, async msg => {
-      await this.setState({ recent50Messages: msg.reverse() });
+      await this.setState({ recent50Messages: msg });
       this.scrollToBottom();
     });
 
@@ -147,7 +142,9 @@ class Chat extends Component {
           isTyping: true,
           currentUserTyping: `${msg.user} is`
         });
-      } else if (this.currentUserTyping) {
+      } else if (this.currentUserTyping === "a few people are") {
+        return;
+      } else {
         this.setState({
           currentUserTyping: "a few people are"
         });
@@ -161,10 +158,7 @@ class Chat extends Component {
     });
 
     socket.on(`${localStorage.username}.leave`, async payload => {
-      await this.setState({
-        // recent50Messages: [],
-        cache: []
-      });
+      await this.setState({ cache: [] });
     });
   }
 
@@ -256,7 +250,6 @@ function mapStateToProps(state) {
 function bindActionsToDispatch(dispatch) {
   return bindActionCreators(
     {
-      // setTestData: setTestData
       updateUserPaneData: updateUserPaneData
     },
     dispatch

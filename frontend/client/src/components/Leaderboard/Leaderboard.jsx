@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import configs from "../../../../../config.js";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import axios from "axios";
 
@@ -124,20 +122,4 @@ class Leaderboard extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    global: state.global,
-    local: state.local
-  };
-};
-
-const bindActionsToDispatch = dispatch => {
-  return bindActionCreators(
-    {
-      // setTestDat: setTestData
-    },
-    dispatch
-  );
-};
-
-export default connect(mapStateToProps, bindActionsToDispatch)(Leaderboard);
+export default Leaderboard;

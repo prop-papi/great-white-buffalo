@@ -41,7 +41,7 @@ const chat = io.of("/chatSocket").on("connection", socket => {
           .then(res => {
             console.log("res: ", res.data);
             res.data.forEach(message => {
-              redisClient.lpush(
+              redisClient.rpush(
                 `lounge:${msg.currentLoungeID}`,
                 JSON.stringify(message)
               );
@@ -62,10 +62,10 @@ const chat = io.of("/chatSocket").on("connection", socket => {
 
   socket.on("message.send", msg => {
     chat.to(`lounge:${msg.currentLoungeID}`).emit("message.send", msg);
-    redisClient.lpush(`lounge:${msg.currentLoungeID}`, JSON.stringify(msg));
+    redisClient.rpush(`lounge:${msg.currentLoungeID}`, JSON.stringify(msg));
     getListLength(`lounge:${msg.currentLoungeID}`, (err, result) => {
       if (result > 50) {
-        redisClient.rpop(`lounge:${msg.currentLoungeID}`);
+        redisClient.lpop(`lounge:${msg.currentLoungeID}`);
       }
     });
   });
