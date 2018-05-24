@@ -447,7 +447,7 @@ class ClubNav extends Component {
                                 src={club.logo}
                                 circle
                                 responsive
-                                className="nav-image"
+                                className="nav-image mod-nav-image"
                               />
                             </OverlayTrigger>
                           </div>{" "}
@@ -491,7 +491,7 @@ class ClubNav extends Component {
                                   src={club.logo}
                                   circle
                                   responsive
-                                  className="nav-image"
+                                  className="nav-image mod-nav-image"
                                 />
                               </OverlayTrigger>
                             </div>

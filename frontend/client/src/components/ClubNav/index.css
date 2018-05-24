@@ -53,22 +53,19 @@
 .joinLeaveClubInd {
   position: relative;
   float: left;
-  border: 10px solid white;
+  border-width: 0px 0px 5px 0px;
+  border-color: white;
   height: 70px;
-  border-radius: 50%;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
   width: 70px;
 }
 
 .joinLeaveClubInd-selected {
   position: relative;
   float: left;
-  border: 10px solid #738bd7;
+  border-width: 0px 0px 5px 0px;
+  border-style: solid;
+  border-color: #738bd7;
   height: 70px;
-  border-radius: 50%;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
   width: 70px;
 }
 
@@ -78,10 +75,12 @@
   bottom: 5%;
 }
 
-/* .modal-content {
-  min-height: 50vh;
-} */
-
 ::-webkit-scrollbar {
   display: none;
+}
+
+.mod-nav-image {
+  width: 70px;
+  height: 70px;
+  padding: 10px;
 }

@@ -126,3 +126,9 @@ a {
   background-color: lightgray !important;
   border-radius: 4px;
 }
+
+.titleGreat {
+  font-family: "buffon-bold";
+  color: white;
+  margin-left: 20px;
+}

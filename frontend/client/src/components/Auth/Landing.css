@@ -4,6 +4,11 @@
 }
 
 @font-face {
+  font-family: "buffon-bold";
+  src: url("../../font/Buffon-Bold.otf");
+}
+
+@font-face {
   font-family: "mission-gothic-light";
   src: url("../../font/Mission\ Gothic\ Light.otf");
 }

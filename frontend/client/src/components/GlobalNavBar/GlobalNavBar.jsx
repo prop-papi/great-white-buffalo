@@ -124,6 +124,8 @@ class GlobalNavBar extends Component {
             src="https://s3.us-east-2.amazonaws.com/great-white-buffalo/updated-favicon.png"
             rounded
           />
+          {/* <span className="invisibleUnderline">___</span> */}
+          <span className="titleGreat"> GREAT WHITE BUFFALO</span>
         </li>
         <li className="li right">
           <span className="label win-ratio">
