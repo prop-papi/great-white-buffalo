@@ -46,7 +46,8 @@ class Home extends Component {
 
     this.state = {
       usersOnline: {},
-      showModal: false
+      showModal: false,
+      showNotifications: false
     };
 
     this.createNotification = this.createNotification.bind(this);
@@ -83,6 +84,8 @@ class Home extends Component {
     } = this.props;
 
     await fetchHomeData(localStorage.id, localStorage.default_club);
+
+    this.createNotification("Test notification");
 
     betSocket.emit("user.enter", {
       user: localStorage.username,
@@ -211,7 +214,8 @@ class Home extends Component {
       position: "top-right",
       autoClose: 6000,
       hideProgressBar: false,
-      closeOnClick: true
+      closeOnClick: true,
+      onClose: () => this.setState({ showNotifications: true })
     });
   }
 
@@ -244,6 +248,7 @@ class Home extends Component {
                 <GlobalNavBar
                   history={this.props.history}
                   notificationsSocket={notificationsSocket}
+                  showNotifications={this.state.showNotifications}
                 />
               </Col>
             </Row>
@@ -303,14 +308,7 @@ class Home extends Component {
               </Col>
             </Row>
           </Grid>
-          <ToastContainer
-            position="top-right"
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-          />
-          <ToastContainer />
+          <ToastContainer position="top-right" rtl={false} />
           <VideoModal
             showModal={this.state.showModal}
             setShow={this.videoEditTapped.bind(this)}
