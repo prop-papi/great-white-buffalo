@@ -144,9 +144,8 @@ let addNewLounges = async () => {
 
 let makeSportRequest = async (sport, date, loungeDate, club, backupDate) => {
   let body = await asyncRequest(
-    `http://scores.nbcsports.msnbc.com/ticker/data/gamesMSNBC.js.asp?jsonp=true&sport=${sport}&period=${date}`
+    `http://scores.nbcsports.com/ticker/data/gamesMSNBC.js.asp?jsonp=true&sport=${sport}&period=${date}`
   );
-  console.log(body);
   // parse out response
   let data = JSON.parse(
     body.replace("shsMSNBCTicker.loadGamesData(", "").replace(");", "")

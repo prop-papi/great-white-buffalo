@@ -27,17 +27,21 @@ export const updateUserPaneData = userPaneData => dispatch => {
 
 export const fetchHomeData = (id, club) => async dispatch => {
   // utilize some kind of loading screen
-  const globalData = await axios.get(`${configs.HOST}api/users/${id}`);
-  const localData = await axios.get(`${configs.HOST}api/users/local/${club}`);
-  const notifications = await axios.get(
-    `${configs.HOST}api/notifications/${id}`
-  );
-  setGlobalData(globalData.data, dispatch);
-  setLocalData(localData.data, dispatch);
-  setNotifications(notifications.data.notifications, dispatch);
-  setUserPaneData({ showUsers: true, didSelectUser: false }, dispatch);
-  setMainComponent("bets");
-};
+  try {
+    const globalData = await axios.get(`${configs.HOST}api/users/${id}`);
+    const localData = await axios.get(`${configs.HOST}api/users/local/${club}`);
+    const notifications = await axios.get(
+      `${configs.HOST}api/notifications/${id}`
+    );
+    setGlobalData(globalData.data, dispatch);
+    setLocalData(localData.data, dispatch);
+    setNotifications(notifications.data.notifications, dispatch);
+    setUserPaneData({ showUsers: true, didSelectUser: false }, dispatch);
+    setMainComponent("bets");
+  } catch(err) {
+    console.log(err);
+    window.location.href = "http://localhost:1337/login";
+  }
 
 export const updateLocalData = club => async dispatch => {
   const localData = await axios.get(`${configs.HOST}api/users/local/${club}`);
