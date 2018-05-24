@@ -217,6 +217,7 @@ class SearchBets extends React.Component {
                 <Bet
                   key={b.id}
                   bet={b}
+                  display="large"
                   betSocket={this.props.betSocket}
                   notificationsSocket={this.props.notificationsSocket}
                 />
@@ -230,6 +231,7 @@ class SearchBets extends React.Component {
                 <Bet
                   key={b.id}
                   bet={b}
+                  display="large"
                   betSocket={this.props.betSocket}
                   notificationsSocket={this.props.notificationsSocket}
                 />
@@ -251,6 +253,7 @@ class SearchBets extends React.Component {
                     <Bet
                       key={b.id}
                       bet={b}
+                      display="large"
                       betSocket={this.props.betSocket}
                       notificationsSocket={this.props.notificationsSocket}
                     />
@@ -262,6 +265,7 @@ class SearchBets extends React.Component {
                 <Bet
                   key={b.id}
                   bet={b}
+                  display="large"
                   betSocket={this.props.betSocket}
                   notificationsSocket={this.props.notificationsSocket}
                 />
@@ -306,6 +310,7 @@ class SearchBets extends React.Component {
                     <Bet
                       key={b.id}
                       bet={b}
+                      display="large"
                       betSocket={this.props.betSocket}
                       notificationsSocket={this.props.notificationsSocket}
                     />
@@ -316,6 +321,7 @@ class SearchBets extends React.Component {
                     <Bet
                       key={b.id}
                       bet={b}
+                      display="large"
                       betSocket={this.props.betSocket}
                       notificationsSocket={this.props.notificationsSocket}
                     />
@@ -326,6 +332,7 @@ class SearchBets extends React.Component {
                     <Bet
                       key={b.id}
                       bet={b}
+                      display="large"
                       betSocket={this.props.betSocket}
                       notificationsSocket={this.props.notificationsSocket}
                     />
@@ -345,6 +352,7 @@ class SearchBets extends React.Component {
                 <Bet
                   key={b.id}
                   bet={b}
+                  display="large"
                   betSocket={this.props.betSocket}
                   notificationsSocket={this.props.notificationsSocket}
                 />

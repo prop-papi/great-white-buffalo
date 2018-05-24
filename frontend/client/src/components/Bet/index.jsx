@@ -263,7 +263,7 @@ class Bet extends React.Component {
   }
 
   render() {
-    return (
+    return this.props.display === "large" ? (
       <div
         className="wholeBet"
         id={this.props.bet.is_my_bet ? "myBet" : "othersBet"}
@@ -483,6 +483,10 @@ class Bet extends React.Component {
             </Panel.Body>
           </Panel.Collapse>
         </Panel>
+      </div>
+    ) : (
+      <div className="smallBet">
+        {this.props.bet.club_name} - {this.props.bet.wager} token(s)
       </div>
     );
   }
