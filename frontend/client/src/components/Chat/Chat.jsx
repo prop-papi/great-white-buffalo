@@ -142,7 +142,7 @@ class Chat extends Component {
           isTyping: true,
           currentUserTyping: `${msg.user} is`
         });
-      } else if (this.state.currentUserTyping === "a few people are") {
+      } else if (this.state.currentUserTyping === `${msg.user} is`) {
         return;
       } else {
         this.setState({
