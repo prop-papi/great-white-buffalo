@@ -39,6 +39,7 @@
 .chat-display a {
   text-decoration: none;
   font-weight: 700;
+  color: white;
 }
 
 .chat-display a:hover {
