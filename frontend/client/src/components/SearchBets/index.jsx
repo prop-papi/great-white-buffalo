@@ -116,7 +116,11 @@ class SearchBets extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.props.global.globalData.bets !== newProps.global.globalData.bets) {
+    if (
+      this.props.global.globalData.bets !== newProps.global.globalData.bets ||
+      this.props.local.localData.club.name !==
+        newProps.local.localData.club.name
+    ) {
       var tempMyOpen = [];
       var tempMyCurrent = [];
       var tempMyAdminReview = [];
