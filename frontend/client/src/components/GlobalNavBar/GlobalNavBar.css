@@ -104,6 +104,7 @@ a {
 
 .win-ratio {
   /* font-family: fantasy; */
+  font-size: 11px;
 }
 
 .nav-component:hover {
@@ -131,4 +132,8 @@ a {
   font-family: "buffon-bold";
   color: white;
   margin-left: 20px;
+}
+
+.stats {
+  color: rgb(115, 139, 215);
 }

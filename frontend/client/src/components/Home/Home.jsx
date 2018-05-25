@@ -51,6 +51,7 @@ class Home extends Component {
     };
 
     this.createNotification = this.createNotification.bind(this);
+    this.toggleNotificationsHome = this.toggleNotificationsHome.bind(this);
   }
 
   mainComponentRender(componentName) {
@@ -84,8 +85,6 @@ class Home extends Component {
     } = this.props;
 
     await fetchHomeData(localStorage.id, localStorage.default_club);
-
-    // this.createNotification("Test notification");
 
     betSocket.emit("user.enter", {
       user: localStorage.username,
@@ -212,11 +211,15 @@ class Home extends Component {
   createNotification(message) {
     toast(message, {
       position: "top-right",
-      autoClose: 6000,
+      autoClose: false,
       hideProgressBar: false,
       closeOnClick: true,
       onClose: () => this.setState({ showNotifications: true })
     });
+  }
+
+  toggleNotificationsHome() {
+    this.setState({ showNotifications: false });
   }
 
   checkAdmin() {
@@ -249,6 +252,7 @@ class Home extends Component {
                   history={this.props.history}
                   notificationsSocket={notificationsSocket}
                   showNotifications={this.state.showNotifications}
+                  toggle={this.toggleNotificationsHome}
                 />
               </Col>
             </Row>
@@ -308,7 +312,7 @@ class Home extends Component {
               </Col>
             </Row>
           </Grid>
-          <ToastContainer position="top-right" rtl={false} />
+          <ToastContainer position="top-right" />
           <VideoModal
             showModal={this.state.showModal}
             setShow={this.videoEditTapped.bind(this)}
