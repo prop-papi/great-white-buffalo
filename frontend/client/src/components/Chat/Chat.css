@@ -39,7 +39,6 @@
 .chat-display a {
   text-decoration: none;
   font-weight: 700;
-  color: white;
 }
 
 .chat-display a:hover {
@@ -59,6 +58,10 @@
 .chat-display .row:nth-child(even) {
   background-color: #2f3136;
   color: white;
+}
+
+.chat-username a {
+  color: white !important;
 }
 
 .col-lg-1 {
