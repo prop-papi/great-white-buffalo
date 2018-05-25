@@ -174,11 +174,11 @@ class SideProfile extends Component {
           <br />
           <Row>
             {this.state.myBets.length === 0 && !this.state.isMe
-              ? "This user has no open bets :("
+              ? "No open bets :("
               : !this.state.isMe && "Open Bets"}
           </Row>
           {this.state.myBets.map((bet, key) => {
-            return <Bet bet={bet} key={key} />;
+            return <Bet bet={bet} key={key} display="small" />;
           })}
         </div>
       </div>

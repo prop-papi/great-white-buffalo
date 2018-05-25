@@ -85,7 +85,7 @@ class Home extends Component {
 
     await fetchHomeData(localStorage.id, localStorage.default_club);
 
-    this.createNotification("Test notification");
+    // this.createNotification("Test notification");
 
     betSocket.emit("user.enter", {
       user: localStorage.username,

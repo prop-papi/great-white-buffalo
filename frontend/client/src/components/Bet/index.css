@@ -45,3 +45,10 @@
 .warningMessage {
   color: red;
 }
+
+.smallBet {
+  font-size: 0.7em;
+  border: solid;
+  border-radius: 15px;
+  margin: 5px;
+}
