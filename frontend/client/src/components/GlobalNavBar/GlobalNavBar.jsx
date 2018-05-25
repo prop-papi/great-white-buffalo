@@ -57,6 +57,7 @@ class GlobalNavBar extends Component {
 
   closeNotifications() {
     this.setState({ showNotifications: false });
+    this.props.toggle();
   }
 
   handleNavItemCollapse(e) {
@@ -71,6 +72,7 @@ class GlobalNavBar extends Component {
           showNotifications: false,
           showMenu: false
         });
+        this.props.toggle();
       }
     }
   }
@@ -135,13 +137,19 @@ class GlobalNavBar extends Component {
         </li>
         <li className="li right">
           <span className="label win-ratio">
-            {this.props.global.globalData.balances[0].available_balance}
-            {" tokens available  | "}
+            Token Balance:{" "}
+            <span className="stats">
+              {" "}
+              {this.props.global.globalData.balances[0].available_balance}
+            </span>
+            {" | "}
             Wager Win Ratio:{" "}
-            {(Number(localStorage.getItem("win_ratio")) * 100)
-              .toString()
-              .slice(0, 5)}
-            {"%"}
+            <span className="stats">
+              {(Number(localStorage.getItem("win_ratio")) * 100)
+                .toString()
+                .slice(0, 5)}
+              {"%"}
+            </span>
           </span>
         </li>
         <li className="li notify-icon">
