@@ -5,3 +5,11 @@
   height: 72vh;
   overflow-y: scroll;
 }
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #2f3137;
+}
+
+.table-hover > tbody > tr:hover {
+  background-color: #738bd7;
+}
