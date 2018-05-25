@@ -47,6 +47,7 @@ let authenticate = (req, res, next) => {
       token
     ) {
       if (err) {
+        console.log(err);
         res.status(500).send();
       } else {
         next();

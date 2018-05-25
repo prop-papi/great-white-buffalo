@@ -72,7 +72,7 @@ class FriendRequest extends Component {
       status: 2,
       id: this.props.data.id
     };
-    this.setState({ inputRecieved: true });
+    this.setState({ inputRecieved: true, accepted: false });
     try {
       // trigger socket notification here
       const data = await axios.post(
