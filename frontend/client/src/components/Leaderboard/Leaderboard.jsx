@@ -65,7 +65,6 @@ class Leaderboard extends Component {
   }
 
   displaySideProfile(target) {
-    console.log("display my shit");
     let params = {
       username: target.currentTarget.innerHTML
     };
