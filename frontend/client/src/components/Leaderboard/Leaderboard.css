@@ -6,6 +6,20 @@
   overflow-y: scroll;
 }
 
+.leaderboard-username:hover {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.leaderboard-username {
+  color: white !important;
+}
+
+.leaderboard-username a {
+  color: white;
+  text-decoration: none;
+}
+
 .table-striped > tbody > tr:nth-of-type(odd) {
   background-color: #2f3137;
 }
