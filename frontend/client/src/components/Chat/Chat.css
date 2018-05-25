@@ -60,6 +60,10 @@
   color: white;
 }
 
+.chat-username a {
+  color: white !important;
+}
+
 .col-lg-1 {
   width: 15% !important;
 }
