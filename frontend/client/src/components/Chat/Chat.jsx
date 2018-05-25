@@ -137,12 +137,12 @@ class Chat extends Component {
     });
 
     socket.on("message.typing", msg => {
-      if (!this.currentUserTyping) {
+      if (!this.state.currentUserTyping) {
         this.setState({
           isTyping: true,
           currentUserTyping: `${msg.user} is`
         });
-      } else if (this.currentUserTyping === "a few people are") {
+      } else if (this.state.currentUserTyping === "a few people are") {
         return;
       } else {
         this.setState({
@@ -154,7 +154,7 @@ class Chat extends Component {
           isTyping: false,
           currentUserTyping: null
         });
-      }, 1500);
+      }, 2000);
     });
 
     socket.on(`${localStorage.username}.leave`, async payload => {
