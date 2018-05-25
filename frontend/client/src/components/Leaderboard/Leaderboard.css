@@ -1,7 +1,7 @@
 .leaderboard-container {
   padding: 10px;
-  background-color: lightgrey;
-  color: teal;
+  background-color: #36393e;
+  color: white;
   height: 72vh;
   overflow-y: scroll;
 }

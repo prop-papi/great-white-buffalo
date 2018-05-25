@@ -225,6 +225,7 @@ class Chat extends Component {
         <div className="message-input">
           <FormControl
             type="text"
+            className="text-input-box"
             value={this.state.text}
             placeholder={`Chatting in ${
               this.props.currentLounge.currentLounge.name
