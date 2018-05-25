@@ -18,10 +18,10 @@ router.post("/send", async (req, res) => {
   }
 });
 
-router.get("/get/:loungeID", async (req, res) => {
+router.get("/:lounge", async (req, res) => {
   try {
-    let { loungeID } = req.params;
-    let messages = await selectTop50Messages(loungeID);
+    let { lounge } = req.params;
+    let messages = await selectTop50Messages(lounge);
     res.status(200).send(messages);
   } catch (err) {
     console.log("error: ", err);
