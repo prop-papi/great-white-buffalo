@@ -98,7 +98,7 @@ class GlobalNavBar extends Component {
     localStorage.removeItem("persist:root");
     document.cookie = "";
     this.props.activeUserSocket.disconnect();
-    this.props.history.push("/login");
+    window.location.replace("http://localhost:1337/login");
   }
 
   menuSelectHandler(componentName) {
