@@ -13,13 +13,13 @@ const router = express.Router();
 
 router
   .use("/auth", authRouter)
+  .use("/message", messageRouter)
   .use(authenticate)
   .use("/users", usersRouter)
   .use("/bets", betsRouter)
   .use("/clubs", clubsRouter)
   .use("/notifications", notificationsRouter)
   .use("/lounges", loungesRouter)
-  .use("/message", messageRouter)
   .use("/leaderboard", leaderboardRouter)
   .use("/userpane", userPaneRouter);
 

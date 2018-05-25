@@ -37,7 +37,7 @@ const chat = io.of("/chatSocket").on("connection", socket => {
     await getListLength(`lounge:${msg.currentLoungeID}`, (err, result) => {
       if (result === 0) {
         axios
-          .get(`${configs.HOST2}api/message/get/${msg.currentLoungeID}`)
+          .get(`${configs.HOST2}api/message/${msg.currentLoungeID}`)
           .then(res => {
             console.log("res: ", res.data);
             res.data.forEach(message => {

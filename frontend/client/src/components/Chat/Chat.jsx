@@ -80,7 +80,7 @@ class Chat extends Component {
       socket.emit("message.send", payload);
       this.setState({ text: "" });
       axios
-        .post("/api/message/send", payload)
+        .post(`${configs.HOST}api/message/send`, payload)
         .then(response => {
           console.log("Server response: ", response);
         })
