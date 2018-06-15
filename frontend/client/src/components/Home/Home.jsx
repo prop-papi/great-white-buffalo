@@ -253,6 +253,8 @@ class Home extends Component {
                   notificationsSocket={notificationsSocket}
                   showNotifications={this.state.showNotifications}
                   toggle={this.toggleNotificationsHome}
+                  usersOnline={this.state.usersOnline}
+                  activeUserSocket={activeUserSocket}
                 />
               </Col>
             </Row>

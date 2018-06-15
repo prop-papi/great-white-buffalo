@@ -20,7 +20,8 @@ class VideoModal extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    return nextProps.link !== prevState.link ? { link: nextProps.link } : null;
+    console.log("next", nextProps.link, "prev", prevState.link);
+    return nextProps.link !== prevState.link ? { link: prevState.link } : null;
   }
 
   onChange(e) {

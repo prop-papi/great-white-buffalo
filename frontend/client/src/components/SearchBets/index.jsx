@@ -116,72 +116,69 @@ class SearchBets extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (
-      this.props.global.globalData.bets !== newProps.global.globalData.bets ||
-      this.props.local.localData.club.name !==
-        newProps.local.localData.club.name
-    ) {
-      var tempMyOpen = [];
-      var tempMyCurrent = [];
-      var tempMyAdminReview = [];
-      var tempMyReview = [];
-      var tempMyHistorical = [];
-      var tempMyCanceled = [];
-      var tempMyExpired = [];
-      var tempMyClosed = [];
-      var tempMyStalemate = [];
-      var tempOpen = [];
-      newProps.global.globalData.bets.forEach(b => {
-        if (b.is_my_bet) {
-          if (
-            b.status === "disputed" &&
-            b.club_admin === Number(localStorage.id)
-          ) {
-            // fix this later by having multiple admins / mods and not having you decide if it is your own bet
-            tempMyAdminReview.push(b);
-          } else if (b.status === "pending") {
-            tempMyOpen.push(b);
-          } else if (b.status === "active") {
-            tempMyCurrent.push(b);
-          } else if (b.status === "voting" || b.status === "disputed") {
-            tempMyReview.push(b);
-          } else if (b.status === "canceled") {
-            tempMyCanceled.push(b);
-            tempMyHistorical.push(b);
-          } else if (b.status === "expired") {
-            tempMyExpired.push(b);
-            tempMyHistorical.push(b);
-          } else if (b.status === "resolved" || b.status === "stalemate") {
-            tempMyClosed.push(b);
-            tempMyHistorical.push(b);
-          }
-        } else if (
-          b.status === "pending" &&
-          (newProps.local.localData.club.name === "Global" ||
-            newProps.local.localData.club.id === b.club)
-        ) {
-          tempOpen.push(b);
-        } else if (
+    // if (
+    //   this.props.global.globalData.bets !== newProps.global.globalData.bets ||
+    //   this.props.local.localData.club.name !==
+    //     newProps.local.localData.club.name
+    // ) {
+    var tempMyOpen = [];
+    var tempMyCurrent = [];
+    var tempMyAdminReview = [];
+    var tempMyReview = [];
+    var tempMyHistorical = [];
+    var tempMyCanceled = [];
+    var tempMyExpired = [];
+    var tempMyClosed = [];
+    var tempMyStalemate = [];
+    var tempOpen = [];
+    newProps.global.globalData.bets.forEach(b => {
+      if (b.is_my_bet) {
+        if (
           b.status === "disputed" &&
           b.club_admin === Number(localStorage.id)
         ) {
+          // fix this later by having multiple admins / mods and not having you decide if it is your own bet
           tempMyAdminReview.push(b);
+        } else if (b.status === "pending") {
+          tempMyOpen.push(b);
+        } else if (b.status === "active") {
+          tempMyCurrent.push(b);
+        } else if (b.status === "voting" || b.status === "disputed") {
+          tempMyReview.push(b);
+        } else if (b.status === "canceled") {
+          tempMyCanceled.push(b);
+          tempMyHistorical.push(b);
+        } else if (b.status === "expired") {
+          tempMyExpired.push(b);
+          tempMyHistorical.push(b);
+        } else if (b.status === "resolved" || b.status === "stalemate") {
+          tempMyClosed.push(b);
+          tempMyHistorical.push(b);
         }
-      });
-      this.setState({
-        myOpenBets: tempMyOpen,
-        myCurrentBets: tempMyCurrent,
-        myAdminReview: tempMyAdminReview,
-        myReviewBets: tempMyReview,
-        myHistoricalBets: tempMyHistorical,
-        myCanceledBets: tempMyCanceled,
-        myExpiredBets: tempMyExpired,
-        myClosedBets: tempMyClosed,
-        myStalemateBets: tempMyStalemate,
-        openBets: tempOpen
-      });
-    }
+      } else if (
+        b.status === "pending" &&
+        (newProps.local.localData.club.name === "Global" ||
+          newProps.local.localData.club.id === b.club)
+      ) {
+        tempOpen.push(b);
+      } else if (
+        b.status === "disputed" &&
+        b.club_admin === Number(localStorage.id)
+      ) {
+        tempMyAdminReview.push(b);
+      }
+    });
     this.setState({
+      myOpenBets: tempMyOpen,
+      myCurrentBets: tempMyCurrent,
+      myAdminReview: tempMyAdminReview,
+      myReviewBets: tempMyReview,
+      myHistoricalBets: tempMyHistorical,
+      myCanceledBets: tempMyCanceled,
+      myExpiredBets: tempMyExpired,
+      myClosedBets: tempMyClosed,
+      myStalemateBets: tempMyStalemate,
+      openBets: tempOpen,
       openBetsName:
         newProps.local.localData.club.name === "Global"
           ? "Open Wagers Globally"

@@ -142,7 +142,7 @@ class Chat extends Component {
           isTyping: true,
           currentUserTyping: `${msg.user} is`
         });
-      } else if (this.state.currentUserTyping === "a few people are") {
+      } else if (this.state.currentUserTyping === `${msg.user} is`) {
         return;
       } else {
         this.setState({
@@ -225,6 +225,7 @@ class Chat extends Component {
         <div className="message-input">
           <FormControl
             type="text"
+            className="text-input-box"
             value={this.state.text}
             placeholder={`Chatting in ${
               this.props.currentLounge.currentLounge.name

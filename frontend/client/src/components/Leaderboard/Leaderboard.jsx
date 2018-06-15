@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import configs from "../../../../../config.js";
 import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
+import { updateUserPaneData } from "../../actions";
 import axios from "axios";
 
 // custom css (if needed)
@@ -10,6 +13,7 @@ class Leaderboard extends Component {
   constructor(props) {
     super(props);
 
+    this.displaySideProfile = this.displaySideProfile.bind(this);
     this.sortBySelector = this.sortBySelector.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
 
@@ -29,7 +33,11 @@ class Leaderboard extends Component {
     return this.state[sortBy].map((entry, i) => (
       <tr key={i}>
         <td>{i + 1}</td>
-        <td>{entry.username}</td>
+        <td>
+          <a className="leaderboard-username" onClick={this.displaySideProfile}>
+            {entry.username}
+          </a>
+        </td>
         <td>{entry.reputation}</td>
         <td>{entry.wins} </td>
         <td>{entry.losses}</td>
@@ -54,6 +62,23 @@ class Leaderboard extends Component {
     this.setState({
       sortBy: sortByValue
     });
+  }
+
+  displaySideProfile(target) {
+    let params = {
+      username: target.currentTarget.innerHTML
+    };
+    axios
+      .get(`${configs.HOST}api/userpane/selected`, { params })
+      .then(response => {
+        let newUserPane = Object.assign({}, this.props.userPane.userPaneData);
+        newUserPane.didSelectUser = true;
+        newUserPane.selectedUser = response.data[0];
+        this.props.updateUserPaneData(newUserPane);
+      })
+      .catch(err => {
+        console.log("Error: ", err);
+      });
   }
 
   componentDidMount() {
@@ -122,4 +147,19 @@ class Leaderboard extends Component {
   }
 }
 
-export default Leaderboard;
+function mapStateToProps(state) {
+  return {
+    userPane: state.userPane
+  };
+}
+
+function bindActionsToDispatch(dispatch) {
+  return bindActionCreators(
+    {
+      updateUserPaneData: updateUserPaneData
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, bindActionsToDispatch)(Leaderboard);

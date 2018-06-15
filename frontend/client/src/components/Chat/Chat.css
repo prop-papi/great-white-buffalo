@@ -4,7 +4,7 @@
 }
 
 .chat-background {
-  background-color: #788796;
+  background-color: #36393e;
   width: 100%;
   height: 70vh;
 }
@@ -21,7 +21,7 @@
 }
 
 .time-stamp {
-  color: darkgrey;
+  color: white;
   text-align: right;
   font-weight: 500;
   padding: 0 7px 0 0;
@@ -51,11 +51,17 @@
 }
 
 .chat-display .row:nth-child(odd) {
-  background-color: slategray;
+  background-color: #36393e;
+  color: white;
 }
 
 .chat-display .row:nth-child(even) {
-  background-color: lightslategrey;
+  background-color: #2f3136;
+  color: white;
+}
+
+.chat-username a {
+  color: white !important;
 }
 
 .col-lg-1 {
@@ -68,4 +74,13 @@
 
 .message-username:hover {
   cursor: pointer;
+}
+
+.message-username {
+  color: white !important;
+}
+
+.text-input-box {
+  background-color: #36393e;
+  color: #f0f0f0;
 }
